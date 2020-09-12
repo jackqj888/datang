@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{eyou:global name='web_title' /}</title>
+<meta name="description" content="{eyou:global name='web_description' /}" />
+<meta name="keywords" content="{eyou:global name='web_keywords' /}" />
+<link href="{eyou:global name='web_cmspath' /}/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="{eyou:global name='web_templets_pc' /}/skin/css/css.css">
+<link rel="stylesheet" href="{eyou:global name='web_templets_pc' /}/skin/css/red.css" type="text/css"  title="styles3" media="screen" />
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/jquery1.42.min.js"></script>
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/jquery.superslide.2.1.1.js"></script>
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/index.js"></script>
+</head>
+<body>
+{eyou:include file="/template/pc/header.htm" /}
+
+{eyou:channelartlist typeid='35'}
+<div class="cp-box">
+  <div class="cp-tit"><span>{eyou:field name='englist_name' /}</span>{eyou:field name='typename' /}</div>
+  <div class="fl-box">
+    <div class="fl-tit">
+      <p>Classification</p>
+      产品分类</div>
+    <div class="fl-con">
+      <ul>
+        {eyou:channel type='son' row='5' id="field"}
+        <li><a href="{$field.typeurl}" target="_blank">{$field.typename}</a></li>
+        {/eyou:channel}
+        <div class="cp-more"><a href="{eyou:field name='typeurl' /}" target="_blank">查看更多</a></div>
+      </ul>
+    </div>
+  </div>
+  <div class="cp-con">
+    <ul>
+      {eyou:arclist titlelen='40' row='8'}
+      <li>
+        <div class="c-tu"><a href="{$field.arcurl}" target="_blank"><img src="{$field.litpic}" alt="{$field.title}" width="210" height="144" /></a></div>
+        <div class="c-tit"><a href="{$field.arcurl}" target="_blank">{$field.title}</a></div>
+      </li>
+      {/eyou:arclist}
+    </ul>
+  </div>
+</div>
+{/eyou:channelartlist} 
+<div class="usne-box"> {eyou:channelartlist typeid='1,0' }
+  <div class="us-box">
+    <div class="us-tu"><img src="{eyou:field name='litpic' /}" width="290" height="320" alt=""/></div>
+    <div class="us-con">
+      <div class="us-tit">
+        <p>{eyou:field name='typename' /}</p>
+        {eyou:field name='englist_name' /}</div>
+      <div class="us-wz">{eyou:type addtable='single_content'}{$field.content|html_msubstr=###,0,155}...{/eyou:type}</div>
+      <div class="us-more"><a href="{eyou:field name='typeurl' /}" target="_blank">更多>></a></div>
+    </div>
+  </div>
+  {/eyou:channelartlist}
+  <div class="ne-box">
+    <div class="hd">
+      <ul>
+        {eyou:type typeid='46'}
+        <li>{$field.typename}</li>
+        {/eyou:type}
+        {eyou:type typeid='47'}
+        <li>{$field.typename}</li>
+        {/eyou:type} <span><a href="{eyou:type typeid='2'}{$field.typeurl}{/eyou:type}" target="_blank">更多>></a></span>
+      </ul>
+    </div>
+    <div class="bd">
+      <ul>
+        {eyou:arclist titlelen='40' row='6' typeid='46'}
+        <li><span>{$field.add_time|MyDate='Y-m-d',###}</span><a href="{$field.arcurl}" target="_blank">{$field.title}</a></li>
+        {/eyou:arclist}
+      </ul>
+      <ul>
+        {eyou:arclist titlelen='40' row='6' typeid='47'}
+        <li><span>{$field.add_time|MyDate='Y-m-d',###}</span><a href="{$field.arcurl}" target="_blank">{$field.title}</a></li>
+        {/eyou:arclist}
+      </ul>
+    </div>
+    <script type="text/javascript">jQuery(".ne-box").slide();</script> 
+  </div>
+</div>
+{eyou:channelartlist typeid='15'}
+<div class="lx-box">
+  <div class="lx-l"><img src="{eyou:field name='litpic' /}" width="550" height="240" alt=""/></div>
+  <div class="lx-r">
+    <div class="kf"><img src="{eyou:global name='web_templets_pc' /}/skin/img/kf.png" width="200" height="320" alt=""/></div>
+    <div class="lx-ico"><span>{eyou:global name='web_attr_2' /}</span></div>
+    <div class="lx-wz">手机：{eyou:global name='web_attr_60' /}<br>
+      邮箱：{eyou:global name='web_attr_55' /}<br>
+      地址：{eyou:global name='web_attr_56' /} </div>
+    <div class="lx-an"><a href="http://wpa.qq.com/msgrd?v=3&site={eyou:global name="web_name" /}&menu=yes&uin={eyou:global name='web_attr_3' /}" target="_blank">立即咨询</a></div>
+  </div>
+</div>
+{/eyou:channelartlist}
+
+{eyou:channelartlist typeid='36'}
+<div class="al-box">
+  <div class="al-tit"><span>{eyou:field name='englist_name' /}</span>{eyou:field name='typename' /}</div>
+  <div class="al-con">
+    <div class="next"></div>
+    <div class="bd">
+      <ul>
+        {eyou:arclist titlelen='40' row='10'}
+        <li>
+        <div class="c-tu"><a href="{$field.arcurl}" target="_blank"><img src="{$field.litpic}" alt="{$field.title}" width="210" height="144" /></a></div>
+        <div class="c-tit"><a href="{$field.arcurl}" target="_blank">{$field.title}</a></div>
+        </li>
+        {/eyou:arclist}
+      </ul>
+    </div>
+    <div class="prev"></div>
+    <script type="text/javascript">
+			jQuery(".al-con").slide({mainCell:".bd ul",autoPlay:true,effect:"leftMarquee",vis:5,interTime:50});
+		</script> 
+  </div>
+</div>
+{/eyou:channelartlist} 
+{eyou:include file="/template/pc/footer.htm" /}
+</body>
+</html>

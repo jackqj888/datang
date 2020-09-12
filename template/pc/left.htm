@@ -1,0 +1,25 @@
+<div class="n-l">
+    <div class="l-b">
+      <div class="fl-tit">
+        <p>Classification</p>
+        {$eyou.field.typeid|gettoptype=###,'typename'}</div>
+      <div class="er-fl">
+        <ul>
+        {eyou:channel type='first' id='field' currentstyle='cur'}
+          <li><a href="{$field.typeurl}" class="{$field.currentstyle}">{$field.typename}</a></li>
+        {/eyou:channel} 
+        </ul>
+      </div>
+    </div>
+    <div class="n-lx">
+      <div class="n-lx-ico">
+        <p></p>
+        {eyou:global name='web_attr_2' /}</div>
+      <div class="n-lx-wz">
+        传真：{eyou:global name='web_attr_57' /}<br>
+        手机：{eyou:global name='web_attr_60' /}<br>
+        邮箱：{eyou:global name='web_attr_55' /}<br>
+        地址：{eyou:global name='web_attr_56' /} </div>
+      <div class="n-lx-an"><a href="http://wpa.qq.com/msgrd?v=3&site={eyou:global name="web_name" /}&menu=yes&uin={eyou:global name='web_attr_3' /}" target="_blank">立即咨询</a></div>
+    </div>
+  </div>

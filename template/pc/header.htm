@@ -1,0 +1,81 @@
+<div class="top-box">
+  
+  <div class="top-j">
+    <div class="logo-box"><a href="{eyou:global name='web_cmsurl' /}/" title="{eyou:global name="web_name" /}"><img src="{eyou:global name="web_logo" /}"  alt="{eyou:global name="web_name" /}" /></a></div>
+    <div class="t-ico">
+      <div class="ico-dh">
+        <p>咨询热线</p>
+        {eyou:global name='web_attr_2' /}</div>
+      <div class="ico-u">
+        <ul>
+          <li><a onclick="SetHome(this,window.location)">设为首页</a></li>
+          <li><a onclick="AddFavorite(window.location,document.title)">加入收藏</a></li>
+          {eyou:type typeid='15'}
+          <li><a href="{$field.typeurl}">{$field.typename}</a></li>
+          {/eyou:type}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="menu-box">
+    <ul id="nav" class="nav clearfix">
+      <li class="nLi">
+        <h3><a href="{eyou:global name='web_cmsurl' /}/" {eyou:eq name='$Think.const.CONTROLLER_NAME' value='Index'}class="cur"{/eyou:eq}>网站首页</a></h3>
+      </li>
+      {eyou:channel type="top" row="8" id="field" currentstyle="cur"}
+      <li class="nLi">
+        <h3><a href="{$field.typeurl}" class="{$field.currentstyle}">{$field.typename}</a></h3>
+        {eyou:notempty name="$field.children"}
+        <ul class="sub">
+          {eyou:channel name="$field.children" row="10" id="field2"}
+           <li><a href="{$field2.typeurl}">{$field2.typename}</a></li>
+          {/eyou:channel}
+        </ul>
+        {/eyou:notempty}
+      </li>
+     {/eyou:channel} 
+    </ul>
+    <script id="jsID" type="text/javascript">
+			
+			jQuery("#nav").slide({ 
+				type:"menu",// 效果类型，针对菜单/导航而引入的参数（默认slide）
+				titCell:".nLi", //鼠标触发对象
+				targetCell:".sub", //titCell里面包含的要显示/消失的对象
+				effect:"slideDown", //targetCell下拉效果
+				delayTime:300 , //效果时间
+				triggerTime:0, //鼠标延迟触发时间（默认150）
+				returnDefault:true //鼠标移走后返回默认状态，例如默认频道是"预告片"，鼠标移走后会返回"预告片"（默认false）
+			});
+		</script> 
+  </div>
+</div>
+<div class="banner-box">
+  <div class="banner">
+    <ul>
+   {eyou:adv pid='1' }
+    <li style="background:url({$field.litpic}) center center no-repeat;"></li>
+   {/eyou:adv} 
+    </ul>
+  </div>
+  <div class="dn">
+    <ul>
+    </ul>
+  </div>
+  <script type="text/javascript">
+		jQuery(".banner-box").slide({ titCell:".dn ul", mainCell:".banner ul", effect:"fold", autoPlay:true, autoPage:true });
+	</script> 
+</div>
+<div class="search-box">
+  <div class="ss-l">
+    <h3>最新公告：</h3>
+    {eyou:global name='web_attr_64' /}</div>
+  <div class="ss-r">
+  {eyou:searchform type='default'}
+    <form method="get" action="{$field.action}">
+      {$field.hidden}
+      <input  name="keywords" id="keywords" type="text" autocomplete="off" placeholder="输入产品关键字">
+      <input type="submit" name="Submit" value=""  class="go"/>
+    </form>
+  {/eyou:searchform}
+  </div>
+</div>

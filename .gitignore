@@ -1,0 +1,13 @@
+# Windows thumbnail cache files
+.env*
+/.idea
+/runtime
+/view/crmebNewUI/project.config.json
+.git
+/runtime/*
+*.idea
+.idea/*
+/.idea/*
+/.vscode
+/.vagrant
+/.history/*

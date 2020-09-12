@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="telephone=no" name="format-detection" />
+<script type="text/javascript" language="javascript" src="{eyou:global name='web_templets_m' /}/skin/js/jq.js"></script>
+<script type="text/javascript" language="javascript" src="{eyou:global name='web_templets_m' /}/skin/js/js.js"></script>
+<script src="{eyou:global name='web_templets_m' /}/skin/js/slide.js"></script>
+<script src="{eyou:global name='web_templets_m' /}/skin/js/swiper.min.js"></script>
+<title>{$eyou.field.seo_title}</title>
+<meta name="description" content="{$eyou.field.seo_description}" />
+<meta name="keywords" content="{$eyou.field.seo_keywords}" />
+<link href="{eyou:global name='web_templets_m' /}/skin/css/reset.css" type="text/css" rel="stylesheet" />
+<link href="{eyou:global name='web_templets_m' /}/skin/css/css.css" type="text/css" rel="stylesheet" />
+<link href="{eyou:global name='web_templets_m' /}/skin/css/swiper.min.css" type="text/css" rel="stylesheet" />
+<link rel="stylesheet" href="{eyou:global name='web_templets_m' /}/skin/css/iconfont.css" />
+</head>
+<body>
+<div id="container"> {eyou:include file="/template/mobile/header.htm" /}
+  <div class="mainboxbg"></div>
+  <!--header-->
+  <div id="header" class="clearfix">
+    <div class="back abslt_l"><a class="iconfont" href="javascript:history.back(-1);">&#xe62a;</a></div>
+    <div class="contitle"><a href="{eyou:global name='web_cmsurl' /}/" title="{eyou:global name='web_title' /}"> <img src="{eyou:global name='web_attr_59' /}" alt="{eyou:global name='web_title' /}"/> </a></div>
+    <div class="flbox abslt_r sechan"><span class="sdmenut iconfont">&#xe687;</span></div>
+  </div>
+  <!--mainbox-->
+  <div class="mainbox clearfix" style="margin-top:0;"> 
+    <!--loginbox-->
+    <div class="menutt content clearfix">
+       <h1>{$eyou.field.title}</h1>
+      {$eyou.field.content} </br>
+      <li> {eyou:prenext get="pre" empty="<a >上一篇：暂无</a>"} <a href="{$field.arcurl}" title="{$field.title}"> 上一篇 : {$field.title} </a> {/eyou:prenext} </li>
+      <li> {eyou:prenext get="next" empty="<a>下一篇：暂无</a>"} <a href="{$field.arcurl}" title="{$field.title}"> 下一篇 : {$field.title} </a> {/eyou:prenext} </li>
+      <a href="{$eyou.field.typeurl}" title="返回列表" class="back">返回列表</a> 
+    </div>
+  </div>
+  <!--footer-->
+  {eyou:include file="/template/mobile/footer.htm" /} </div>
+</body>
+</html>

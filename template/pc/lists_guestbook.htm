@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$eyou.field.seo_title}</title>
+<meta name="description" content="{$eyou.field.seo_description}" />
+<meta name="keywords" content="{$eyou.field.seo_keywords}" />
+<meta name="generator" content="eyoucms 1.0.0" data-variable="{eyou:global name='web_eyoucms' /}" />
+<link href="{eyou:version file='/favicon.ico' /}" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="{eyou:global name='web_templets_pc' /}/skin/css/css.css">
+<link rel="stylesheet" href="{eyou:global name='web_templets_pc' /}/skin/css/red.css" type="text/css"  title="styles3" media="screen" />
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/jquery1.42.min.js"></script>
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/jquery.superslide.2.1.1.js"></script>
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/index.js"></script>
+</head>
+<body>
+{eyou:include file="/template/pc/header.htm" /}
+<div class="n-box"> {eyou:include file="/template/pc/left.htm" /}
+  <div class="n-r">
+    <div class="n-zb">当前位置：{eyou:position style="crumb" /}</div>
+    <div class="lyb-box">
+      <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" style="font-size:12px">
+        {eyou:guestbookform type='default'}
+        <form class="ui-from" method="POST" enctype="multipart/form-data" action="{$field.action}" onsubmit="return checkForm();" >
+          <tr>
+            <td width="275" height="30" align="right">{$field.itemname_14}：</td>
+            <td width="574"><input name="{$field.attr_14}" type="text" class="oinput2" id="attr_14" size="20" />
+              *</td>
+          </tr>
+          <tr>
+            <td height="30" align="right">{$field.itemname_15}：</td>
+            <td><input name="{$field.attr_15}" type="text" id="attr_15" class="oinput2" size="20" />
+              *</td>
+          </tr>
+          <tr>
+            <td height="30" align="right">{$field.itemname_16}：</td>
+            <td><input name="{$field.attr_16}" type="text" class="oinput2" size="20" /></td>
+          </tr>
+          <tr>
+            <td height="30" align="right">{$field.itemname_17}：</td>
+            <td><textarea name="{$field.attr_17}" cols="50" rows="6" class="textarea1"></textarea></td>
+          </tr>
+          <tr>
+            <td height="30" align="left">&nbsp;</td>
+            <td height="30"><input name="submit" type="submit" value="提交" style=" font-family:微软雅黑; color:#fff; font-weight:bold; background:#e01515; width:57px; height:25px; border:none; cursor:pointer; display:block; float:left;margin-top:4px;" />
+              <input name="reset" type="reset" value="重置" style=" font-family:微软雅黑; color:#fff; font-weight:bold; background:#929292; width:57px; height:25px; border:none; cursor:pointer; display:block; float:left;margin-left:15px;margin-top:4px;" /></td>
+          </tr>
+          
+        {$field.hidden}
+         </form>
+         <script type="text/javascript">
+            function checkForm()
+            {
+              if(document.getElementById('attr_14').value.length == 0)
+              {
+                alert('请输入{$field.itemname_14}');
+                return false;
+              }
+              if(document.getElementById('attr_15').value.length == 0)
+              {
+                alert('请输入{$field.itemname_15}');
+                return false;
+              }
+              
+              return true;
+            }
+          </script>
+        {/eyou:guestbookform}
+      </table>
+    </div>
+  </div>
+</div>
+{eyou:include file="/template/pc/footer.htm" /}
+</body>
+</html>
