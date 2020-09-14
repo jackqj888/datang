@@ -1,6 +1,7 @@
 <?php
 use think\Env;
 return array(
+
     // 数据库类型
     'type'            => Env::get('database.type', 'mysql'),
     // 服务器地址
