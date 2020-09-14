@@ -278,9 +278,8 @@ return array(
     'AUTH_CODE' => "!*&^eyoucms<>|?", //安装完毕之后不要改变，否则所有密码都会出错
     
     // 核心字符串
-    'service_ey' => "aHR0cDovL3NlcnZpY2UuZXlvdWNtcy5jb20=",
-    'service_ey_token' => "0763150235251e259b1a47f2838ecc26",
-    
+//    'service_ey' => "aHR0cDovL3NlcnZpY2UuZXlvdWNtcy5jb20=",
+//    'service_ey_token' => "0763150235251e259b1a47f2838ecc26",
     // +----------------------------------------------------------------------
     // | 验证码
     // +----------------------------------------------------------------------

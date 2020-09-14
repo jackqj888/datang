@@ -1191,6 +1191,7 @@ class Language extends Base
     {
         if (!empty($mark) && !empty($c_lang)) {
             $service_ey = config('service_ey');
+
             $query_str = 'L2luZGV4LnBocD9tPWFwaSZjPUxhbmd1YWdlJmE9c3luX3BhY2tfc2luZ2xlJg==';
             $values = array(            
                 'lang'=>$mark, 

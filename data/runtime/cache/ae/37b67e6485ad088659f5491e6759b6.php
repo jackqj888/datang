@@ -1,4 +1,0 @@
-<?php
-//000000000000
- exit();?>
-s:580:"D:\phpEnv\www\other\jixie/data/runtime/cache\48\a490180995f86addcfc603c5daf390.php,D:\phpEnv\www\other\jixie/data/runtime/cache\0a\8594e049e426618d569476910a58f1.php,D:\phpEnv\www\other\jixie/data/runtime/cache\fc\aab41d6314c28cd612cde590461ef5.php,D:\phpEnv\www\other\jixie/data/runtime/cache\42\19f4c1585afaf87ae727e181a47a04.php,D:\phpEnv\www\other\jixie/data/runtime/cache\b2\c7657dcde3129ba3fe740ae2ce9e70.php,D:\phpEnv\www\other\jixie/data/runtime/cache\4f\54a5aad32def568216e55e166fbafa.php,D:\phpEnv\www\other\jixie/data/runtime/cache\5b\b42b432e9e3c4dd524f004c94a90f2.php";

@@ -1,7 +1,17 @@
 <div class="top-box">
   
   <div class="top-j">
-    <div class="logo-box"><a href="{eyou:global name='web_cmsurl' /}/" title="{eyou:global name="web_name" /}"><img src="{eyou:global name="web_logo" /}"  alt="{eyou:global name="web_name" /}" /></a></div>
+    <div class="logo-box">
+      <a href="{eyou:global name='web_cmsurl' /}/" title="{eyou:global name="web_name" /}">
+      <img src="{eyou:global name="web_logo" /}"
+      alt="{eyou:global name="web_name" /}" />
+      </a>
+    </div>
+    <div>
+      {eyou:language }
+      <a href="{$field.url}"><img src="{$field.logo}" alt="{$field.title}">{$field.title}</a>
+      {/eyou:language}
+    </div>
     <div class="t-ico">
       <div class="ico-dh">
         <p>咨询热线</p>
