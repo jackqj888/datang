@@ -1,31 +1,49 @@
+<style>
+  .logo-box-c {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .lang-c {
+    position: relative;
+    top: 20px;
+  }
+  .lang-c img {
+    margin-top: 4px;
+    margin-right: 2px;
+  }
+</style>
+
 <div class="top-box">
   
   <div class="top-j">
-    <div class="logo-box">
+    <div class="logo-box logo-box-c">
       <a href="{eyou:global name='web_cmsurl' /}/" title="{eyou:global name="web_name" /}">
-      <img src="{eyou:global name="web_logo" /}"
-      alt="{eyou:global name="web_name" /}" />
+        <img src="{eyou:global name="web_logo" /}"
+        alt="{eyou:global name="web_name" /}" />
       </a>
-    </div>
-    <div>
-      {eyou:language }
-      <a href="{$field.url}"><img src="{$field.logo}" alt="{$field.title}">{$field.title}</a>
-      {/eyou:language}
-    </div>
-    <div class="t-ico">
-      <div class="ico-dh">
-        <p>咨询热线</p>
-        {eyou:global name='web_attr_2' /}</div>
-      <div class="ico-u">
-        <ul>
-          <li><a onclick="SetHome(this,window.location)">设为首页</a></li>
-          <li><a onclick="AddFavorite(window.location,document.title)">加入收藏</a></li>
-          {eyou:type typeid='15'}
-          <li><a href="{$field.typeurl}">{$field.typename}</a></li>
-          {/eyou:type}
-        </ul>
+      <div class="lang-c">
+        {eyou:language }
+        <a href="{$field.url}"><img src="{$field.logo}" alt="{$field.title}"><span>{$field.title}</span></a>
+        {/eyou:language}
       </div>
     </div>
+
+<!--    <div class="t-ico">-->
+<!--      <div class="ico-dh">-->
+<!--        <p>咨询热线</p>-->
+<!--        {eyou:global name='web_attr_2' /}</div>-->
+<!--      <div class="ico-u">-->
+<!--        <ul>-->
+<!--          <li><a onclick="SetHome(this,window.location)">设为首页</a></li>-->
+<!--          <li><a onclick="AddFavorite(window.location,document.title)">加入收藏</a></li>-->
+<!--          {eyou:type typeid='15'}-->
+<!--          <li><a href="{$field.typeurl}">{$field.typename}</a></li>-->
+<!--          {/eyou:type}-->
+<!--        </ul>-->
+<!--      </div>-->
+<!--    </div>-->
   </div>
   <div class="menu-box">
     <ul id="nav" class="nav clearfix">
