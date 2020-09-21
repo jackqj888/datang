@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:44:"./application/admin/template/index\index.htm";i:1599809783;s:71:"D:\phpEnv\www\other\jixie\application\admin\template\public\menubox.htm";i:1516929058;s:68:"D:\phpEnv\www\other\jixie\application\admin\template\public\left.htm";i:1599809783;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:44:"./application/admin/template/index\index.htm";i:1600072432;s:71:"D:\phpEnv\www\other\jixie\application\admin\template\public\menubox.htm";i:1516929058;s:68:"D:\phpEnv\www\other\jixie\application\admin\template\public\left.htm";i:1600073231;}*/ ?>
 <!doctype html>
 <html>
 <head>
@@ -67,14 +67,23 @@
 } 
 </style>
 <div class="admincp-container unfold">
+<style>
+
+    .box9 {
+        height: 80px;
+        display: -webkit-box;
+        -webkit-box-pack: center;
+        -webkit-box-align: center;
+        -webkit-box-orient: vertical;
+        text-align: center;
+        font-size: 25px;
+    }
+</style>
+
 <div class="eycms_cont_left hidden-xs">
-    <dl class="eylogo">
-        <?php if(!(empty($is_eyou_authortoken) || (($is_eyou_authortoken instanceof \think\Collection || $is_eyou_authortoken instanceof \think\Paginator ) && $is_eyou_authortoken->isEmpty()))): ?>
-        <a href="<?php echo \think\Request::instance()->url(); ?>"><img id="web_adminlogo" src="/public/static/admin/images/logo_ey.png?v=<?php echo time(); ?>" alt="点击刷新" title="点击刷新"></a>
-        <?php else: ?>
-        <a href="<?php echo \think\Request::instance()->url(); ?>"><img id="web_adminlogo" src="/public/static/admin/images/logo.png?v=<?php echo time(); ?>" alt="点击刷新" title="点击刷新"></a>
-        <?php endif; ?>
-    </dl>
+   <div class="box9">
+        <a href="<?php echo \think\Request::instance()->url(); ?>">后台管理系统</a>
+   </div>
     <?php if(is_array($menu) || $menu instanceof \think\Collection || $menu instanceof \think\Paginator): $i = 0; $__LIST__ = $menu;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
         <dl style="<?php if($vo['is_menu'] == 0): ?>display: none;<?php endif; ?>">
             <?php if(!(empty($vo['name']) || (($vo['name'] instanceof \think\Collection || $vo['name'] instanceof \think\Paginator ) && $vo['name']->isEmpty()))): ?><dt><?php echo $vo['name']; ?></dt><?php endif; ?>
@@ -119,22 +128,8 @@
                   <i class="fa fa-toggle-on"></i>
                   <span class="hidden-xs">功能开关</span>
                 </a>
-                <?php endif; endif; if(!(empty($is_eyou_authortoken) || (($is_eyou_authortoken instanceof \think\Collection || $is_eyou_authortoken instanceof \think\Paginator ) && $is_eyou_authortoken->isEmpty()))): ?>
-              <!-- 商业授权 -->   
-              <em class="eyou_tool em_authortoken" data-expanded="close">
-                <a class="btn btn-default dropdown-toggle" title="购买后可去除所有版权提示" href="javascript:void(0);" onclick="valide(this);">
-                  <i class="fa fa-bookmark"></i>
-                  <span class="hidden-xs">购买授权</span>
-                </a>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="shouquan">
-                    <li class="ey-tool-list text-center"><a target="_blank" class="liaojie" href="http://www.eyoucms.com/buy/">了解商业授权</a></li>
-                    <li class="ey-tool-list text-center">
-                      <input class="btn btn-primary" type="button" onclick="$('.em_authortoken').toggleClass('open');openItem('Index|authortoken');" value="检测是否正版" />
-                    </li>
-                </ul>
-               </em>
-              <!-- 商业授权 -->   
-              <?php endif; ?>
+                <?php endif; endif; ?>
+
 
               <!-- 多语言 -->
               <em id="Language_index" class="eyou_tool em_lang" data-expanded="close" <?php if(empty($web_language_switch)): ?>style="display: none;"<?php endif; ?>>

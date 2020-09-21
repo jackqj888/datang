@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:46:"./application/admin/template/index\welcome.htm";i:1599809783;s:70:"D:\phpEnv\www\other\jixie\application\admin\template\public\footer.htm";i:1525273455;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:46:"./application/admin/template/index\welcome.htm";i:1600072530;s:70:"D:\phpEnv\www\other\jixie\application\admin\template\public\footer.htm";i:1525273455;}*/ ?>
 <!doctype html>
 <html>
 <head>
@@ -35,16 +35,9 @@
 <div id="ajaxwaitid"></div>
 <?php if(empty($system_explanation_welcome) || empty($system_explanation_welcome_2)): ?>
 <div id="explanation_welcome" style="margin:10px 15px 0px 15px;">
-    <?php if(empty($system_explanation_welcome) || (($system_explanation_welcome instanceof \think\Collection || $system_explanation_welcome instanceof \think\Paginator ) && $system_explanation_welcome->isEmpty())): ?>
-    <div class="explanation" style="color: rgb(44, 188, 163); background-color: #fff!important; width: 99%; height: 100%;">
-        <div class="title checkZoom" data-type="1">
-            <span title="不再提示" style="display: block;"></span>
-        </div>
-        <ul>
-            <li style="color: red;">系统检测当前版本尚未备份数据库，请点击<a href="<?php echo url('Tools/index'); ?>">【数据备份】</a>进入操作。</li>
-        </ul>
-    </div>
-    <?php endif; if(empty($system_explanation_welcome_2)): ?>
+
+
+    <?php if(empty($system_explanation_welcome_2)): ?>
     <div class="explanation" style="color: rgb(44, 188, 163); background-color: #fff!important; width: 99%; height: 100%; margin-top: 10px;">
         <div class="title checkZoom" data-type="2">
             <span title="不再提示" style="display: block;"></span>
@@ -100,43 +93,7 @@
                 </div>
             </div>
             <div class="section system_section" style="float: none;width: inherit;">
-                <div class="system_section_con">
-                    <div class="sc_title" style="padding: 26px 0 14px;border-bottom: 1px solid #e4eaec;">
-                      
-                        <h3><i class="fa fa-gear"></i>程序信息</h3>
-                    </div>
-                    <div class="sc_warp" id="system_warp" style="display: block;">
-                        <table cellpadding="0" cellspacing="0" class="system_table">
-                            <tbody>
-                                <tr>
-                                    <td class="gray_bg">系统更新：</td>
-                                    <td id="td_upgrade_msg">
-                                        <div id="upgrade_filelist" style="display:none;"></div> 
-                                        <div id="upgrade_intro" style="display:none;"></div> 
-                                        <div id="upgrade_notice" style="display:none;"></div> 
-                                        <a href="javascript:void(0);" id="a_upgrade" data-version="" data-max_version="" data-iframe="workspace" title="" data-tips_url="<?php echo url('Upgrade/setPopupUpgrade'); ?>" data-upgrade_url="<?php echo url('Upgrade/OneKeyUpgrade'); ?>" data-check_authority="<?php echo url('Upgrade/check_authority'); ?>"><?php if($upgrade == 'true'): ?>正在版本检测中……<?php else: ?>已是最新版<?php endif; ?></a>
-                                    </td>
-                                    <td class="gray_bg">当前版本：</td>
-                                    <td><?php echo (isset($sys_info['curent_version']) && ($sys_info['curent_version'] !== '')?$sys_info['curent_version']:'v1.0'); ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="gray_bg">程序名称：</td>
-                                    <td><?php echo (isset($sys_info['web_name']) && ($sys_info['web_name'] !== '')?$sys_info['web_name']:'Eyoucms企业网站管理系统'); ?></td>
-                                    <td class="gray_bg">版权所有：</td>
-                                    <td><?php if(!(empty($is_eyou_authortoken) || (($is_eyou_authortoken instanceof \think\Collection || $is_eyou_authortoken instanceof \think\Paginator ) && $is_eyou_authortoken->isEmpty()))): ?>盗版必究<?php else: ?>正版软件<?php endif; ?></td>
-                                </tr>
-                                <?php if(!(empty($is_eyou_authortoken) || (($is_eyou_authortoken instanceof \think\Collection || $is_eyou_authortoken instanceof \think\Paginator ) && $is_eyou_authortoken->isEmpty()))): ?>
-                                <tr>
-                                    <td class="gray_bg">更新日志：</td>
-                                    <td><a href="http://www.eyoucms.com/rizhi/" target="_blank">查看</a></td>
-                                    <td class="gray_bg">帮助中心:</td>
-                                    <td><a href="http://www.eyoucms.com/ask/" target="_blank">查看</a></td>
-                                </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+
                 <div class="system_section_con">
                     <div class="sc_title" style="padding: 26px 0 14px;border-bottom: 1px solid #e4eaec;">
                         

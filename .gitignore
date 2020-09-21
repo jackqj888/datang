@@ -1,7 +1,7 @@
 # Windows thumbnail cache files
 .env*
 /.idea
-/runtime
+/data/runtime
 /view/crmebNewUI/project.config.json
 .git
 /runtime/*

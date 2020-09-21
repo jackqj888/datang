@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:30:"./template/pc/lists_single.htm";i:1530671847;s:24:"./template/pc/header.htm";i:1600062948;s:22:"./template/pc/left.htm";i:1530670434;s:24:"./template/pc/footer.htm";i:1531819666;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:30:"./template/pc/lists_single.htm";i:1600067900;s:24:"./template/pc/header.htm";i:1600062948;s:22:"./template/pc/left.htm";i:1530670434;s:24:"./template/pc/footer.htm";i:1600072025;}*/ ?>
 <!doctype html>
 <html>
 <head>
@@ -134,16 +134,11 @@
   <div class="n-r">
     <div class="n-cont">
       <div class="n-zb">当前位置： <?php  $typeid = ""; if(empty($typeid) && isset($channelartlist["id"]) && !empty($channelartlist["id"])) : $typeid = intval($channelartlist["id"]); endif;  $tagPosition = new \think\template\taglib\eyou\TagPosition; $__VALUE__ = $tagPosition->getPosition($typeid, "", "crumb"); echo $__VALUE__; ?></div>
-      <?php echo $eyou['field']['content']; ?>  </div>
+      <?php echo $eyou['field']['content']; ?>  </div >
   </div>
 </div>
 <div class="foot-box">
-  <div class="link-box">
-    <div class="link-con">
-      <h3>友情链接：</h3>
-       <?php  $tagFlink = new \think\template\taglib\eyou\TagFlink; $_result = $tagFlink->getFlink("1", ""); if(is_array($_result) || $_result instanceof \think\Collection || $_result instanceof \think\Paginator): $i = 0; $e = 1; $__LIST__ = $_result;if( count($__LIST__)==0 ) : echo htmlspecialchars_decode("");else: foreach($__LIST__ as $key=>$field): $field["title"] = text_msubstr($field["title"], 0, 45, false); $__LIST__[$key] = $_result[$key] = $field;$i= intval($key) + 1;$mod = ($i % 2 ); ?><a href="<?php echo $field['url']; ?>" <?php echo $field['target']; ?>><?php echo $field['title']; ?></a><?php ++$e; endforeach; endif; else: echo htmlspecialchars_decode("");endif; $field = []; ?>
-    </div>
-  </div>
+
   <div class="foot-con">
     <div class="foot-cc">
       <div class="foot-l">
