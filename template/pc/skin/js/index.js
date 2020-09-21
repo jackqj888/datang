@@ -8,6 +8,13 @@ $(document).ready(function(){
 		$(this).children().stop(false,true);
 		$(this).children(".zhzhao").animate({top:-230},400);
 	});
+
+    $('.cur').parent('li').parent('ul').addClass('active')
+
+    $(".toggleIcon").click(function(){
+        $('.subList').slideUp(300)
+        $(this).parents('li').next('ul').stop(true).slideToggle(300);
+    });
 });
 
 

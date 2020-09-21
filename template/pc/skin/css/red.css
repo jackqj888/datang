@@ -70,3 +70,20 @@
 .n-lx-ico{ background:url(../img/lx-ico.png) left bottom no-repeat;}
 .n-lx-an a{ color:#fff; background:#ff9300;}
 .n-lx-an a:hover{ color:#fff; background:#ffba14;}
+.toggleIcon {
+    display: block;
+    width: 30%;
+    height: 40px;
+    float: right;
+    background: url(../img/menu_tb1.png) 80% center no-repeat;
+    -webkit-transition: all .25s;
+    -moz-transition: all .25s;
+    -ms-transition: all .25s;
+    -o-transition: all .25s;
+    transition: all .25s;
+    position: absolute;
+    top: 8px;
+    right: 0;
+    height: 20px;
+    cursor: pointer;
+}

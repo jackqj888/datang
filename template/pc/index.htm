@@ -13,16 +13,27 @@
 <script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/index.js"></script>
 </head>
 <body>
+<style>
+  .cp-con {
+    height: initial;
+  }
+  .fl-con-c {
+    height: 480px;
+  }
+  .fl-box-c {
+    height: 620px;
+  }
+</style>
 {eyou:include file="/template/pc/header.htm" /}
 
 {eyou:channelartlist typeid='35'}
 <div class="cp-box">
   <div class="cp-tit"><span>{eyou:field name='englist_name' /}</span>{eyou:field name='typename' /}</div>
-  <div class="fl-box">
+  <div class="fl-box fl-box-c">
     <div class="fl-tit">
       <p>Classification</p>
       产品分类</div>
-    <div class="fl-con">
+    <div class="fl-con fl-con-c">
       <ul>
         {eyou:channel type='son' row='5' id="field"}
         <li><a href="{$field.typeurl}" target="_blank">{$field.typename}</a></li>
@@ -33,7 +44,7 @@
   </div>
   <div class="cp-con">
     <ul>
-      {eyou:arclist titlelen='40' row='8'}
+      {eyou:arclist titlelen='40' row='12'}
       <li>
         <div class="c-tu"><a href="{$field.arcurl}" target="_blank"><img src="{$field.litpic}" alt="{$field.title}" width="210" height="144" /></a></div>
         <div class="c-tit"><a href="{$field.arcurl}" target="_blank">{$field.title}</a></div>
@@ -95,7 +106,7 @@
 </div>
 {/eyou:channelartlist}
 
-{eyou:channelartlist typeid='36'}
+{eyou:channelartlist typeid='35'}
 <div class="al-box">
   <div class="al-tit"><span>{eyou:field name='englist_name' /}</span>{eyou:field name='typename' /}</div>
   <div class="al-con">
