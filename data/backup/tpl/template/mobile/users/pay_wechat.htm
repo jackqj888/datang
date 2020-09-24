@@ -11,7 +11,6 @@
     {eyou:include file="users/skin/css/diy_css.htm" /}
 
     {eyou:static file="/public/static/common/js/jquery.min.js"/}
-    {eyou:static file="/public/plugins/layer-v3.1.0/layer.js"/}
     {eyou:static file="users/skin/js/global.js" /}
 </head>
 <body>
@@ -22,18 +21,12 @@
     </div>
     <input id="unified_number" type="hidden" value="{$unified_number}">
     <input id="transaction_type" type="hidden" value="{$transaction_type}">
-    <input id="WeChatUrl" type="hidden" value="{$WeChatUrl}">
 
     <script type="text/javascript">
         var t1;
-        var sum = 0;
+        var sum=0;
         $(document).ready(function () {
-            var WeChatUrl = $('#WeChatUrl').val();
-            if (WeChatUrl) {
-                t1 = setInterval("ajaxstatus()", 1500);
-            }else{
-                t1 = setInterval("ajaxstatus()", 3000);
-            }
+            t1 = setInterval("ajaxstatus()", 3000);
         });
         function ajaxstatus() {
             sum++;
@@ -49,13 +42,9 @@
             }
             var unified_number = $("#unified_number").val();
             var transaction_type = $('#transaction_type').val();
-            var WeChatUrl = $('#WeChatUrl').val();
-            if (!WeChatUrl) {
-                WeChatUrl = "{eyou:url link='user/Pay/pay_deal_with' vars='_ajax=1'/}";
-            }
             if (unified_number != 0) {
             	$.ajax({
-    				url: WeChatUrl,
+    				url: "{eyou:url link='user/Pay/pay_deal_with' /}",
     				data: {unified_number:unified_number,transaction_type:transaction_type},
     				type:'post',
     				dataType:'json',
@@ -64,9 +53,9 @@
     	                    $("#query_result").html(res.msg);
     	                } else if (1 == res.data.status) {
     	                    $("#query_result").html(res.msg);
-                            layer.msg(res.msg, {time: 1000}, function(){
-                                top.location.href = res.url;
-                            });
+    	                    setTimeout(function () {
+    							top.location.href = res.url;
+    						}, 1000);
     	                } else if (2 == res.data.status) {
     	                    $("#query_result").html(res.msg);
     	                }

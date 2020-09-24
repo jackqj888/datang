@@ -13,7 +13,6 @@
 
 namespace app\admin\model;
 
-use think\Db;
 use think\Model;
 
 /**
@@ -47,13 +46,20 @@ class Images extends Model
         $post['aid'] = $aid;
         $addonFieldExt = !empty($post['addonFieldExt']) ? $post['addonFieldExt'] : array();
         model('Field')->dealChannelPostData($post['channel'], $post, $addonFieldExt);
+        // 自动推送链接给蜘蛛
+        push_zzbaidu($opt, $aid);
 
         // ---------多图
         model('ImagesUpload')->saveimg($aid, $post);
         // ---------end
 
         // --处理TAG标签
-        model('Taglist')->savetags($aid, $post['typeid'], $post['tags'], $post['arcrank'], $opt);
+        model('Taglist')->savetags($aid, $post['typeid'], $post['tags']);
+
+        /*清除页面缓存*/
+        // $htmlCacheLogic = new \app\common\logic\HtmlCacheLogic;
+        // $htmlCacheLogic->clear_archives([$aid]);
+        /*--end*/
     }
 
     /**
@@ -64,7 +70,7 @@ class Images extends Model
     {
         $result = array();
         $field = !empty($field) ? $field : '*';
-        $result = Db::name('archives')->field($field)
+        $result = db('archives')->field($field)
             ->where([
                 'aid'   => $aid,
                 'lang'  => get_admin_lang(),
@@ -72,15 +78,14 @@ class Images extends Model
             ->find();
         if ($isshowbody) {
             $tableName = M('channeltype')->where('id','eq',$result['channel'])->getField('table');
-            $result['addonFieldExt'] = Db::name($tableName.'_content')->where('aid',$aid)->find();
+            $result['addonFieldExt'] = db($tableName.'_content')->where('aid',$aid)->find();
         }
 
         // 图集TAG标签
         if (!empty($result)) {
             $typeid = isset($result['typeid']) ? $result['typeid'] : 0;
             $tags = model('Taglist')->getListByAid($aid, $typeid);
-            $result['tags'] = $tags['tag_arr'];
-            $result['tag_id'] = $tags['tid_arr'];
+            $result['tags'] = $tags;
         }
 
         return $result;
@@ -111,7 +116,7 @@ class Images extends Model
         }
         $map['a.channel'] = $this->channeltype;
 
-        $result = Db::name('archives')
+        $result = db('archives')
             ->field($field)
             ->alias('a')
             ->join('__ARCTYPE__ b', 'b.id = a.typeid', 'LEFT')
@@ -131,7 +136,7 @@ class Images extends Model
     {
         $map['channel'] = $this->channeltype;
         $map['status'] = 1;
-        $result = Db::name('archives')
+        $result = db('archives')
             ->field($field)
             ->where($map)
             // ->cache(true,EYOUCMS_CACHE_TIME)
@@ -182,9 +187,8 @@ class Images extends Model
             ->select();
         if (!empty($result)) {
             foreach ($result as $key => $val) {
-                $image_url = preg_replace('#^(/[/\w]+)?(/public/upload/|/uploads/)#i', '$2', $val['image_url']);
-                if (!is_http_url($image_url) && file_exists('.'.$image_url) && preg_match('#^(/uploads/|/public/upload/)(.*)/([^/]+)\.([a-z]+)$#i', $image_url)) {
-                    @unlink(realpath('.'.$image_url));
+                if (!is_http_url($val['image_url'])) {
+                    @unlink(ROOT_PATH.trim($val['image_url'], '/'));
                 }
             }
             M('images_upload')->where(

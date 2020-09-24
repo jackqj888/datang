@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+<title>{$eyou.field.seo_title}</title>
+<meta name="description" content="{$eyou.field.seo_description}" />
+<meta name="keywords" content="{$eyou.field.seo_keywords}" />
+<link href="{eyou:global name='web_cmspath' /}/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link href="{eyou:global name='web_templets_pc' /}/skin/css/common.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_pc' /}/skin/css/style.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_pc' /}/skin/css/temp.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" rev="stylesheet" href="{eyou:global name='web_templets_pc' /}/skin/css/pshow2.css" type="text/css" />
+<link rel="stylesheet" rev="stylesheet" href="{eyou:global name='web_templets_pc' /}/skin/css/base_v4.css" type="text/css" />
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/ajax.js"></script>
+<script  type="text/javascript"></script>
+</head>
+<body>
+<!--header:end-->
+{eyou:include file="header.htm" /}
+<link rel="stylesheet" rev="stylesheet" href="{eyou:global name='web_templets_pc' /}/skin/css/jqzoom.css" type="text/css" />
+<link href="{eyou:global name='web_templets_pc' /}/skin/css/magiczoom.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/jqzoom.pack.1.0.1.js"></script> 
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/mz-packed.js"></script> 
+<script language="javascript" type="text/javascript">
+//产品标题
+var OBJ_TITLE = "{$eyou.field.title}";
+//图片路径数组
+var ARR_IMG_PATH = [
+{eyou:volist name="$eyou.field.image_list"}
+"{$field.image_url}",
+{/eyou:volist}
+];
+
+</script> 
+<!--content:start-->
+<div class="topadcs"> <a style='background:url({eyou:notempty name='$eyou.field.banner' /}{$eyou.field.banner} {eyou:else /}{$eyou.field.typeid|gettoptype=###,'banner'}{/eyou:notempty}) no-repeat center top;' ></a> </div>
+<div class="cpMain">
+  <div class="container">
+    {eyou:include file="left.htm" /}
+    <div class="cpright">
+      <div class="rtop">
+        <h5> <a>{$eyou.field.typename}</a></h5>
+        <span><em>您的位置：</em>{eyou:position style="crumb" /}</span> </div>
+      <div class="pro_main">
+        <div id="printableview">
+          <div class="pleft">
+            <div class="mainbox">
+              <div class="maincont"> 
+                <!-- prodetailsinfo -->
+                <div class="prodetailsinfo">
+                  <div class="proviewbox">
+                    <div class="probigshow"> 
+                   {eyou:volist name="$eyou.field.image_list" row='1'}
+                    <a class="jqzoom" href="{$field.image_url}"> <img src="{$field.image_url}" alt="" class="js_goods_image_url" style="width: 300px; height: 300px;" /></a>                    
+                   {/eyou:volist}
+                     </div>
+                    <div class="div_prothumb">
+                      <div class="thumbporbox">
+                        <ul class="ul_prothumb" id="img_list">
+                       {eyou:volist name="$eyou.field.image_list"}
+                        <li><a href="{$field.image_url}" target="_blank"><img longdesc="{$field.image_url}" src="{$field.image_url}"></a></li>
+                       {/eyou:volist}
+                         </ul>
+                      </div>
+                      <span class="span_prev span_prevb">prev</span><span class="span_next span_nextb">next</span> </div>
+                  </div>
+                  <!-- prodbaseinfo_a -->
+                  <div id="protop" class="prodbaseinfo_a">
+                    <h2 class="h2_prodtitle">{$eyou.field.title}</h2>
+                    <ul class="ul_prodinfo">
+                      {eyou:volist name="$eyou.field.attr_list"}
+                      <li class="li_normalprice">{$field.attr_name}: {$field.attr_value}</li>
+                      {/eyou:volist}
+                    </ul>
+                    <ul class="ul_prodinfos">
+                      <li>咨询热线：<span class="hottel" style="font-size: 24px;">{eyou:global name='web_attr_1' /}</span></li>
+                      <li class="li_weight">
+                        <div class="propar"> <a href="#caigou"> <img style="border: 0" src="{eyou:global name='web_templets_pc' /}/skin/img/buynowsmalls.jpg" /></a> </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="clear"> </div>
+                </div>
+              </div>
+            </div>
+            <script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/pshow2.js"></script> 
+            <script type="text/javascript">
+                            $(".jqzoom").jqzoom({ title: false, zoomWidth: 340, zoomHeight: 340, xOffset: 4 });
+                        </script> 
+          </div>
+          <div class="clear"> </div>
+          <div class="cp eyou-edit" e-id="p1" e-type="arclist" e-page="view_product">
+{eyou:uiarclist e-id='p1' typeid='2' e-page="view_product"}
+            <div class="cptab"  class="eyou-edit" e-id="p2" e-page='view_product' e-type="text"> {eyou:uitext e-id='p2' e-page='view_product' id='field'}
+{$field.value}
+{eyou:else/}跟此产品相关的产品 {/eyou:uitext}</div>
+            <div id="cntrRelevantProd">
+              <div id="cptab_relevant">
+              {eyou:arclist titlelen='20' rderby='rand' row='4'}    
+                <dl>
+                  <dt><a target='_blank' href="{$field.arcurl}"><img src="{$field.litpic}" alt="{$field.title}" /></a></dt>
+                  <dd class="t1"><a target='_blank' href="{$field.arcurl}">{$field.title}</a></dd>
+                </dl>
+               {/eyou:arclist}    
+              </div>
+            </div>
+            <div class="clear"> </div>
+            {/eyou:uiarclist}
+          </div>
+          <div class="mod_goods_info">
+            <ul class="hds">
+              <li class="status_on" id="detail0" onclick="switchExtendAttrTab('detail0',2)">
+                <h3> 产品详情</h3>
+              </li>
+           </ul>
+          </div>
+          <div class="proinfo " id="detailvalue0">
+            <div id='contentvalue100' class="shouzi2" style='display:;'>
+             {$eyou.field.content}
+            </div>
+          </div>
+          
+          <div id="helpContent"> </div>
+          <div class="dgxxBox" id="caigou">
+            <p> 咨询：{$eyou.field.title}</p>
+            {eyou:guestbookform type='default' typeid='24'}
+            <form method="POST" enctype="multipart/form-data" action="{$field.action}" onsubmit="return checkForm();">
+            <ul class="m_form clearfix" id="tbForm1">
+              <li class="areLi">
+                <textarea class="txtAre" placeholder="请填写{$field.itemname_4}" id="attr_4" name="{$field.attr_4}"></textarea>
+              </li>
+              <li class="clearfix">
+                <label> {$field.itemname_1}</label>
+                <input class="iptTxt" type="text" id="attr_1" name="{$field.attr_1}" placeholder="请填写{$field.itemname_1}" />
+              </li>
+              <li class="clearfix">
+                <label> {$field.itemname_2}</label>
+                <input class="iptTxt" id="attr_2" name="{$field.attr_2}" type="text" placeholder="请填写{$field.itemname_2}" />
+              </li>
+              <li class="clearfix">
+                <label> {$field.itemname_3}</label>
+                <input class="iptTxt" id="attr_3" name="{$field.attr_3}" type="text" placeholder="请填写{$field.itemname_3}"/>
+              </li>
+              <li class="btnLi">
+                <input class="btnTjly" type="submit" name="submit" value="提交您的咨询信息" />
+              </li>
+            </ul>
+            {$field.hidden}
+          </form>
+          <script type="text/javascript">
+            function checkForm()
+            {
+              if(document.getElementById('attr_1').value.length == 0)
+              {
+                alert('请填写{$field.itemname_1}');
+                return false;
+              }
+              if(document.getElementById('attr_2').value.length == 0)
+              {
+                alert('请填写{$field.itemname_2}');
+                return false;
+              }
+              
+              return true;
+            }
+          </script>
+        {/eyou:guestbookform}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clear"> </div>
+  </div>
+</div>
+<!--content:end--> 
+<!--footer:start-->
+{eyou:include file="footer.htm" /}
+<!--footer:end-->
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/jquery-3.3.1.min.js"></script> 
+{eyou:ui open='off' /}
+</body>
+</html>

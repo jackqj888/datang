@@ -30,10 +30,6 @@ $admin_config = array(
     'default_filter'         => 'htmlspecialchars', // htmlspecialchars
     // 登录有效期
     'login_expire' => 3600,
-    // 登录错误最大次数
-    'login_errtotal'   => 8,
-    // 登录错误超过次数之后，锁定用户名有效时间 15 分钟
-    'login_errexpire'   => 900,
     // +----------------------------------------------------------------------
     // | 模板设置
     // +----------------------------------------------------------------------
@@ -62,7 +58,7 @@ $admin_config = array(
 
     // 数据管理
     'DATA_BACKUP_PATH' => '/data/sqldata', //数据库备份根路径
-    'DATA_BACKUP_PART_SIZE' => 524288000, //数据库备份卷大小 50M
+    'DATA_BACKUP_PART_SIZE' => 52428800, //数据库备份卷大小 50M
     'DATA_BACKUP_COMPRESS' => 0, //数据库备份文件是否启用压缩
     'DATA_BACKUP_COMPRESS_LEVEL' => 9, //数据库备份文件压缩级别
 

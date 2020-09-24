@@ -16,7 +16,6 @@ var ueditor_toolbars = [[
 ]];
 
 var layer_tips; // 全局提示框的对象
-var ey_unknown_error = '未知错误，无法继续！';
 
 $(function(){
     auto_notic_tips();
@@ -32,188 +31,12 @@ $(function(){
             }
         });
     }
-
-    /*TAG标签选中与取消处理*/
-    $('.TagIndex1591690114').click(function() {
-        if ($(this).html() && $(this).data('id')) {
-            /*读取原有数据*/
-            var id  = $(this).data('id');
-            var tag = $(this).html();
-            var tagOldSelectID  = $('#TagOldSelectID').val();
-            var tagOldSelectTag = $('#TagOldSelectTag').val();
-            /*END*/
-            if (tagOldSelectID) {
-                /*处理原有数据*/
-                var tagOldSelectNew = tagOldSelectID.split(',');
-                var index = $.inArray(String(id), tagOldSelectNew);
-                if (index == -1) {
-                    /*追加新数据*/
-                    tagOldSelectID  += ',' + id;
-                    tagOldSelectTag += ',' + tag;
-                    /*END*/
-                } else {
-                    /*删除原有数据*/
-                    tagOldSelectNew.splice(index, 1);
-                    tagOldSelectID  = tagOldSelectNew.join(',');
-                    tagOldSelectTag = tagOldSelectTag.split(',');
-                    tagOldSelectTag.splice(index, 1);
-                    tagOldSelectTag = tagOldSelectTag.join(',');
-                    /*END*/
-                }
-                /*END*/
-            } else {
-                /*追加新数据*/
-                tagOldSelectID  = id;
-                tagOldSelectTag = tag;
-                /*END*/
-            }
-            $('#TagOldSelectID, #NewTagOldSelectID').val(tagOldSelectID);
-            $('#TagOldSelectTag, #NewTagOldSelectTag, #tags').val(tagOldSelectTag);
-        }
-    });
-    /*END*/
 });
- 
-/*TAG标签代码*/
-/*打开ATG快捷选择列表*/
-function TagListSelect1591784354(obj) {
-    var url = eyou_basefile + "?m="+module_name+"&c=Tags&a=tag_list&lang=" + __lang__;
-    //iframe窗
-    layer.open({
-        type: 2,
-        title: 'TAG标签选择',
-        fixed: true, //不固定
-        shadeClose: false,
-        shade: 0.3,
-        maxmin: false, //开启最大化最小化按钮
-        area: ['80%', '80%'],
-        content: url,
-        cancel: function () {
-            $('#TagOldSelectID').val($('#NewTagOldSelectID').val());
-            $('#TagOldSelectTag').val($('#NewTagOldSelectTag').val());
-        }
-    });
-}
-
-/*通过TAGID删除对应数据*/
-function UseTagIDDel1591784354(obj) {
-    // 获取已选中的tag标签ID
-    var tagOldSelectID = $('#TagOldSelectID').val();
-    // 获取已选中的tag标签Tag
-    var tagOldSelectTag = $('#TagOldSelectTag').val();
-    // 获取当前点击的tag标签ID
-    var id = $(obj).attr('data-id');
-    if (tagOldSelectID) {
-        // 将字符串转成数组，判断tag标签ID是否已存在
-        var tagOldSelectID = tagOldSelectID.split(',');
-        // 将字符串转成数组，判断tag标签ID是否已存在
-        var tagOldSelectTag = tagOldSelectTag.split(',');
-        // 是否存在，存在则返回下标
-        var index = $.inArray(String(id), tagOldSelectID);
-        // 若存在则执行
-        if (index != -1) {
-            // 删除指定tag的ID
-            tagOldSelectID.splice(index, 1);
-            // 将数组转成字符串
-            tagOldSelectID = tagOldSelectID.join(',');
-            // 赋值给已选中的tag标签ID隐藏域
-            $('#TagOldSelectID, #NewTagOldSelectID').val(tagOldSelectID);
-
-            // 删除指定tag的名称
-            tagOldSelectTag.splice(index, 1);
-            // 将数组转成字符串
-            tagOldSelectTag = tagOldSelectTag.join(',');
-            // 赋值给已选中的tag标签名称隐藏域
-            $('#tags').show().val(tagOldSelectTag).hide();
-            $('#TagOldSelectTag, #NewTagOldSelectTag').val(tagOldSelectTag);
-        }
-    }
-    // 删除自身
-    $(obj).parent().remove();
-}
-/*END*/
-
-/*通过TAG名称删除对应数据*/
-function UseTagNameDel1591784354(obj) {
-    // 获取已选中的tag标签ID
-    var tagOldSelectID = $('#TagOldSelectID').val();
-    // 获取已选中的tag标签Tag
-    var tagOldSelectTag = $('#TagOldSelectTag').val();
-    // 获取当前点击的tag标签Tag
-    var Tag = $(obj).val();
-    if (tagOldSelectID && tagOldSelectTag) {
-        // 将字符串转成数组，判断tag标签ID是否已存在
-        var tagOldSelectID = tagOldSelectID.split(',');
-        // 将字符串转成数组，判断tag标签ID是否已存在
-        var tagOldSelectTag = tagOldSelectTag.split(',');
-        // 是否存在，存在则返回下标
-        var index = $.inArray(String(Tag), tagOldSelectTag);
-        // 若存在则执行
-        if (index != -1) {
-            // 删除指定tag的ID
-            tagOldSelectID.splice(index, 1);
-            // 将数组转成字符串
-            tagOldSelectID = tagOldSelectID.join(',');
-            // 赋值给已选中的tag标签ID隐藏域
-            $('#TagOldSelectID, #NewTagOldSelectID').val(tagOldSelectID);
-            // 删除指定tag的名称
-            tagOldSelectTag.splice(index, 1);
-            // 将数组转成字符串
-            tagOldSelectTag = tagOldSelectTag.join(',');
-            // 赋值给已选中的tag标签名称隐藏域
-            $('#tags').show().val(tagOldSelectTag).hide();
-            $('#TagOldSelectTag, #NewTagOldSelectTag').val(tagOldSelectTag);
-        }
-    }
-    // 删除自身
-    $(obj).parent().remove();
-}
-/*END*/
-
-/**
- * 批量复制
- */
-function func_batch_copy(obj, name)
-{
-    var a = [];
-    var k = 0;
-    aids = '';
-    $('input[name^='+name+']').each(function(i,o){
-        if($(o).is(':checked')){
-            a.push($(o).val());
-            if (k > 0) {
-                aids += ',';
-            }
-            aids += $(o).val();
-            k++;
-        }
-    })
-    if(a.length == 0){
-        layer.alert('请至少选择一项', {icon: 2, title:false});
-        return;
-    }
-
-    var url = $(obj).attr('data-url');
-    //iframe窗
-    layer.open({
-        type: 2,
-        title: '批量复制',
-        fixed: true, //不固定
-        shadeClose: false,
-        shade: 0.3,
-        maxmin: false, //开启最大化最小化按钮
-        area: ['450px', '300px'],
-        content: url
-    });
-}
 
 /**
  * 批量删除提交
  */
 function batch_del(obj, name) {
-
-    var url = $(obj).attr('data-url');
-
     var a = [];
     $('input[name^='+name+']').each(function(i,o){
         if($(o).is(':checked')){
@@ -227,156 +50,37 @@ function batch_del(obj, name) {
 
     var deltype = $(obj).attr('data-deltype');
     if ('pseudo' == deltype) {
-        batch_del_pseudo(obj, a);
+        title = '删除到回收站，确认批量删除？';
     } else {
-        title = '此操作不可恢复，确定批量删除？';
-        btn = ['确定', '取消']; //按钮
-        // 删除按钮
-        layer.confirm(title, {
-            title: false,
-            btn: btn //按钮
-        }, function () {
-            layer_loading('正在处理');
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: {del_id:a, _ajax:1},
-                dataType: 'json',
-                success: function (data) {
-                    layer.closeAll();
-                    if(data.code == 1){
-                        layer.msg(data.msg, {icon: 1});
-                        //window.location.reload();
-                
-                        /* 生成静态页面代码 */
-                        var slice_start = url.indexOf('m=admin&c=');
-                        slice_start = parseInt(slice_start) + 10;
-                        var slice_end = url.indexOf('&a=');
-                        var ctl_name = url.slice(slice_start,slice_end);
-                        $.ajax({
-                            url:__root_dir__+"/index.php?m=home&c=Buildhtml&a=upHtml&lang="+__lang__,
-                            type:'POST',
-                            dataType:'json',
-                            data: {del_ids:a,ctl_name:ctl_name,_ajax:1},
-                            success:function(data){
-                                window.location.reload();
-                            },
-                            error: function(){
-                                window.location.reload();
-                            }
-                        });
-                        /* end */
-                                
-                        // layer.alert(data.msg, {
-                        //     icon: 1,
-                        //     closeBtn: 0
-                        // }, function(){
-                        //     window.location.reload();
-                        // });
-                    }else{
-                        layer.alert(data.msg, {icon: 2, title:false});
-                    }
-                },
-                error:function(){
-                    layer.closeAll();
-                    layer.alert(ey_unknown_error, {icon: 2, title:false});
-                }
-            });
-        }, function (index) {
-            layer.closeAll(index);
-        });
+        title = '此操作不可逆，确认批量删除？';
     }
-}
-
-/**
- * 批量删除-针对临时存放在回收站的数据
- */
-function batch_del_pseudo(obj, a) {
-
-    var url = $(obj).attr('data-url');
 
     // 删除按钮
-    layer.confirm('将批量删除文档，请选择操作？', {
-        title: false,
-        btn: ['彻底删除', '放入回收站'] //按钮
+    layer.confirm(title, {
+        btn: ['确定', '取消'] //按钮
     }, function () {
         layer_loading('正在处理');
         $.ajax({
             type: "POST",
-            url: url,
-            data: {del_id:a, thorough:1, _ajax:1},
+            url: $(obj).attr('data-url'),
+            data: {del_id:a},
             dataType: 'json',
             success: function (data) {
                 layer.closeAll();
                 if(data.code == 1){
                     layer.msg(data.msg, {icon: 1});
-            
-                    /* 生成静态页面代码 */
-                    var slice_start = url.indexOf('m=admin&c=');
-                    slice_start = parseInt(slice_start) + 10;
-                    var slice_end = url.indexOf('&a=');
-                    var ctl_name = url.slice(slice_start,slice_end);
-                    $.ajax({
-                        url:__root_dir__+"/index.php?m=home&c=Buildhtml&a=upHtml&lang="+__lang__,
-                        type:'POST',
-                        dataType:'json',
-                        data: {del_ids:a,ctl_name:ctl_name,_ajax:1},
-                        success:function(data){
-                            window.location.reload();
-                        },
-                        error: function(){
-                            window.location.reload();
-                        }
-                    });
-                    /* end */
+                    window.location.reload();
                 }else{
                     layer.alert(data.msg, {icon: 2, title:false});
                 }
             },
             error:function(){
                 layer.closeAll();
-                layer.alert(ey_unknown_error, {icon: 2, title:false});
+                layer.alert('网络失败，请刷新页面后重试', {icon: 2, title:false});
             }
         });
     }, function (index) {
-        layer_loading('正在处理');
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: {del_id:a, _ajax:1},
-            dataType: 'json',
-            success: function (data) {
-                layer.closeAll();
-                if(data.code == 1){
-                    layer.msg(data.msg, {icon: 1});
-            
-                    /* 生成静态页面代码 */
-                    var slice_start = url.indexOf('m=admin&c=');
-                    slice_start = parseInt(slice_start) + 10;
-                    var slice_end = url.indexOf('&a=');
-                    var ctl_name = url.slice(slice_start,slice_end);
-                    $.ajax({
-                        url:__root_dir__+"/index.php?m=home&c=Buildhtml&a=upHtml&lang="+__lang__,
-                        type:'POST',
-                        dataType:'json',
-                        data: {del_ids:a,ctl_name:ctl_name,_ajax:1},
-                        success:function(data){
-                            window.location.reload();
-                        },
-                        error: function(){
-                            window.location.reload();
-                        }
-                    });
-                    /* end */
-                }else{
-                    layer.alert(data.msg, {icon: 2, title:false});
-                }
-            },
-            error:function(){
-                layer.closeAll();
-                layer.alert(ey_unknown_error, {icon: 2, title:false});
-            }
-        });
+        layer.closeAll(index);
     });
 }
 
@@ -384,202 +88,43 @@ function batch_del_pseudo(obj, a) {
  * 单个删除
  */
 function delfun(obj) {
-
-    var url = $(obj).attr('data-url');
-    
     var deltype = $(obj).attr('data-deltype');
     if ('pseudo' == deltype) {
-        delfun_pseudo(obj);
+        title = '删除到回收站，确认删除？';
     } else {
-        title = '此操作不可恢复，确定删除？';
-        btn = ['确定', '取消']; //按钮
-        layer.confirm(title, {
-                title: false,
-                btn: btn //按钮
-            }, function(){
-                // 确定
-                layer_loading('正在处理');
-                $.ajax({
-                    type : 'POST',
-                    url : url,
-                    data : {del_id:$(obj).attr('data-id'), _ajax:1},
-                    dataType : 'json',
-                    success : function(data){
-                        layer.closeAll();
-                        if(data.code == 1){
-                            layer.msg(data.msg, {icon: 1});
-                            //window.location.reload();
-
-                            /* 生成静态页面代码 */
-                            var slice_start = url.indexOf('m=admin&c=');
-                            slice_start = parseInt(slice_start) + 10;
-                            var slice_end = url.indexOf('&a=');
-                            var ctl_name = url.slice(slice_start,slice_end);
-                            $.ajax({
-                                url:__root_dir__+"/index.php?m=home&c=Buildhtml&a=upHtml&lang="+__lang__,
-                                type:'POST',
-                                dataType:'json',
-                                data: {del_ids:$(obj).attr('data-id'),ctl_name:ctl_name,_ajax:1},
-                                success:function(data){
-                                     window.location.reload();
-                                },
-                                error: function(){
-                                    window.location.reload();
-                                }
-                            });
-                            /* end */
-                        }else{
-                            layer.alert(data.msg, {icon: 2, title:false});
-                        }
-                    },
-                    error:function(){
-                        layer.closeAll();
-                        layer.alert(ey_unknown_error, {icon: 2, title:false});
-                    }
-                })
-            }, function(index){
-                layer.close(index);
-                return false;// 取消
-            }
-        );
+        title = '此操作不可逆，确认删除？';
     }
-}
 
-/**
- * 单个删除-针对临时存放在回收站的数据
- */
-function delfun_pseudo(obj) {
-
-    var url = $(obj).attr('data-url');
-
-    layer.confirm('将删除该文档，请选择操作？', {
-            title: false,
-            btn: ['彻底删除', '放入回收站'] //按钮
+    layer.confirm(title, {
+          btn: ['确定','取消'] //按钮
         }, function(){
-            // 直接删除
-            layer_loading('正在处理');
-            $.ajax({
-                type : 'POST',
-                url : url,
-                data : {del_id:$(obj).attr('data-id'), thorough:1, _ajax:1},
-                dataType : 'json',
-                success : function(data){
-                    layer.closeAll();
-                    if(data.code == 1){
-                        layer.msg(data.msg, {icon: 1});
-
-                        /* 生成静态页面代码 */
-                        var slice_start = url.indexOf('m=admin&c=');
-                        slice_start = parseInt(slice_start) + 10;
-                        var slice_end = url.indexOf('&a=');
-                        var ctl_name = url.slice(slice_start,slice_end);
-                        $.ajax({
-                            url:__root_dir__+"/index.php?m=home&c=Buildhtml&a=upHtml&lang="+__lang__,
-                            type:'POST',
-                            dataType:'json',
-                            data: {del_ids:$(obj).attr('data-id'),ctl_name:ctl_name,_ajax:1},
-                            success:function(data){
-                                 window.location.reload();
-                            },
-                            error: function(){
-                                window.location.reload();
-                            }
-                        });
-                        /* end */
-                    }else{
-                        layer.alert(data.msg, {icon: 2, title:false});
-                    }
-                },
-                error:function(){
-                    layer.closeAll();
-                    layer.alert(ey_unknown_error, {icon: 2, title:false});
-                }
-            })
-
-        }, function(index){
             // 确定
             layer_loading('正在处理');
             $.ajax({
-                type : 'POST',
-                url : url,
-                data : {del_id:$(obj).attr('data-id'), _ajax:1},
+                type : 'post',
+                url : $(obj).attr('data-url'),
+                data : {del_id:$(obj).attr('data-id')},
                 dataType : 'json',
                 success : function(data){
                     layer.closeAll();
                     if(data.code == 1){
                         layer.msg(data.msg, {icon: 1});
-                        //window.location.reload();
-
-                        /* 生成静态页面代码 */
-                        var slice_start = url.indexOf('m=admin&c=');
-                        slice_start = parseInt(slice_start) + 10;
-                        var slice_end = url.indexOf('&a=');
-                        var ctl_name = url.slice(slice_start,slice_end);
-                        $.ajax({
-                            url:__root_dir__+"/index.php?m=home&c=Buildhtml&a=upHtml&lang="+__lang__,
-                            type:'POST',
-                            dataType:'json',
-                            data: {del_ids:$(obj).attr('data-id'),ctl_name:ctl_name,_ajax:1},
-                            success:function(data){
-                                 window.location.reload();
-                            },
-                            error: function(){
-                                window.location.reload();
-                            }
-                        });
-                        /* end */
+                        window.location.reload();
+                        // $(obj).parent().parent().parent().remove();
                     }else{
                         layer.alert(data.msg, {icon: 2, title:false});
                     }
                 },
                 error:function(){
                     layer.closeAll();
-                    layer.alert(ey_unknown_error, {icon: 2, title:false});
+                    layer.alert('网络失败，请刷新页面后重试', {icon: 2, title:false});
                 }
             })
+        }, function(index){
+            layer.close(index);
+            return false;// 取消
         }
     );
-}
-
-/**
- * 批量属性操作
- */
-function batch_attr(obj, name, title)
-{
-    var a = [];
-    var k = 0;
-    var aids = '';
-    $('input[name^='+name+']').each(function(i,o){
-        if($(o).is(':checked')){
-            a.push($(o).val());
-            if (k > 0) {
-                aids += ',';
-            }
-            aids += $(o).val();
-            k++;
-        }
-    })
-    if(a.length == 0){
-        layer.alert('请至少选择一项', {icon: 2, title:false});
-        return;
-    }
-
-    var url = $(obj).attr('data-url');
-    //iframe窗
-    layer.open({
-        type: 2,
-        title: title,
-        fixed: true, //不固定
-        shadeClose: false,
-        shade: 0.3,
-        maxmin: false, //开启最大化最小化按钮
-        area: ['390px', '200px'],
-        content: url,
-        success: function(layero, index){
-            var body = layer.getChildFrame('body', index);
-            body.find('input[name=aids]').val(aids);
-        }
-    });
 }
 
 /**
@@ -595,49 +140,19 @@ function selectAll(name,obj){
  */
 function clickRemote(obj, id)
 {
-    try {
-        if ($(obj).is(':checked')) {
-            $('#'+id+'_remote').show();
-            $('.div_'+id+'_local').hide();
-            if ($("input[name="+id+"_remote]").val().length > 0) {
-                $("input[name=is_litpic]").attr('checked', true); // 自动勾选属性[图片]
-            } else {
-                $("input[name=is_litpic]").attr('checked', false); // 自动取消属性[图片]
-            }
-        } else {
-            $('.div_'+id+'_local').show();
-            $('#'+id+'_remote').hide();
-            if ($("input[name="+id+"_local]").val().length > 0) {
-                $("input[name=is_litpic]").attr('checked', true); // 自动勾选属性[图片]
-            } else {
-                $("input[name=is_litpic]").attr('checked', false); // 自动取消属性[图片]
-            }
-        }
-    }catch(e){}
-}
-
-/**
- * 监听远程图片文本框的按键输入事件
- */
-function keyupRemote(obj, id)
-{
-    try {
-        var value = $(obj).val();
-        if (value != '') {
-            $("input[name=is_litpic]").attr('checked', true); // 自动勾选属性[图片]
-        } else {
-            $("input[name=is_litpic]").attr('checked', false); // 自动取消属性[图片]
-        }
-    }catch(e){}
+    if ($(obj).is(':checked')) {
+        $('#'+id+'_remote').show();
+        $('.div_'+id+'_local').hide();
+    } else {
+        $('.div_'+id+'_local').show();
+        $('#'+id+'_remote').hide();
+    }
 }
 
 /**
  * 批量移动操作
  */
 function batch_move(obj, name) {
-
-    var url = $(obj).attr('data-url');
-
     var a = [];
     $('input[name^='+name+']').each(function(i,o){
         if($(o).is(':checked')){
@@ -655,8 +170,8 @@ function batch_move(obj, name) {
         layer_loading('正在处理');
         $.ajax({
             type: "POST",
-            url: url,
-            data: {move_id:a, _ajax:1},
+            url: $(obj).attr('data-url'),
+            data: {move_id:a},
             dataType: 'json',
             success: function (data) {
                 layer.closeAll();
@@ -669,7 +184,7 @@ function batch_move(obj, name) {
             },
             error:function(){
                 layer.closeAll();
-                layer.alert(ey_unknown_error, {icon: 2, title:false});
+                layer.alert('网络失败，请刷新页面后重试', {icon: 2, title:false});
             }
         });
     }, function (index) {
@@ -736,15 +251,7 @@ function GetUploadify(num,elementid,path,callback,url)
         layer.close(layer_GetUploadify);
     }
     if (num > 0) {
-
-        var is_water = 1;
-
         if (!url) {
-            url = GetUploadify_url;
-        }
-
-        if ('water' == url) {
-            is_water = 0;
             url = GetUploadify_url;
         }
         
@@ -761,7 +268,7 @@ function GetUploadify(num,elementid,path,callback,url)
             height = '66%';
         }
 
-        var upurl = url+'num='+num+'&input='+elementid+'&path='+path+'&func='+callback+'&is_water='+is_water;
+        var upurl = url+'num='+num+'&input='+elementid+'&path='+path+'&func='+callback;
         layer_GetUploadify = layer.open({
             type: 2,
             title: '上传图片',
@@ -835,13 +342,13 @@ function GetUploadifyProduct(id,num,elementid,path,callback)
         content: upurl
      });
 }
-    
+	
 // 获取活动剩余天数 小时 分钟
 //倒计时js代码精确到时分秒，使用方法：注意 var EndTime= new Date('2013/05/1 10:00:00'); //截止时间 这一句，特别是 '2013/05/1 10:00:00' 这个js日期格式一定要注意，否则在IE6、7下工作计算不正确哦。
 //js代码如下：
 function GetRTime(end_time){
       // var EndTime= new Date('2016/05/1 10:00:00'); //截止时间 前端路上 http://www.51xuediannao.com/qd63/
-       var EndTime= new Date(end_time); //截止时间 前端路上 http://www.51xuediannao.com/qd63/
+	   var EndTime= new Date(end_time); //截止时间 前端路上 http://www.51xuediannao.com/qd63/
        var NowTime = new Date();
        var t =EndTime.getTime() - NowTime.getTime();
        /*var d=Math.floor(t/1000/60/60/24);
@@ -856,8 +363,8 @@ function GetRTime(end_time){
        var h=Math.floor(t/1000/60/60%24);
        var m=Math.floor(t/1000/60%60);
        var s=Math.floor(t/1000%60);
-       if(s >= 0)   
-       return d + '天' + h + '小时' + m + '分' +s+'秒';
+	   if(s >= 0)	
+	   return d + '天' + h + '小时' + m + '分' +s+'秒';
    }
    
 /**
@@ -873,9 +380,8 @@ function get_select_options(t,next){
     $.ajax({
         type : "GET",
         url  : url,
-        data : {_ajax:1},
         error: function(request) {
-            alert(ey_unknown_error);
+            alert("网络失败，请刷新页面后重试");
             return;
         },
         success: function(v) {
@@ -887,29 +393,29 @@ function get_select_options(t,next){
 // 读取 cookie
 function getCookie(c_name)
 {
-    if (document.cookie.length>0)
-    {
-      c_start = document.cookie.indexOf(c_name + "=")
-      if (c_start!=-1)
-      { 
-        c_start=c_start + c_name.length+1 
-        c_end=document.cookie.indexOf(";",c_start)
-        if (c_end==-1) c_end=document.cookie.length
-            return unescape(document.cookie.substring(c_start,c_end))
-      } 
-    }
-    return "";
+	if (document.cookie.length>0)
+	{
+	  c_start = document.cookie.indexOf(c_name + "=")
+	  if (c_start!=-1)
+	  { 
+	    c_start=c_start + c_name.length+1 
+	    c_end=document.cookie.indexOf(";",c_start)
+	    if (c_end==-1) c_end=document.cookie.length
+	    	return unescape(document.cookie.substring(c_start,c_end))
+	  } 
+	}
+	return "";
 }
 
 function setCookies(name, value, time)
 {
-    var cookieString = name + "=" + escape(value) + ";";
-    if (time != 0) {
-        var Times = new Date();
-        Times.setTime(Times.getTime() + time);
-        cookieString += "expires="+Times.toGMTString()+";"
-    }
-    document.cookie = cookieString+"path=/";
+	var cookieString = name + "=" + escape(value) + ";";
+	if (time != 0) {
+		var Times = new Date();
+		Times.setTime(Times.getTime() + time);
+		cookieString += "expires="+Times.toGMTString()+";"
+	}
+	document.cookie = cookieString+"path=/";
 }
 function delCookie(name){
     var exp=new Date();
@@ -921,20 +427,20 @@ function delCookie(name){
 }
 
 function layConfirm(msg , callback){
-    layer.confirm(msg, {
-          btn: ['确定','取消'] //按钮
-        }, function(){
-            callback();
-            layer.closeAll();
-        }, function(index){
-            layer.close(index);
-            return false;// 取消
-        }
-    );
+	layer.confirm(msg, {
+		  btn: ['确定','取消'] //按钮
+		}, function(){
+			callback();
+			layer.closeAll();
+		}, function(index){
+			layer.close(index);
+			return false;// 取消
+		}
+	);
 }
 
 function isMobile(){
-    return "yes";
+	return "yes";
 }
 
 // 判断是否手机浏览器
@@ -952,7 +458,7 @@ function isMobileBrowser()
     if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM ){    
         return true;
     }else 
-        return false;
+	    return false;
 }
 
 function getCookieByName(name) {
@@ -1101,93 +607,3 @@ function changeNum(elm,txtElm,maxNum,_this) {
     }  
     return ;  
 } 
-
-// 查看大图
-function Images(links, max_width, max_height){
-    var img = "<img src='"+links+"'/>";
-    $(img).load(function() {
-        width  = this.width;
-        height = this.height;
-        if (width > height) {
-            if (width > max_width) {
-                width = max_width;
-            }
-            width += 'px';
-        } else {
-            width = 'auto';
-        }
-        if (width < height) {
-            if (height > max_height) {
-                height = max_height;
-            }
-            height += 'px';
-        } else {
-            height = 'auto';
-        }
-
-        var links_img = "<img style='width:"+width+";height:"+height+";' src="+links+">";
-        
-        layer.open({
-            type: 1,
-            title: false,
-            closeBtn: true,
-            area: [width, height],
-            skin: 'layui-layer-nobg', //没有背景色
-            content: links_img
-        });
-    });
-}
-
-function gourl(url)
-{
-    window.location.href = url;
-}
-
-// 百度自动推送
-function push_zzbaidu(url, type)
-{
-    $.ajax({
-        url:__root_dir__+"/index.php?m=api&c=Ajax&a=push_zzbaidu&lang="+__lang__,
-        type:'POST',
-        dataType:'json',
-        data:{"url":url,"type":type,"_ajax":1},
-        success:function(res){
-            console.log(res.msg);
-        },
-        error: function(e){
-            console.log(e);
-        }
-    });
-}
-
-// 更新sitemap.xml地图
-function update_sitemap(controller, action)
-{
-    $.ajax({
-        url:__root_dir__+"/index.php?m=admin&c=Ajax&a=update_sitemap&lang="+__lang__,
-        type:'POST',
-        dataType:'json',
-        data:{"controller":controller,"action":action,"_ajax":1},
-        success:function(res){
-            console.log(res.msg);
-        },
-        error: function(e){
-            console.log(e);
-        }
-    });
-}
-
-//在iframe内打开易优官网的页面
-function click_to_eyou_1575506523(url,title) {
-    //iframe窗
-    layer.open({
-        type: 2,
-        title: title,
-        fixed: true, //不固定
-        shadeClose: false,
-        shade: 0.3,
-        maxmin: true, //开启最大化最小化按钮
-        area: ['80%', '80%'],
-        content: url
-    });
-}

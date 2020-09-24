@@ -1,20 +1,19 @@
-<ul class="foc clearfix">
-    <li><a href="tel:{eyou:global name='web_attr_2' /}"> <span class="bthome iconfont">&#xe64c;</span>
-      <p>在线咨询</p>
-      </a></li>
-    <li><a href="sms:{eyou:global name='web_attr_60' /}"> <span class="btfl iconfont">&#xe685;</span>
-      <p>短信预约</p>
-      </a></li>
-      {eyou:type typeid='15'}
-    <li><a href="{$field.typeurl}"> <span class="btcar iconfont">&#xe606;</span>
-      <p>{$field.typename}</p>
-      </a></li>
-      {/eyou:type}
-    <li><a href="{eyou:global name='web_cmsurl' /}/"> <span class="btmenber iconfont">&#xe605;</span>
-      <p>返回首页</p>
-      </a></li>
-  </ul>
-  {eyou:global name='web_thirdcode_wap' /} 
-  <!-- 应用插件标签 start --> 
-  {eyou:weapp type='default' /} 
-  <!-- 应用插件标签 end -->
+
+<div class="info"  e-page="footer">
+  <div class="eyou-edit" e-id="1" e-type="text"> {eyou:uitext e-id='1' e-page='index' id='field'}
+    {$field.value}
+    {eyou:else/}
+    <p>{eyou:global name='web_name' /}</p>
+    <p>总部地址：{eyou:global name='web_attr_5' /}</p>
+    <p>电话：<a href="tel:{eyou:global name='web_attr_1' /}">{eyou:global name='web_attr_1' /}</a>&nbsp;&nbsp;/{eyou:global name='web_attr_6' /}</p>
+    <p> E-mail:{eyou:global name='web_attr_8' /}</p>
+    {/eyou:uitext} </div>
+  <p>{eyou:global name='web_copyright' /}</p>
+</div>
+<!--footer-->
+<div class="backTop"><a href="#header"><img src="{eyou:global name='web_templets_m' /}/skin/img/top.png" width="50" height="50" /></a></div>
+<footer> <a href="{eyou:global name='web_cmsurl' /}/"><img src="{eyou:global name='web_templets_m' /}/skin/img/f01.png">返回首页 </a> {eyou:type typeid='2'} <a href="{$field.typeurl}"> <img src="{eyou:global name='web_templets_m' /}/skin/img/f02.png">{$field.typename}</a> {/eyou:type} <a href="sms:{eyou:global name='web_attr_6' /}"><img src="{eyou:global name='web_templets_m' /}/skin/img/f03.png">短信</a> <a href="tel:{eyou:global name='web_attr_1' /}"><img src="{eyou:global name='web_templets_m' /}/skin/img/f04.png">免费咨询</a> </footer>
+{eyou:global name='web_thirdcode_wap' /} 
+<!-- 应用插件标签 start --> 
+{eyou:weapp type='default' /} 
+<!-- 应用插件标签 end -->

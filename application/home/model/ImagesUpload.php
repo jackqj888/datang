@@ -13,7 +13,6 @@
 
 namespace app\home\model;
 
-use think\Db;
 use think\Model;
 
 /**
@@ -27,20 +26,17 @@ class ImagesUpload extends Model
         // 需要调用`Model`的`initialize`方法
         parent::initialize();
     }
-    
+
     /**
-     * 获取指定图集的所有图片
+     * 获取单条图集的所有图片
      * @author 小虎哥 by 2018-4-3
      */
-    public function getImgUpload($aids = [], $field = '*')
+    public function getImgUpload($aid, $field = '*')
     {
-        $where = [];
-        !empty($aids) && $where['aid'] = ['IN', $aids];
-        $result = Db::name('ImagesUpload')->field($field)
-            ->where($where)
+        $result = db('ImagesUpload')->field($field)
+            ->where('aid', $aid)
             ->order('sort_order asc')
             ->select();
-        !empty($result) && $result = group_same_key($result, 'aid');
 
         return $result;
     }

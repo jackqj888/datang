@@ -21,26 +21,23 @@ use app\admin\logic\FieldLogic;
 class Arctype extends Base
 {
     public $fieldLogic;
-    public $arctypeLogic;
     // 栏目对应模型ID
     public $arctype_channel_id = '';
     // 允许发布文档的模型ID
     public $allowReleaseChannel = array();
     // 禁用的目录名称
     public $disableDirname = [];
-
-    public function _initialize()
-    {
+    
+    public function _initialize() {
         parent::_initialize();
-        $this->fieldLogic          = new FieldLogic();
-        $this->arctypeLogic        = new ArctypeLogic();
+        $this->fieldLogic = new FieldLogic();
         $this->allowReleaseChannel = config('global.allow_release_channel');
-        $this->arctype_channel_id  = config('global.arctype_channel_id');
-        $this->disableDirname      = config('global.disable_dirname');
+        $this->arctype_channel_id = config('global.arctype_channel_id');
+        $this->disableDirname = config('global.disable_dirname');
 
         /*兼容每个用户的自定义字段，重新生成数据表字段缓存文件*/
-        $arctypeFieldInfo = include DATA_PATH . 'schema/' . PREFIX . 'arctype.php';
-        foreach (['weapp_code'] as $key => $val) {
+        $arctypeFieldInfo = include DATA_PATH.'schema/'.PREFIX.'arctype.php';
+        foreach (['del_method'] as $key => $val) {
             if (!isset($arctypeFieldInfo[$val])) {
                 try {
                     schemaTable('arctype');
@@ -55,39 +52,10 @@ class Arctype extends Base
     {
         $arctype_list = array();
         // 目录列表
+        $arctypeLogic = new ArctypeLogic(); 
         $where['is_del'] = '0'; // 回收站功能
-        $arctype_list = $this->arctypeLogic->arctype_list(0, 0, false, 0, $where, false);
+        $arctype_list = $arctypeLogic->arctype_list(0, 0, false, 0, $where, false);
         $this->assign('arctype_list', $arctype_list);
-
-        /*多语言模式下，栏目ID显示主体语言的ID和属性title名称*/
-        $main_arctype_list = [];
-        if ($this->admin_lang != $this->main_lang) {
-            $attr_values = get_arr_column($arctype_list, 'id');
-            $languageAttrRow = Db::name('language_attr')->field('attr_name,attr_value')->where([
-                    'attr_value'    => ['IN', $attr_values],
-                    'attr_group'    => 'arctype',
-                    'lang'          => $this->admin_lang,
-                ])->getAllWithIndex('attr_value');
-            $typeids = [];
-            foreach ($languageAttrRow as $key => $val) {
-                $tid_tmp = str_replace('tid', '', $val['attr_name']);
-                array_push($typeids, intval($tid_tmp));
-            }
-            $main_ArctypeRow = Db::name('arctype')->field("id,typename,CONCAT('tid', id) AS attr_name")
-                ->where([
-                    'id'    => ['IN', $typeids],
-                    'lang'  => $this->main_lang,
-                ])->getAllWithIndex('attr_name');
-            foreach ($arctype_list as $key => $val) {
-                $key_tmp = !empty($languageAttrRow[$val['id']]['attr_name']) ? $languageAttrRow[$val['id']]['attr_name'] : '';
-                $main_arctype_list[$val['id']] = [
-                    'id'        => !empty($main_ArctypeRow[$key_tmp]['id']) ? $main_ArctypeRow[$key_tmp]['id'] : 0,
-                    'typename'  => !empty($main_ArctypeRow[$key_tmp]['typename']) ? $main_ArctypeRow[$key_tmp]['typename'] : '',
-                ];
-            }
-        }
-        $this->assign('main_arctype_list', $main_arctype_list);
-        /*end*/
 
         // 模型列表
         $channeltype_list = getChanneltypeList();
@@ -96,14 +64,7 @@ class Arctype extends Base
         // 栏目最多级别
         $arctype_max_level = intval(config('global.arctype_max_level'));
         $this->assign('arctype_max_level', $arctype_max_level);
-        
-        /* 生成静态页面代码 */
-        $typeid = input('param.typeid/d',0);
-        $is_del = input('param.is_del/d',0);
-        $this->assign('typeid',$typeid);
-        $this->assign('is_del',$is_del);
-        /* end */
-        
+
         return $this->fetch();
     }
     
@@ -121,11 +82,17 @@ class Arctype extends Base
             $post = input('post.');
             if ($post) {
                 /*目录名称*/
-                $post['dirname'] = func_preg_replace([' ','　'], '', $post['dirname']);
-                $dirname = $this->arctypeLogic->get_dirname($post['typename'], $post['dirname']);
+                $dirname = $this->get_dirpinyin($post['typename'], $post['dirname']);
+                $dirname = preg_replace('/(\s)+/', '_', $dirname);
+                if (2 >= strlen($dirname)) { // 避免与多语言标识冲突
+                    $this->error('目录名称不能少于2个字符');
+                }
+                // 多语言
+                $langMark = Db::name('language')->column('mark');
+                $this->disableDirname = array_merge($this->disableDirname, $langMark);
                 // 检测
-                if (!empty($post['dirname']) && !$this->arctypeLogic->dirname_unique($post['dirname'])) {
-                    $this->error('目录名称与系统内置冲突，请更改！');
+                if (in_array(strtolower($dirname), $this->disableDirname)) {
+                    $this->error('目录名称与系统内置重名，请更改！');
                 }
                 /*--end*/
                 $dirpath = rtrim($post['dirpath'],'/');
@@ -178,13 +145,11 @@ class Arctype extends Base
                     $_POST['id'] = $insertId;
 
                     /*同步栏目ID到多语言的模板栏目变量里*/
-                    $this->arctypeLogic->syn_add_language_attribute($insertId);
+                    $this->syn_add_language_attribute($insertId);
                     /*--end*/
 
                     adminLog('新增栏目：'.$data['typename']);
-
-                    // 生成静态页面代码
-                    $this->success("操作成功!", url('Arctype/index', ['typeid'=>$insertId]));
+                    $this->success("操作成功!", url('Arctype/index'));
                     exit;
                 }
             }
@@ -205,7 +170,7 @@ class Arctype extends Base
         $parent_id = input('param.parent_id/d');
         $grade = 0;
         $current_channel = '';
-        $predirpath = ''; // 生成静态页面代码
+        $predirpath = tpCache('seo.seo_arcdir');
         $ptypename = '';
         if (0 < $parent_id) {
             $info = M('arctype')->where(array('id'=>$parent_id))->find();
@@ -246,7 +211,7 @@ class Arctype extends Base
         /*--end*/
 
         /*自定义字段*/
-        $assign_data['addonFieldExtList'] = model('Field')->getTabelFieldList(config('global.arctype_channel_id'));
+        $assign_data['addonFieldList'] = model('Field')->getTabelFieldList(config('global.arctype_channel_id'));
         $assign_data['aid'] = 0;
         $assign_data['channeltype'] = 6;
         $assign_data['nid'] = 'arctype';
@@ -263,7 +228,7 @@ class Arctype extends Base
     {
         if (IS_POST) {
             $post = input('post.');
-            if (!empty($post['id'])) {
+            if(!empty($post['id'])){
 
                 /*自己的上级不能是自己*/
                 if (intval($post['id']) == intval($post['parent_id'])) {
@@ -272,18 +237,24 @@ class Arctype extends Base
                 /*--end*/
 
                 /*目录名称*/
-                $post['dirname'] = func_preg_replace([' ', '　'], '', $post['dirname']);
-                $dirname         = $this->arctypeLogic->get_dirname($post['typename'], $post['dirname'], $post['id']);
+                $dirname = $this->get_dirpinyin($post['typename'], $post['dirname'], $post['id']);
+                $dirname = preg_replace('/(\s)+/', '_', $dirname);
+                if (2 >= strlen($dirname)) { // 避免与多语言标识冲突
+                    $this->error('目录名称不能少于2个字符');
+                }
+                // 多语言
+                $langMark = Db::name('language')->column('mark');
+                $this->disableDirname = array_merge($this->disableDirname, $langMark);
                 // 检测
-                if (!empty($post['dirname']) && !$this->arctypeLogic->dirname_unique($post['dirname'], $post['id'])) {
-                    $this->error('目录名称与系统内置冲突，请更改！');
+                if (in_array(strtolower($dirname), $this->disableDirname)) {
+                    $this->error('目录名称与系统内置重名，请更改！');
                 }
                 /*--end*/
-                $dirpath  = rtrim($post['dirpath'], '/');
+                $dirpath = rtrim($post['dirpath'], '/');
                 $typelink = !empty($post['is_part']) ? $post['typelink'] : '';
                 /*封面图的本地/远程图片处理*/
                 $is_remote = !empty($post['is_remote']) ? $post['is_remote'] : 0;
-                $litpic    = '';
+                $litpic = '';
                 if ($is_remote == 1) {
                     $litpic = $post['litpic_remote'];
                 } else {
@@ -293,12 +264,12 @@ class Arctype extends Base
                 // 最顶级模型ID
                 $channeltype = $post['channeltype'];
                 // 当前更改的等级
-                $grade = $post['grade'];
+                $grade = $post['grade']; 
                 // 根据栏目ID获取最新的最顶级模型ID
                 if (intval($post['parent_id']) > 0) {
-                    $arctype_row = Db::name('arctype')->field('grade,channeltype')->where('id', $post['parent_id'])->find();
+                    $arctype_row = M('arctype')->field('grade,channeltype')->where('id', $post['parent_id'])->find();
                     $channeltype = $arctype_row['channeltype'];
-                    $grade       = $arctype_row['grade'] + 1;
+                    $grade = $arctype_row['grade'] + 1;
                 }
                 /*SEO描述*/
                 $seo_description = $post['seo_description'];
@@ -326,38 +297,8 @@ class Arctype extends Base
                 $data = array_merge($post, $newData, $addonField);
                 $r = model('Arctype')->updateData($data);
                 if($r){
-
-                    //查出该栏目所有子级，包括自己
-                    $hasChildrenRow = model('Arctype')->getHasChildren($post['id'], true);
-
-                    /*当前栏目以及所有子孙栏目的静态HTML保存路径的变动、模板继承*/
-                    $subSaveData = [];
-                    foreach ($hasChildrenRow as $key => $val) {
-                        $dirpathArr = explode('/', trim($val['dirpath'], '/'));
-                        $dirpathArr[$grade] = $dirname;
-                        $dirpath = '/'.implode('/', $dirpathArr);
-                        $subSaveData_tmp = [
-                            'id'            => $val['id'],
-                            'dirpath'       => $dirpath,
-                            'update_time'   => getTime(),
-                        ];
-                        /*父级模板继承*/
-                        if (!empty($post['inherit_status']) && $post['inherit_status'] == 1) {
-                            $subSaveData_tmp['templist'] = $post['templist'];
-                            $subSaveData_tmp['tempview'] = $post['tempview'];
-                        }
-                        /*end*/
-                        $subSaveData[] = $subSaveData_tmp;
-                    }
-                    if (!empty($subSaveData)) {
-                        model('Arctype')->saveAll($subSaveData);
-                    }
-                    /*end*/
-
                     adminLog('编辑栏目：'.$data['typename']);
-
-                    // 生成静态页面代码
-                    $this->success("操作成功!", url('Arctype/index', ['typeid'=>$post['id']]));
+                    $this->success("操作成功!", url('Arctype/index'));
                     exit;
                 }
             }
@@ -390,7 +331,7 @@ class Arctype extends Base
         if (!empty($info['dirpath'])) {
             $predirpath = preg_replace('/\/([^\/]*)$/i', '', $info['dirpath']);
         } else {
-            $predirpath = ''; // 生成静态页面代码
+            $predirpath = tpCache('seo.seo_arcdir');
         }
         $this->assign('predirpath',$predirpath);
 
@@ -402,11 +343,11 @@ class Arctype extends Base
         } else {
             // 所属栏目
             // $channeltype = $info['channeltype'];
-            $select_html       = '<option value="0" data-grade="-1" data-dirpath="' . tpCache('seo.seo_html_arcdir') . '">顶级栏目</option>';
-            $selected          = $info['parent_id'];
+            $select_html = '<option value="0" data-grade="-1" data-dirpath="'.tpCache('seo.seo_arcdir').'">顶级栏目</option>';
+            $selected = $info['parent_id'];
             $arctype_max_level = intval(config('global.arctype_max_level'));
-            $arctypeWhere      = ['is_del' => 0];
-            $options           = $this->arctypeLogic->arctype_list(0, $selected, false, $arctype_max_level - 1, $arctypeWhere);
+            $arctypeLogic = new ArctypeLogic();
+            $options = $arctypeLogic->arctype_list(0, $selected, false, $arctype_max_level - 1);
             foreach ($options AS $var)
             {
                 $select_html .= '<option value="' . $var['id'] . '" data-grade="' . $var['grade'] . '" data-dirpath="'.$var['dirpath'].'"';
@@ -424,7 +365,9 @@ class Arctype extends Base
         $this->assign('hasChildren',$hasChildren);
 
         /* 模型 */
-        $map = "status = 1 OR id = '".$info['current_channel']."'";
+        $map = array(
+            'status'    => 1,
+        );
         $channeltype_list = model('Channeltype')->getAll('id,title,nid,ctl_name', $map, 'id');
         // 模型对应模板文件不存在报错
         if (!isset($channeltype_list[$info['current_channel']])) {
@@ -461,7 +404,7 @@ class Arctype extends Base
         /*--end*/
 
         /*自定义字段*/
-        $assign_data['addonFieldExtList'] = model('Field')->getTabelFieldList(config('global.arctype_channel_id'), $id);
+        $assign_data['addonFieldList'] = model('Field')->getTabelFieldList(config('global.arctype_channel_id'), $id);
         $assign_data['aid'] = $id;
         $assign_data['channeltype'] = 6;
         $assign_data['nid'] = 'arctype';
@@ -518,9 +461,7 @@ class Arctype extends Base
 
                 \think\Cache::clear("arctype");
                 adminLog('编辑栏目：'.$info['typename']);
-
-                // 生成静态页面代码
-                $this->success("操作成功!", $post['gourl'].'&typeid='.$typeid);
+                $this->success("操作成功!", $post['gourl']);
                 exit;
             }
             $this->error("操作失败!");
@@ -567,11 +508,6 @@ class Arctype extends Base
         /*--end*/
 
         $this->assign($assign_data);
-        
-        /* 生成静态页面代码 */
-        $this->assign('typeid',$typeid);
-        /* end */
-        
         return $this->fetch();
     }
     
@@ -634,13 +570,41 @@ class Arctype extends Base
     }
 
     /**
+     * 获取栏目的拼音，确保唯一性
+     */
+    private function get_dirpinyin($typename = '', $dirname = '', $id = 0)
+    {
+        if (empty($dirname)) {
+            $dirname = get_pinyin($typename);
+        }
+        if (strval(intval($dirname)) == strval($dirname)) {
+            $dirname .= get_rand_str(3,0,0);
+        }
+        $map = array(
+            'dirname'   => $dirname,
+            'lang'  => $this->admin_lang,
+        );
+        if (intval($id) > 0) {
+            $map['id']  = array('neq', $id);
+        }
+        $result = M('arctype')->field('id')->where($map)->find();
+        if (!empty($result)) {
+            $nowDirname = $dirname.get_rand_str(3,0,0);
+            return $this->get_dirpinyin($typename, $nowDirname, $id);
+        }
+
+        return $dirname;
+    }
+
+    /**
      * 通过模型获取栏目
      */
     public function ajax_get_arctype($channeltype = 0)
     {
+        $arctypeLogic = new ArctypeLogic();
         $arctype_max_level = intval(config('global.arctype_max_level'));
-        $options           = $this->arctypeLogic->arctype_list(0, 0, false, $arctype_max_level, array('channeltype' => $channeltype));
-        $select_html       = '<option value="0" data-grade="-1">顶级栏目</option>';
+        $options = $arctypeLogic->arctype_list(0, 0, false, $arctype_max_level, array('channeltype'=>$channeltype));
+        $select_html = '<option value="0" data-grade="-1">顶级栏目</option>';
         foreach ($options AS $var)
         {
             $select_html .= '<option value="' . $var['id'] . '" data-grade="' . $var['grade'] . '" data-dirpath="'.$var['dirpath'].'"';
@@ -704,7 +668,7 @@ class Arctype extends Base
 
     public function ajax_getTemplateList($opt = 'add', $templist = '', $tempview = '')
     {   
-        $planPath = 'template/'.TPL_THEME.'pc';
+        $planPath = 'template/pc';
         $dirRes   = opendir($planPath);
         $view_suffix = config('template.view_suffix');
 
@@ -717,21 +681,11 @@ class Arctype extends Base
             }
             array_push($templateArr, $filename);
         }
-        !empty($templateArr) && asort($templateArr);
         /*--end*/
 
         /*多语言全部标识*/
         $markArr = Db::name('language_mark')->column('mark');
         /*--end*/
-        
-        $is_language = false;
-        $web_language_switch = tpCache('web.web_language_switch');
-        if (!empty($web_language_switch)) {
-            $languageCount = Db::name('language')->where(['status'=>1])->count('id');
-            if (1 < $languageCount) {
-                $is_language = true;
-            }
-        }
 
         $templateList = array();
         $channelList = model('Channeltype')->getAll();
@@ -754,7 +708,7 @@ class Arctype extends Base
                 $langtpl = preg_replace('/\.'.$view_suffix.'$/i', "_{$this->admin_lang}.{$view_suffix}", $v2);
                 if (file_exists(realpath($planPath.DS.$langtpl))) {
                     continue;
-                } else if (true == $is_language && preg_match('/^(.*)_([a-zA-z]{2,2})\.'.$view_suffix.'$/i',$v2,$matches2)) {
+                } else if (preg_match('/^(.*)_([a-zA-z]{2,2})\.'.$view_suffix.'$/i',$v2,$matches2)) {
                     if (in_array($matches2[2], $markArr) && $matches2[2] != $this->admin_lang) {
                         continue;
                     }
@@ -823,6 +777,67 @@ class Arctype extends Base
     }
 
     /**
+     * 同步新增栏目ID到多语言的模板栏目变量里
+     */
+    private function syn_add_language_attribute($typeid)
+    {
+        /*单语言情况下不执行多语言代码*/
+        if (!is_language()) {
+            return true;
+        }
+        /*--end*/
+
+        $attr_group = 'arctype';
+        $admin_lang = $this->admin_lang;
+        $main_lang = get_main_lang();
+        $languageRow = Db::name('language')->field('mark')->order('id asc')->select();
+        if (!empty($languageRow) && $admin_lang == $main_lang) { // 当前语言是主体语言，即语言列表最早新增的语言
+            $arctypeRow = Db::name('arctype')->find($typeid);
+            $attr_name = 'tid'.$typeid;
+            $r = Db::name('language_attribute')->save([
+                'attr_title'    => $arctypeRow['typename'],
+                'attr_name'     => $attr_name,
+                'attr_group'    => $attr_group,
+                'add_time'      => getTime(),
+                'update_time'   => getTime(),
+            ]);
+            if (false !== $r) {
+                $data = [];
+                foreach ($languageRow as $key => $val) {
+                    /*同步新栏目到其他语言栏目列表*/
+                    if ($val['mark'] != $admin_lang) {
+                        $addsaveData = $arctypeRow;
+                        $addsaveData['lang'] = $val['mark'];
+                        $addsaveData['typename'] = $val['mark'].$addsaveData['typename']; // 临时测试
+                        $parent_id = Db::name('language_attr')->where([
+                                'attr_name' => 'tid'.$arctypeRow['parent_id'],
+                                'lang'  => $val['mark'],
+                            ])->getField('attr_value');
+                        $addsaveData['parent_id'] = intval($parent_id);
+                        unset($addsaveData['id']);
+                        $typeid = model('Arctype')->addData($addsaveData);
+                    }
+                    /*--end*/
+                    
+                    /*所有语言绑定在主语言的ID容器里*/
+                    $data[] = [
+                        'attr_name' => $attr_name,
+                        'attr_value'    => $typeid,
+                        'lang'  => $val['mark'],
+                        'attr_group'    => $attr_group,
+                        'add_time'      => getTime(),
+                        'update_time'   => getTime(),
+                    ];
+                    /*--end*/
+                }
+                if (!empty($data)) {
+                    model('LanguageAttr')->saveAll($data);
+                }
+            }
+        }
+    }
+
+    /**
      * 新建模板文件
      */
     public function ajax_newtpl()
@@ -841,7 +856,7 @@ class Arctype extends Base
             }
 
             $content = !empty($content) ? $content : '';
-            $tpldirpath = !empty($post['tpldir']) ? '/template/'.TPL_THEME.trim($post['tpldir']) : '/template/'.TPL_THEME.'pc';
+            $tpldirpath = !empty($post['tpldir']) ? '/template/'.trim($post['tpldir']) : '/template/pc';
             if (file_exists(ROOT_PATH.ltrim($tpldirpath, '/').'/'.$filename)) {
                 $this->error('文件名称已经存在，请重新命名！', null, ['focus'=>'filename']);
             }
@@ -861,237 +876,17 @@ class Arctype extends Base
         }
         $type = input('param.type/s');
         $nid = input('param.nid/s');
-        $tpldirList = glob('template/'.TPL_THEME.'*');
-        $tpl_theme = str_replace('/', '\\/', TPL_THEME);
+        $tpldirList = glob('template/*');
         foreach ($tpldirList as $key => $val) {
-            if (!preg_match('/template\/'.$tpl_theme.'(pc|mobile)$/i', $val)) {
+            if (!preg_match('/template\/(pc|mobile)$/i', $val)) {
                 unset($tpldirList[$key]);
             } else {
-                $tpldirList[$key] = preg_replace('/^(.*)template\/'.$tpl_theme.'(pc|mobile)$/i', '$2', $val);
+                $tpldirList[$key] = preg_replace('/^(.*)template\/(pc|mobile)$/i', '$2', $val);
             }
         }
-        !empty($tpldirList) && arsort($tpldirList);
         $this->assign('tpldirList', $tpldirList);
         $this->assign('type', $type);
         $this->assign('nid', $nid);
-        $this->assign('tpl_theme', TPL_THEME);
         return $this->fetch();
-    }
-
-    /**
-     * 批量增加栏目
-     */
-    public function batch_add()
-    {
-        //防止php超时
-        function_exists('set_time_limit') && set_time_limit(0);
-        
-        $this->language_access(); // 多语言功能操作权限
-
-        if (IS_POST) {
-            $post = input('post.');
-            if ($post) {
-
-                if (empty($post['parent_id'])) { // 增加顶级栏目
-                    foreach ($post['toptype'] as $key => $val) {
-                        $val = trim($val);
-                        if (empty($val)) {
-                            unset($post['toptype'][$key]);
-                        }
-                    }
-                    if (empty($post['toptype'])) {
-                        $this->error('顶级栏目名称不能为空！');
-                    }
-                    $this->batch_add_toptype($post);
-                } 
-                else { // 增加下级栏目
-                    foreach ($post['reltype'] as $key => $val) {
-                        $val = trim($val);
-                        if (empty($val)) {
-                            unset($post['reltype'][$key]);
-                        }
-                    }
-                    if (empty($post['reltype'])) {
-                        $this->error('栏目名称不能为空！');
-                    }
-                    $this->batch_add_subtype($post);
-                }
-            }
-            $this->error("操作失败！");
-            exit;
-        }
-
-        /* 模型 */
-        $map = array(
-            'status'    => 1,
-        );
-        $channeltype_list = model('Channeltype')->getAll('id,title,nid', $map, 'id');
-        $this->assign('channeltype_list', $channeltype_list);
-        
-        /*发布文档的模型ID，用于是否显示文档模板列表*/
-        $js_allow_channel_arr = '[';
-        foreach ($this->allowReleaseChannel as $key => $val) {
-            if ($key > 0) {
-                $js_allow_channel_arr .= ',';
-            }
-            $js_allow_channel_arr .= $val;
-        }
-        $js_allow_channel_arr = $js_allow_channel_arr.']';
-        $this->assign('js_allow_channel_arr', $js_allow_channel_arr);
-        /*--end*/
-
-        // 所属栏目
-        $select_html = '<option value="0" data-grade="-1" data-dirpath="'.tpCache('seo.seo_html_arcdir').'">顶级栏目</option>';
-        $selected = 0;
-        $arctype_max_level = intval(config('global.arctype_max_level'));
-        $arctypeWhere = ['is_del'=>0];
-        $options = $this->arctypeLogic->arctype_list(0, $selected, false, $arctype_max_level - 1, $arctypeWhere);
-        foreach ($options AS $var)
-        {
-            $select_html .= '<option value="' . $var['id'] . '" data-grade="' . $var['grade'] . '" data-dirpath="'.$var['dirpath'].'">';
-            if ($var['level'] > 0)
-            {
-                $select_html .= str_repeat('&nbsp;', $var['level'] * 4);
-            }
-            $select_html .= htmlspecialchars(addslashes($var['typename'])) . '</option>';
-        }
-        $this->assign('select_html',$select_html);
-
-        /*模板列表*/
-        $templateList = $this->ajax_getTemplateList('add');
-        $this->assign('templateList', $templateList);
-        /*--end*/
-
-        $dirpath = tpCache('seo.seo_html_arcdir');
-        $this->assign('dirpath', $dirpath);
-
-        return $this->fetch();
-    }
-
-    /**
-     * 批量增加顶级栏目
-     */
-    private function batch_add_toptype($post = [])
-    {
-        $saveData = [];
-        $dirnameArr = [];
-        foreach ($post['toptype'] as $key => $val) {
-            $typename = func_preg_replace([',','，'], '', trim($val));
-            if (empty($typename)) continue;
-
-            // 子栏目
-            if (!empty($post['sontype'][$key])) {
-                $sontype = str_replace('，', ',', $post['sontype'][$key]);
-                $post['sontype'][$key] = explode(',', $sontype);
-            }
-
-            // 目录名称
-            $dirname = $this->arctypeLogic->get_dirname($typename, '', 0, $dirnameArr);
-            array_push($dirnameArr, $dirname);
-
-            $dirpath = '/'.$dirname;
-
-            $data = [
-                'typename'  => $typename,
-                'channeltype'   => $post['current_channel'],
-                'current_channel'   => $post['current_channel'],
-                'parent_id' => 0,
-                'dirname'   => $dirname,
-                'dirpath'   => $dirpath,
-                'grade' => 0,
-                'templist'  => !empty($post['templist']) ? $post['templist'] : '',
-                'tempview'  => !empty($post['tempview']) ? $post['tempview'] : '',
-                'is_hidden'  => $post['is_hidden'],
-                'seo_description'   => '',
-                'admin_id'  => session('admin_info.admin_id'),
-                'lang'  => $this->admin_lang,
-                'sort_order'    => !empty($post['sort_order'][$key]) ? intval($post['sort_order'][$key]) : 100,
-                'add_time'  => getTime(),
-                'update_time'  => getTime(),
-            ];
-
-            $saveData[] = $data;
-        }
-
-        if (!empty($saveData)) {
-            $result = model('Arctype')->batchAddTopData($saveData, $post);
-            if (!empty($result)) {
-                $typenameArr = get_arr_column($result, 'typename');
-                $typenameStr = implode(',', $typenameArr);
-                adminLog('批量增加栏目：'.$typenameStr);
-
-                // 生成静态页面代码
-                $msg = '操作成功！';
-                $seo_pseudo = config('tpcache.seo_pseudo');
-                if (2 == $seo_pseudo) {
-                    $msg = '操作成功，请手工生成静态页面！';
-                }
-                $this->success($msg, url('Arctype/index'));
-                exit;
-            }
-        }
-        $this->error("操作失败！");
-    }
-
-    /**
-     * 批量增加下级栏目
-     */
-    private function batch_add_subtype($post = [])
-    {
-        // 获取顶级模型ID
-        $channeltype = Db::name('arctype')->where('id', $post['parent_id'])->getField('channeltype');
-
-        $saveData = [];
-        $dirnameArr = [];
-        foreach ($post['reltype'] as $key => $val) {
-            $typename = func_preg_replace([',','，'], '', trim($val));
-            if (empty($typename)) continue;
-
-            // 目录名称
-            $dirname = $this->arctypeLogic->get_dirname($typename, '', 0, $dirnameArr);
-            array_push($dirnameArr, $dirname);
-
-            $dirpath = $post['dirpath'].'/'.$dirname;
-
-            $data = [
-                'typename'  => $typename,
-                'channeltype'   => $channeltype,
-                'current_channel'   => $post['current_channel'],
-                'parent_id' => intval($post['parent_id']),
-                'dirname'   => $dirname,
-                'dirpath'   => $dirpath,
-                'grade' => intval($post['grade']),
-                'templist'  => !empty($post['templist']) ? $post['templist'] : '',
-                'tempview'  => !empty($post['tempview']) ? $post['tempview'] : '',
-                'is_hidden'  => $post['is_hidden'],
-                'seo_description'   => '',
-                'admin_id'  => session('admin_info.admin_id'),
-                'lang'  => $this->admin_lang,
-                'sort_order'    => !empty($post['sort_order_1'][$key]) ? intval($post['sort_order_1'][$key]) : 100,
-                'add_time'  => getTime(),
-                'update_time'  => getTime(),
-            ];
-
-            $saveData[] = $data;
-        }
-
-        if (!empty($saveData)) {
-            $result = model('Arctype')->batchAddSubData($saveData);
-            if (!empty($result)) {
-                $typenameArr = get_arr_column($result, 'typename');
-                $typenameStr = implode(',', $typenameArr);
-                adminLog('批量增加栏目：'.$typenameStr);
-
-                // 生成静态页面代码
-                $msg = '操作成功！';
-                $seo_pseudo = config('tpcache.seo_pseudo');
-                if (2 == $seo_pseudo) {
-                    $msg = '操作成功，请手工生成静态页面！';
-                }
-                $this->success($msg, url('Arctype/index'));
-                exit;
-            }
-        }
-        $this->error("操作失败！");
     }
 }

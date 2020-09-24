@@ -12,7 +12,6 @@
  */
 namespace app\admin\model;
 
-use think\Db;
 use think\Model;
 
 /**
@@ -39,7 +38,7 @@ class Field extends Model
             return $result;
         }
 
-        $result = Db::name('FieldType')->field($field)->order('sort_order asc')->select();
+        $result = db('FieldType')->field($field)->order('sort_order asc')->select();
 
         if (!empty($index_key)) {
             $result = convert_arr_key($result, $index_key);
@@ -57,7 +56,7 @@ class Field extends Model
      * @param array $archivesInfo 主表数据
      * @author 小虎哥 by 2018-7-25
      */
-    public function getChannelFieldList($channel_id, $ifmain = false, $aid = '', $archivesInfo = [], $where = [])
+    public function getChannelFieldList($channel_id, $ifmain = false, $aid = '', $archivesInfo = [])
     {
         $hideField = array('id','aid','add_time','update_time'); // 不显示在发布表单的字段
         $channel_id = intval($channel_id);
@@ -65,12 +64,10 @@ class Field extends Model
             'channel_id'    => array('eq', $channel_id),
             'name'          => array('notin', $hideField),
             'ifmain'        => 0,
-            'ifeditable'    => 1,
         );
         if (false !== $ifmain) {
             $map['ifmain'] = $ifmain;
         }
-        $map = array_merge($map, $where);
         $row = model('Channelfield')->getListByWhere($map, '*');
 
         /*编辑时显示的数据*/
@@ -135,7 +132,7 @@ class Field extends Model
                 switch ($val['dtype']) {
                     case 'int':
                     {
-                        if (array_key_exists($val['name'], $addonRow)) {
+                        if (isset($addonRow[$val['name']])) {
                             $val['dfvalue'] = $addonRow[$val['name']];
                         } else {
                             if(preg_match("#[^0-9]#", $val['dfvalue']))
@@ -149,7 +146,7 @@ class Field extends Model
                     case 'float':
                     case 'decimal':
                     {
-                        if (array_key_exists($val['name'], $addonRow)) {
+                        if (isset($addonRow[$val['name']])) {
                             $val['dfvalue'] = $addonRow[$val['name']];
                         } else {
                             if(preg_match("#[^0-9\.]#", $val['dfvalue']))
@@ -166,33 +163,10 @@ class Field extends Model
                         $dfvalue = $val['dfvalue'];
                         $dfvalueArr = explode(',', $dfvalue);
                         $val['dfvalue'] = $dfvalueArr;
-                        if (array_key_exists($val['name'], $addonRow)) {
+                        if (isset($addonRow[$val['name']])) {
                             $val['trueValue'] = explode(',', $addonRow[$val['name']]);
                         } else {
                             $dfTrueValue = !empty($dfvalueArr[0]) ? $dfvalueArr[0] : '';
-                            $val['trueValue'] = array($dfTrueValue);
-                        }
-                        break;
-                    }
-
-                    case 'region':
-                    {
-                        $dfvalue    = unserialize($val['dfvalue']);
-                        $RegionData = [];
-                        $region_ids = explode(',', $dfvalue['region_ids']);
-                        foreach ($region_ids as $id_key => $id_value) {
-                            $RegionData[$id_key]['id'] = $id_value;
-                        }
-                        $region_names = explode('，', $dfvalue['region_names']);
-                        foreach ($region_names as $name_key => $name_value) {
-                            $RegionData[$name_key]['name'] = $name_value;
-                        }
-
-                        $val['dfvalue'] = $RegionData;
-                        if (array_key_exists($val['name'], $addonRow)) {
-                            $val['trueValue'] = explode(',', $addonRow[$val['name']]);
-                        } else {
-                            $dfTrueValue = !empty($RegionData[0]) ? $RegionData[0]['id'] : '';
                             $val['trueValue'] = array($dfTrueValue);
                         }
                         break;
@@ -203,7 +177,7 @@ class Field extends Model
                         $dfvalue = $val['dfvalue'];
                         $dfvalueArr = explode(',', $dfvalue);
                         $val['dfvalue'] = $dfvalueArr;
-                        if (array_key_exists($val['name'], $addonRow)) {
+                        if (isset($addonRow[$val['name']])) {
                             $val['trueValue'] = explode(',', $addonRow[$val['name']]);
                         } else {
                             $val['trueValue'] = array();
@@ -216,7 +190,7 @@ class Field extends Model
                         $val[$val['name'].'_eyou_is_remote'] = 0;
                         $val[$val['name'].'_eyou_remote'] = '';
                         $val[$val['name'].'_eyou_local'] = '';
-                        if (array_key_exists($val['name'], $addonRow)) {
+                        if (isset($addonRow[$val['name']])) {
                             if (is_http_url($addonRow[$val['name']])) {
                                 $val[$val['name'].'_eyou_is_remote'] = 1;
                                 $val[$val['name'].'_eyou_remote'] = handle_subdir_pic($addonRow[$val['name']]);
@@ -230,45 +204,14 @@ class Field extends Model
 
                     case 'imgs':
                     {
-                        /*将多图字段类型varchar改为text*/
-                        try {
-                            $channelfieldRow = Db::name('channelfield')->field('id,title,maxlength')
-                                ->where([
-                                    'name'          => $val['name'],
-                                    'channel_id'    => $val['channel_id'],
-                                ])->find();
-                            if (!empty($channelfieldRow) && 1001 == $channelfieldRow['maxlength']) {
-                                $tableExt = M('channeltype')->where('id', $val['channel_id'])->getField('table');
-                                $tableExt = PREFIX.$tableExt.'_content';
-                                $fieldComment = $channelfieldRow['title'];
-                                empty($fieldComment) && $fieldComment = '图集';
-                                $sql = " ALTER TABLE `{$tableExt}` MODIFY COLUMN `{$val['name']}`  varchar(10001) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '{$fieldComment}' ";
-                                if (@Db::execute($sql)) {
-                                    Db::name('channelfield')->where([
-                                            'id'          => $channelfieldRow['id'],
-                                        ])->update([
-                                            'define'        => 'varchar(10001)',
-                                            'maxlength'     => 10001,
-                                            'update_time'   => getTime(),
-                                        ]);
-                                }
-                            }
-                        } catch (\Exception $e) {}
-                        /*end*/
-
                         $val[$val['name'].'_eyou_imgupload_list'] = array();
-                        if (array_key_exists($val['name'], $addonRow) && !empty($addonRow[$val['name']])) {
-                            $eyou_imgupload_list = @unserialize($addonRow[$val['name']]);
-                            if (false === $eyou_imgupload_list) {
-                                $eyou_imgupload_list = [];
-                                $eyou_imgupload_data = explode(',', $addonRow[$val['name']]);
-                                foreach ($eyou_imgupload_data as $k1 => $v1) {
-                                    $eyou_imgupload_list[$k1] = [
-                                        'image_url' => handle_subdir_pic($v1),
-                                        'intro'     => '',
-                                    ];
-                                }
+                        if (isset($addonRow[$val['name']]) && !empty($addonRow[$val['name']])) {
+                            $eyou_imgupload_list = explode(',', $addonRow[$val['name']]);
+                            /*支持子目录*/
+                            foreach ($eyou_imgupload_list as $k1 => $v1) {
+                                $eyou_imgupload_list[$k1] = handle_subdir_pic($v1);
                             }
+                            /*--end*/
                             $val[$val['name'].'_eyou_imgupload_list'] = $eyou_imgupload_list;
                         }
                         break;
@@ -276,27 +219,9 @@ class Field extends Model
 
                     case 'datetime':
                     {
-                        $val['dfvalue'] = !empty($addonRow[$val['name']]) ? date('Y-m-d H:i:s', $addonRow[$val['name']]) : '';
+                        $val['dfvalue'] = !empty($addonRow[$val['name']]) ? date('Y-m-d H:i:s', $addonRow[$val['name']]) : date('Y-m-d H:i:s');
                         break;
                     }
-
-                    case 'file':
-                        {
-                            $val[$val['name'].'_eyou_is_remote'] = 0;
-                            $val[$val['name'].'_eyou_remote'] = '';
-                            $val[$val['name'].'_eyou_local'] = '';
-                            if (array_key_exists($val['name'], $addonRow)) {
-                                if (is_http_url($addonRow[$val['name']])) {
-                                    $val[$val['name'].'_eyou_is_remote'] = 1;
-                                    $val[$val['name'].'_eyou_remote'] = handle_subdir_pic($addonRow[$val['name']]);
-                                } else {
-                                    $val[$val['name'].'_eyou_is_remote'] = 0;
-                                    $val[$val['name'].'_eyou_local'] = handle_subdir_pic($addonRow[$val['name']]);
-                                }
-                            }
-                            $val['dfvalue'] = handle_subdir_pic($addonRow[$val['name']]);
-                            break;
-                        }
 
                     case 'htmltext':
                     {
@@ -318,10 +243,10 @@ class Field extends Model
                         /*--end*/
                         break;
                     }
-
+                    
                     default:
                     {
-                        $val['dfvalue'] = array_key_exists($val['name'], $addonRow) ? $addonRow[$val['name']] : $val['dfvalue'];
+                        $val['dfvalue'] = isset($addonRow[$val['name']]) ? $addonRow[$val['name']] : $val['dfvalue'];
                         /*支持子目录*/
                         if (is_string($val['dfvalue'])) {
                             $val['dfvalue'] = handle_subdir_pic($val['dfvalue'], 'html');
@@ -343,20 +268,12 @@ class Field extends Model
      */
     public function dealChannelPostData($channel_id, $data = array(), $dataExt = array())
     {
-        if (!empty($channel_id)) {
+        if (!empty($dataExt) && !empty($channel_id)) {
 
             $nowDataExt = array();
             $fieldTypeList = model('Channelfield')->getListByWhere(array('channel_id'=>$channel_id), 'name,dtype', 'name');
             foreach ($dataExt as $key => $val) {
                 
-                /*处理复选框取消选中的情况下*/
-                if (preg_match('/^(.*)(_eyempty)$/', $key) && empty($val)) {
-                    $key = preg_replace('/^(.*)(_eyempty)$/', '$1', $key);
-                    $nowDataExt[$key] = '';
-                    continue;
-                }
-                /*end*/
-
                 $key = preg_replace('/^(.*)(_eyou_is_remote|_eyou_remote|_eyou_local)$/', '$1', $key);
                 $dtype = !empty($fieldTypeList[$key]) ? $fieldTypeList[$key]['dtype'] : '';
                 switch ($dtype) {
@@ -386,45 +303,18 @@ class Field extends Model
                     }
 
                     case 'imgs':
+                    case 'files':
                     {
-                        $imgData = [];
-                        $imgsIntroArr = !empty($dataExt[$key.'_eyou_intro']) ? $dataExt[$key.'_eyou_intro'] : [];
                         foreach ($val as $k2 => $v2) {
-                            $v2 = trim($v2);
-                            if (!empty($v2)) {
-                                $imgData[] = [
-                                    'image_url' => $v2,
-                                    'intro'     => !empty($imgsIntroArr[$k2]) ? $imgsIntroArr[$k2] : '',
-                                ];
+                            if (empty($v2)) {
+                                unset($val[$k2]);
+                                continue;
                             }
+                            $val[$k2] = trim($v2);
                         }
-                        $val = serialize($imgData);
+                        $val = implode(',', $val);
                         break;
                     }
-
-                    case 'file':
-                    {
-                        $is_remote = !empty($dataExt[$key.'_eyou_is_remote']) ? $dataExt[$key.'_eyou_is_remote'] : 0;
-                        if (1 == $is_remote) {
-                            $val = $dataExt[$key.'_eyou_remote'];
-                        } else {
-                            $val = $dataExt[$key.'_eyou_local'];
-                        }
-                        break;
-                    }
-
-                    // case 'files':
-                    // {
-                    //     foreach ($val as $k2 => $v2) {
-                    //         if (empty($v2)) {
-                    //             unset($val[$k2]);
-                    //             continue;
-                    //         }
-                    //         $val[$k2] = trim($v2);
-                    //     }
-                    //     $val = implode(',', $val);
-                    //     break;
-                    // }
 
                     case 'datetime':
                     {
@@ -440,13 +330,9 @@ class Field extends Model
                         $val = $money1.'.'.$money2;
                         break;
                     }
-                    
-                    case 'htmltext':
-                    {
-                        $preg = "/&lt;script[\s\S]*?script&gt;/i";
-                        $val = preg_replace($preg, "", $val);
-                        $val = trim($val);
 
+                    // case 'htmltext':
+                    // {
                     //     /*追加指定内嵌样式到编辑器内容的img标签，兼容图片自动适应页面*/
                     //     $title = '';
                     //     if (!empty($data['title'])) {
@@ -458,7 +344,7 @@ class Field extends Model
                     //     $val = htmlspecialchars(img_style_wh($content, $title));
                     //     /*--end*/
                     //     break;
-                    }
+                    // }
                     
                     default:
                     {
@@ -474,14 +360,14 @@ class Field extends Model
                 'add_time'   => getTime(),
                 'update_time'   => getTime(),
             );
-            !empty($nowDataExt) && $nowData = array_merge($nowDataExt, $nowData);
+            $nowDataExt = array_merge($nowDataExt, $nowData);
             $tableExt = M('channeltype')->where('id', $channel_id)->getField('table');
             $tableExt .= '_content';
             $count = M($tableExt)->where('aid', $data['aid'])->count();
             if (empty($count)) {
-                M($tableExt)->insert($nowData);
+                M($tableExt)->insert($nowDataExt);
             } else {
-                M($tableExt)->where('aid', $data['aid'])->save($nowData);
+                M($tableExt)->where('aid', $data['aid'])->save($nowDataExt);
             }
         }
     }

@@ -36,15 +36,6 @@ return array (
     'primary' => false,
     'autoinc' => false,
   ),
-  'intro' => 
-  array (
-    'name' => 'intro',
-    'type' => 'varchar(2000)',
-    'notnull' => false,
-    'default' => '',
-    'primary' => false,
-    'autoinc' => false,
-  ),
   'width' => 
   array (
     'name' => 'width',
@@ -94,15 +85,6 @@ return array (
   array (
     'name' => 'add_time',
     'type' => 'int(10) unsigned',
-    'notnull' => false,
-    'default' => '0',
-    'primary' => false,
-    'autoinc' => false,
-  ),
-  'update_time' => 
-  array (
-    'name' => 'update_time',
-    'type' => 'int(11)',
     'notnull' => false,
     'default' => '0',
     'primary' => false,

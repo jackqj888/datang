@@ -20,16 +20,6 @@ if (file_exists($constsant_path)) {
 }
 // end
 
-// 多语言开启\禁用
-$lang_switch_on = false;
-$langnum_file = DATA_PATH.'conf'.DS.'lang_enable_num.txt';
-if (file_exists($langnum_file)) {
-    $langnum = file_get_contents($langnum_file);
-    if (1 < $langnum) {
-        $lang_switch_on = true;
-    }
-}
-
 return array(
     // +----------------------------------------------------------------------
     // | 应用设置
@@ -64,7 +54,7 @@ return array(
     // 默认时区
     'default_timezone'       => 'PRC',
     // 是否开启多语言
-    'lang_switch_on'         => $lang_switch_on,
+    'lang_switch_on'         => true,
     // 默认全局过滤方法 用逗号分隔多个
     'default_filter'         => 'strip_sql,htmlspecialchars', // htmlspecialchars
     // 默认语言
@@ -288,7 +278,6 @@ return array(
     'AUTH_CODE' => "!*&^eyoucms<>|?", //安装完毕之后不要改变，否则所有密码都会出错
     
     // 核心字符串
-//    'service_ey' => "aHR0cDovL3NlcnZpY2UuZXlvdWNtcy5jb20=",
     'service_ey' => "=",
     'service_ey_token' => "0763150235251e259b1a47f2838ecc26",
     
@@ -321,9 +310,9 @@ return array(
             'is_on' => 1, // 开关
             'config' => [],
         ],
-        // 留言提交验证码配置
-        'guestbook'   => [
-            'is_on' => 0, // 开关
+        // 表单提交验证码配置
+        'form_submit'   => [
+            'is_on' => 1, // 开关
             'config' => [],
         ],
         // 会员登录验证码配置
@@ -347,20 +336,10 @@ return array(
     // | 404页面跳转
     // +----------------------------------------------------------------------
     'http_exception_template' => array(
-        // 还可以定义其它的HTTP status
-        400 => ROOT_PATH.'public/static/errpage/400.html',
+        // 定义404错误的重定向页面地址
+        404 => ROOT_PATH.'public/static/errpage/404.html',
         // 还可以定义其它的HTTP status
         401 => ROOT_PATH.'public/static/errpage/401.html',
-        // 还可以定义其它的HTTP
-        403 => ROOT_PATH.'public/static/errpage/403.html',
-        // 还可以定义其它的HTTP
-        404 => ROOT_PATH.'public/static/errpage/404.html',
-        // 还可以定义其它的HTTP
-        405 => ROOT_PATH.'public/static/errpage/405.html',
-        // 还可以定义其它的HTTP
-        500 => ROOT_PATH.'public/static/errpage/500.html',
-        // 还可以定义其它的HTTP status
-        503 => ROOT_PATH.'public/static/errpage/503.html',
     ),
 
     /**假设这个访问地址是 www.xxxxx.dev/home/goods/goodsInfo/id/1.html 
@@ -389,10 +368,6 @@ return array(
         'home_Download_index'   => ['filename'=>'channel', 'cache'=>7200],
         'home_Download_lists'   => ['filename'=>'lists', 'p'=>array('tid','page'), 'cache'=>7200],
         'home_Download_view'    => ['filename'=>'view', 'p'=>array('dirname','aid'), 'cache'=>7200],
-        // [普通伪静态]视频
-        'home_Media_index'    => ['filename'=>'channel', 'cache'=>7200],
-        'home_Media_lists'    => ['filename'=>'lists', 'p'=>array('tid','page'), 'cache'=>7200],
-        'home_Media_view'     => ['filename'=>'view', 'p'=>array('dirname','aid'), 'cache'=>7200],
         // [普通伪静态]单页
         'home_Single_index'     => ['filename'=>'channel', 'cache'=>7200],
         'home_Single_lists'     => ['filename'=>'lists', 'p'=>array('tid','page'), 'cache'=>7200],
@@ -400,16 +375,20 @@ return array(
         'home_Lists_index'      => ['filename'=>'lists', 'p'=>array('tid','page'), 'cache'=>7200],
         // [超短伪静态]内容页
         'home_View_index'       => ['filename'=>'view', 'p'=>array('dirname','aid'), 'cache'=>7200],
-        // [标签页伪静态]列表页
-        'home_Tags_index'       => ['filename'=>'tags', 'cache'=>7200],
-        'home_Tags_lists'       => ['filename'=>'tags', 'p'=>array('tagid','page'), 'cache'=>7200],
     ],
 
     // +----------------------------------------------------------------------
     // | 短信设置
     // +----------------------------------------------------------------------
     // 开启调试模式，跳过手机接收短信这一块
-    'sms_debug' => false,
+    'sms_debug' => true,
+    //短信使用场景
+    'SEND_SCENE' => array(
+        '1'=>array('用户注册','验证码${code}，您正在注册成为${product}用户，感谢您的支持！','regis_sms_enable'),
+        '2'=>array('用户找回密码','验证码${code}，用于密码找回，如非本人操作，请及时检查账户安全','forget_pwd_sms_enable'),
+        '3'=>array('身份验证','尊敬的用户，您的验证码为${code}, 请勿告诉他人.','bind_mobile_sms_enable'),
+        '4'=>array('消息通知','您有新的消息：${content}，请注意查收！','messages_notice'),
+    ),
 
     // +----------------------------------------------------------------------
     // | 邮件设置
@@ -420,6 +399,5 @@ return array(
         2   => ['scene'=>2], // 会员注册
         3   => ['scene'=>3], // 绑定邮箱
         4   => ['scene'=>4], // 找回密码
-        5   => ['scene'=>5], // 订单提醒
     ],
 );

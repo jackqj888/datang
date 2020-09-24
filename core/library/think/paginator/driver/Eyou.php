@@ -198,7 +198,7 @@ class Eyou extends Paginator
      */
     protected function getAvailablePageWrapper($url, $page)
     {
-        return '<a href="' . htmlentities($url) . '" class="tcdNumber">' . $page . '</a>';
+        return '<a href="' . htmlentities($url) . '">' . $page . '</a>';
     }
 
     /**
@@ -209,7 +209,7 @@ class Eyou extends Paginator
      */
     protected function getDisabledTextWrapper($text)
     {
-        return '<a>' . $text . '</a>';
+        return '<a >' . $text . '</a>';
     }
 
     /**
@@ -220,7 +220,7 @@ class Eyou extends Paginator
      */
     protected function getActivePageWrapper($text)
     {
-        return '<span>' . $text . '</span>';
+        return '<a class="cur">' . $text . '</a>';
     }
 
     /**

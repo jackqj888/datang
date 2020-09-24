@@ -9,9 +9,9 @@
 <div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none; visibility: visible; left: 95px; top: 573px;"></div>
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
-<div class="page" style="min-width:auto;box-shadow:none;">
+<div class="page" style="min-width:auto;">
     <div class="fixed-bar">
-        <div class="item-title"><a class="back" href="javascript:history.back();" title="返回列表"><i class="fa fa-chevron-left"></i></a>
+        <div class="item-title"><a class="back" href="javascript:history.back();" title="返回列表"><i class="fa fa-arrow-circle-o-left"></i></a>
             <div class="subject">
                 <h3>新增图集</h3>
                 <h5></h5>
@@ -92,7 +92,7 @@
                                  title="点击前方预览图可查看大图，点击按钮选择文件并提交表单后上传生效">
                         </span>
                     </div>
-                    <input type="text" id="litpic_remote" name="litpic_remote" value="" placeholder="http://" class="input-txt" onKeyup="keyupRemote(this, 'litpic');" style="display: none;">
+                    <input type="text" id="litpic_remote" name="litpic_remote" value="" placeholder="http://" class="input-txt" style="display: none;">
                     &nbsp;
                     <label><input type="checkbox" name="is_remote" id="is_remote" value="1" onClick="clickRemote(this, 'litpic');">远程图片</label>
                     <span class="err"></span>
@@ -123,21 +123,17 @@
                     <!-- 上传图片显示的样板 start -->
                     <div class="images_upload_tpl none">
                         <div class="images_upload">
-                            <div style="position: relative; height: 130px;">
-                                <input type="hidden" name="imgupload[]" value="" />
-                                <a href="javascript:void(0);" onClick="" class="upimg" title="拖动修改排序">
-                                    <img src="__STATIC__/admin/images/add-button.jpg" width="120" height="120" />
-                                </a>
-                                <a href="javascript:void(0)" class="delect">&nbsp;&nbsp;</a>
-                            </div>
-                            <textarea rows="5" cols="60" name="imgintro[]" style="height:28px; width: 136px;" placeholder="图片注释" title="标签调用：{literal}{$field.intro}{/literal}"></textarea>
+                            <input type="hidden" name="imgupload[]" value="" />
+                            <a href="javascript:void(0);" onClick="" class="upimg" title="拖动修改排序">
+                                <img src="__STATIC__/admin/images/add-button.jpg" width="120" height="120" />
+                            </a>
+                            <a href="javascript:void(0)" class="delect">&nbsp;&nbsp;</a>
                         </div>
                     </div>
                     <!-- 上传图片显示的样板 end -->
                 </dd>
             </dl>
-            
-            {include file="archives/get_field_addonextitem" /}
+            {include file="field/addonextitem" /}
         </div>
         <!-- 常规信息 -->
         <!-- SEO设置 -->
@@ -146,18 +142,11 @@
                 <dt class="tit">
                     <label>TAG标签</label>
                 </dt>
-                <dd class="opt opt1591870121">
-                    <input type="text" name="tags" id="tags" class="input-txt">
-                    <script type="text/javascript">
-                        $(function() { $('#tags').tagsInput({width: '450px', height: 'auto'}); });
-                    </script>
-                    <a href="javascript:void(0);" onclick="TagListSelect1591784354(this);" class="ncap-btn ncap-btn-green">快速选择</a>
+                <dd class="opt">          
+                    <input type="text" value="" name="tags" id="tags" class="input-txt">
+                    &nbsp;<a href="javascript:void(0);" onclick="tags_list(this);" class="ncap-btn ncap-btn-green">管理</a>
                     <span class="err"></span>
-                    <p class="notic">输入标签结束后可用回车或空格分开</p>
-                    <input type="hidden" id="TagOldSelectID">
-                    <input type="hidden" id="NewTagOldSelectID">
-                    <input type="hidden" id="TagOldSelectTag">
-                    <input type="hidden" name="tags_new" id="NewTagOldSelectTag">
+                    <p class="notic">多个标签用英文逗号（,）分开，单个标签小于12字节</p>
                 </dd>
             </dl>
             <dl class="row">
@@ -232,7 +221,7 @@
                     <label for="articleForm">发布时间</label>
                 </dt>
                 <dd class="opt">
-                    <input type="text" class="input-txt" id="add_time" name="add_time" value="{php}echo date('Y-m-d H:i:s'){/php}" autocomplete="off">        
+                    <input type="text" class="input-txt" id="add_time" name="add_time" value="{php}echo date('Y-m-d H:i:s'){/php}">        
                     <span class="add-on input-group-addon">
                         <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
                     </span> 
@@ -251,16 +240,6 @@
                     </select>
                     <input type="hidden" name="type_tempview" value="{$tempview}" />
                     <span class="err"></span>
-                </dd>
-            </dl>
-            <dl class="row" {neq name='$seo_pseudo' value='2'}style="display: none;"{/neq}>
-                <dt class="tit">
-                    <label>自定义文件名</label>
-                </dt>
-                <dd class="opt">
-                    <input type="text" value="" name="htmlfilename" id="htmlfilename" style="width: 120px;" onkeyup="this.value=this.value.replace(/[^\w\-]/g,'');" onpaste="this.value=this.value.replace(/[^\w\-]/g,'');">.html
-                    <span class="err"></span>
-                    <p class="notic">自定义文件名可由字母/数字/'_'/'-'等符号组成</p>
                 </dd>
             </dl>
 <!--             <dl class="row">
@@ -316,7 +295,6 @@
             } else if ({$channeltype} == current_channel) {
                 layer.closeAll();
             }
-            GetAddonextitem($(this).val(), {$channeltype}, 0, true);
         });
     });
 
@@ -328,7 +306,7 @@
             function(val, index){
                 var admin_id = '{$Think.session.admin_info.admin_id}';
                 $.ajax({
-                    url: "{:url('Admin/ajax_setfield', ['_ajax'=>1])}",
+                    url: "{:url('Admin/ajax_setfield')}",
                     type: 'POST',
                     dataType: 'JSON',
                     data: {id_name:'admin_id',id_value:admin_id,field:'pen_name',value:val},
@@ -342,7 +320,7 @@
                         }
                     },
                     error: function(e){
-                        showErrorMsg(ey_unknown_error);
+                        showErrorMsg('网络失败，请刷新页面后重试');
                         return false;
                     }
                 });
@@ -353,18 +331,18 @@
 
     function tags_list(obj)
     {
-        layer.closeAll();
         var url = "{:url('Tags/index')}";
         //iframe窗
-        var iframes = layer.open({
+        layer.open({
             type: 2,
             title: 'TAG标签管理',
             fixed: true, //不固定
             shadeClose: false,
+            shade: 0.3,
+            maxmin: true, //开启最大化最小化按钮
+            area: ['80%', '80%'],
             content: url
         });
-
-        layer.full(iframes);
     }
 
     function system_thumb()
@@ -400,10 +378,9 @@
 
     function img_call_back(fileurl_tmp)
     {
-        $("#litpic_local").val(fileurl_tmp);
-        $("#img_a").attr('href', fileurl_tmp);
-        $("#img_i").attr('onmouseover', "layer_tips=layer.tips('<img src="+fileurl_tmp+" class=\\'layer_tips_img\\'>',this,{tips: [1, '#fff']});");
-        $("input[name=is_litpic]").attr('checked', true); // 自动勾选属性[图片]
+      $("#litpic_local").val(fileurl_tmp);
+      $("#img_a").attr('href', fileurl_tmp);
+      $("#img_i").attr('onmouseover', "layer_tips=layer.tips('<img src="+fileurl_tmp+" class=\\'layer_tips_img\\'>',this,{tips: [1, '#fff']});");
     }
 
     // 上传图集相册回调函数
@@ -430,13 +407,13 @@
         // 删除数据库记录
         $.ajax({
             type:'POST',
-            url:"{:url('Images/del_imgupload', ['_ajax'=>1])}",
+            url:"{:url('Images/del_imgupload')}",
             data:{filename:path},
             success:function(){
-                $(obj).parent().parent().remove(); // 删除完服务器的, 再删除 html上的图片   
+                $(obj).parent().remove(); // 删除完服务器的, 再删除 html上的图片   
                 $.ajax({
                     type:'POST',
-                    url:"{:url('Uploadify/delupload', ['_ajax'=>1])}",
+                    url:"{:url('Uploadify/delupload')}",
                     data:{action:"del", filename:path},
                     success:function(){}
                 }); 
@@ -465,7 +442,6 @@
             // });
         }
     });
-    //因为他们要拖动，所以尽量设置他们的文字不能选择。 
     $( ".sort-list" ).disableSelection();
 
 </script>

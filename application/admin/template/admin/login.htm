@@ -6,7 +6,7 @@
         <meta charset="utf-8">
         <meta http-equiv="Content-Language" content="zh-cn"/>
         <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
-        <meta name='robots' content='noindex,nofollow' />
+        <meta name="robots" content="noarchive">
         <title>后台登录</title>
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" media="screen"/>
         <link href="__SKIN__/css/login.css" rel="stylesheet" type="text/css" />
@@ -36,7 +36,6 @@
                detectBrowser();
             </script>
         <![endif]-->
-        <link href="__SKIN__/css/diy_style.css?v={$version}" rel="stylesheet" type="text/css" />
     </head>
 
     <body>
@@ -64,14 +63,10 @@
                         <img src="{:url('Admin/vertify')}" class="chicuele" id="imgVerify" alt="" onclick="fleshVerify();" style="position:absolute; right: 3px;top: 3px;height: 36px;">
                     </div>
                     {/eq}
-
-                    <!--点选文字验证码 start-->
-                    <!-- weapp_clicap_input -->
-                    <!--点选文字验证码 end-->
-
-                    <!-- <div class="clearfix text-right">
+                    <div class="clearfix text-right">
                         <a href="javascript:void(0);" class="help forget_pwd">忘记密码?</a>
-                    </div> -->
+                    </div>
+                    <input type="hidden" name="__token__" value="{$Request.token}" />
                     <input type="button" name="submit" class="btn btn-lg btn-primary btn-block show-dialog" value="登录">
                 </form>
             </div> 
@@ -128,7 +123,7 @@
                     {/eq}
 
                     if(vertify && $('#theForm input[name=user_name]').val() != '' && $('#theForm input[name=password]').val() != ''){
-                        var url = "{:url('Admin/login', ['_ajax'=>1])}";
+                        var url = "{:url('Admin/login')}";
                         if (url.indexOf('?') > -1) {
                             url += '&';
                         } else {
@@ -156,12 +151,16 @@
                             },
                             error : function(XMLHttpRequest, textStatus, errorThrown) {
                                 layer.closeAll();
-                                layer.alert('未知错误，无法继续！', {icon: 5, title:false});
+                                layer.alert('网络失败，请刷新页面后重试', {icon: 5, title:false});
                             }
                         });
                     }else{
                         return false;
                     }
+                });
+
+                $(".forget_pwd").click(function(){
+                    layer.alert('请联系网站管理员！', {icon: 6, title:false});
                 });
             });
             

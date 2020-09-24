@@ -52,13 +52,13 @@ class Article extends Model
         $result = array();
         if ($isshowbody) {
             $field = !empty($field) ? $field : 'b.*, a.*';
-            $result = Db::name('archives')->field($field)
+            $result = db('archives')->field($field)
                 ->alias('a')
                 ->join('__ARTICLE_CONTENT__ b', 'b.aid = a.aid', 'LEFT')
                 ->find($aid);
         } else {
             $field = !empty($field) ? $field : 'a.*';
-            $result = Db::name('archives')->field($field)
+            $result = db('archives')->field($field)
                 ->alias('a')
                 ->find($aid);
         }

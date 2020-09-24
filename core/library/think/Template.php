@@ -373,8 +373,6 @@ class Template
         if (empty($content)) {
             return;
         }
-        // 替换eyou:literal标签内容
-        $this->parseEyouLiteral($content);
         // 替换literal标签内容
         $this->parseLiteral($content);
         // 解析继承
@@ -387,8 +385,6 @@ class Template
         $this->parseInclude($content);
         // 替换包含文件中literal标签内容
         $this->parseLiteral($content);
-        // 替换包含文件中eyou:literal标签内容
-        $this->parseEyouLiteral($content);
         // 检查PHP语法
         $this->parsePhp($content);
 
@@ -420,9 +416,6 @@ class Template
         }
         // 解析普通模板标签 {$tagName}
         $this->parseTag($content);
-
-        // 还原被替换的eyou:Literal标签
-        $this->parseEyouLiteral($content, true);
 
         // 还原被替换的Literal标签
         $this->parseLiteral($content, true);
@@ -537,9 +530,6 @@ class Template
                     } else if (stristr($file, '.'.$this->config['view_suffix']) && (stristr($file, '/') || stristr($file, '\\'))) {
                         // 支持绝对路径的模板引入写法： {eyou:include file="/template/pc/header.htm" /}
                         $file  = '.'.$file;
-                        if (preg_match('/\/template\/(pc|mobile)\/\//i', $file)) {
-                            $file = str_replace('./template/', './template/'.TPL_THEME, $file);
-                        }
                     }
                     unset($array['file']);
                     // 分析模板文件名并读取内容
@@ -581,11 +571,7 @@ class Template
                     if (preg_match('/^([^\\/]+)\.'.$this->config['view_suffix'].'$/i', $file) === 1) {
                         $file = str_replace('.'.$this->config['view_suffix'], '', $file);
                     } else if (stristr($file, '.'.$this->config['view_suffix']) && (stristr($file, '/') || stristr($file, '\\'))) {
-                        // 支持绝对路径的模板引入写法： {include file="/template/pc/header.htm" /}
                         $file  = '.'.$file;
-                        if (preg_match('/\/template\/(pc|mobile)\/\//i', $file)) {
-                            $file = str_replace('./template/', './template/'.TPL_THEME, $file);
-                        }
                     }
                     /*--end*/
                     unset($array['file']);
@@ -695,38 +681,6 @@ class Template
     private function parseLiteral(&$content, $restore = false)
     {
         $regex = $this->getRegex($restore ? 'restoreliteral' : 'literal');
-        if (preg_match_all($regex, $content, $matches, PREG_SET_ORDER)) {
-            if (!$restore) {
-                $count = count($this->literal);
-                // 替换literal标签
-                foreach ($matches as $match) {
-                    $this->literal[] = substr($match[0], strlen($match[1]), -strlen($match[2]));
-                    $content         = str_replace($match[0], "<!--###literal{$count}###-->", $content);
-                    $count++;
-                }
-            } else {
-                // 还原literal标签
-                foreach ($matches as $match) {
-                    $content = str_replace($match[0], $this->literal[$match[1]], $content);
-                }
-                // 清空literal记录
-                $this->literal = [];
-            }
-            unset($matches);
-        }
-        return;
-    }
-
-    /**
-     * 替换页面中的eyou:literal标签
-     * @access private
-     * @param  string   $content 模板内容
-     * @param  boolean  $restore 是否为还原
-     * @return void
-     */
-    private function parseEyouLiteral(&$content, $restore = false)
-    {
-        $regex = $this->getRegex($restore ? 'restoreliteral' : 'eyou:literal');
         if (preg_match_all($regex, $content, $matches, PREG_SET_ORDER)) {
             if (!$restore) {
                 $count = count($this->literal);
@@ -1261,7 +1215,6 @@ class Template
                     }
                     break;
                 case 'literal':
-                case 'eyou:literal':
                     if ($single) {
                         $regex = '(' . $begin . $tagName . '\b(?>[^' . $end . ']*)' . $end . ')';
                         $regex .= '(?:(?>[^' . $begin . ']*)(?>(?!' . $begin . '(?>' . $tagName . '\b[^' . $end . ']*|\/' . $tagName . ')' . $end . ')' . $begin . '[^' . $begin . ']*)*)';

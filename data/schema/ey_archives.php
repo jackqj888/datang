@@ -129,7 +129,7 @@ return array (
   'arcrank' => 
   array (
     'name' => 'arcrank',
-    'type' => 'int(10)',
+    'type' => 'tinyint(1)',
     'notnull' => false,
     'default' => '0',
     'primary' => false,
@@ -180,66 +180,12 @@ return array (
     'primary' => false,
     'autoinc' => false,
   ),
-  'attrlist_id' => 
-  array (
-    'name' => 'attrlist_id',
-    'type' => 'int(11) unsigned',
-    'notnull' => false,
-    'default' => '0',
-    'primary' => false,
-    'autoinc' => false,
-  ),
   'users_price' => 
   array (
     'name' => 'users_price',
     'type' => 'decimal(10,2)',
     'notnull' => false,
     'default' => '0.00',
-    'primary' => false,
-    'autoinc' => false,
-  ),
-  'users_free' => 
-  array (
-    'name' => 'users_free',
-    'type' => 'tinyint(1) unsigned',
-    'notnull' => false,
-    'default' => '0',
-    'primary' => false,
-    'autoinc' => false,
-  ),
-  'old_price' => 
-  array (
-    'name' => 'old_price',
-    'type' => 'decimal(10,2)',
-    'notnull' => false,
-    'default' => '0.00',
-    'primary' => false,
-    'autoinc' => false,
-  ),
-  'sales_num' => 
-  array (
-    'name' => 'sales_num',
-    'type' => 'int(10) unsigned',
-    'notnull' => false,
-    'default' => '0',
-    'primary' => false,
-    'autoinc' => false,
-  ),
-  'stock_count' => 
-  array (
-    'name' => 'stock_count',
-    'type' => 'int(10) unsigned',
-    'notnull' => false,
-    'default' => '0',
-    'primary' => false,
-    'autoinc' => false,
-  ),
-  'stock_show' => 
-  array (
-    'name' => 'stock_show',
-    'type' => 'tinyint(1) unsigned',
-    'notnull' => false,
-    'default' => '1',
     'primary' => false,
     'autoinc' => false,
   ),
@@ -297,24 +243,6 @@ return array (
     'primary' => false,
     'autoinc' => false,
   ),
-  'users_id' => 
-  array (
-    'name' => 'users_id',
-    'type' => 'int(10)',
-    'notnull' => false,
-    'default' => '0',
-    'primary' => false,
-    'autoinc' => false,
-  ),
-  'arc_level_id' => 
-  array (
-    'name' => 'arc_level_id',
-    'type' => 'int(10)',
-    'notnull' => false,
-    'default' => '0',
-    'primary' => false,
-    'autoinc' => false,
-  ),
   'is_del' => 
   array (
     'name' => 'is_del',
@@ -330,33 +258,6 @@ return array (
     'type' => 'tinyint(1)',
     'notnull' => false,
     'default' => '0',
-    'primary' => false,
-    'autoinc' => false,
-  ),
-  'joinaid' => 
-  array (
-    'name' => 'joinaid',
-    'type' => 'int(10)',
-    'notnull' => false,
-    'default' => '0',
-    'primary' => false,
-    'autoinc' => false,
-  ),
-  'downcount' => 
-  array (
-    'name' => 'downcount',
-    'type' => 'int(10)',
-    'notnull' => false,
-    'default' => '0',
-    'primary' => false,
-    'autoinc' => false,
-  ),
-  'htmlfilename' => 
-  array (
-    'name' => 'htmlfilename',
-    'type' => 'varchar(50)',
-    'notnull' => false,
-    'default' => '',
     'primary' => false,
     'autoinc' => false,
   ),

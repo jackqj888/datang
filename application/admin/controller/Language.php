@@ -239,10 +239,6 @@ class Language extends Base
                         }
                     }
                     /*--end*/
-
-                    /*统计多语言数量*/
-                    model('Language')->setLangNum();
-                    
                     adminLog('编辑多语言：'.$post['title']); // 写入操作日志
                     $this->success("操作成功!", url('Language/index'));
                 }
@@ -289,7 +285,7 @@ class Language extends Base
             }
             /*--end*/
 
-            $result = Db::name('language')->where("id",'IN',$id_arr)->select();
+            $result = $this->langModel->where("id",'IN',$id_arr)->select();
             $title_list = get_arr_column($result, 'title');
             $lang_list = get_arr_column($result, 'mark');
 
@@ -1191,7 +1187,6 @@ class Language extends Base
     {
         if (!empty($mark) && !empty($c_lang)) {
             $service_ey = config('service_ey');
-
             $query_str = 'L2luZGV4LnBocD9tPWFwaSZjPUxhbmd1YWdlJmE9c3luX3BhY2tfc2luZ2xlJg==';
             $values = array(            
                 'lang'=>$mark, 

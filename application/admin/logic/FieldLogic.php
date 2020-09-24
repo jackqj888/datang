@@ -53,7 +53,6 @@ class FieldLogic extends Model
             if(preg_match("#[0-9\-]#", $dfvalue))
             {
                 $dfvalue = strtotime($dfvalue);
-                empty($dfvalue) && $dfvalue = 0;
                 $default_sql = "DEFAULT '$dfvalue'";
             }
             $maxlen = 11;
@@ -111,14 +110,7 @@ class FieldLogic extends Model
             if(empty($dfvalue)) {
                 $dfvalue = '';
             }
-            $maxlen = 10001;
-            $fields[0] = " `$fieldname` varchar($maxlen) NOT NULL DEFAULT '$dfvalue' COMMENT '$fieldtitle';";
-            $fields[1] = "varchar($maxlen)";
-            $fields[2] = $maxlen;
-        }
-        else if("media" == $dtype)
-        {
-            $maxlen = 200;
+            $maxlen = 1001;
             $fields[0] = " `$fieldname` varchar($maxlen) NOT NULL DEFAULT '$dfvalue' COMMENT '$fieldtitle';";
             $fields[1] = "varchar($maxlen)";
             $fields[2] = $maxlen;
@@ -128,7 +120,7 @@ class FieldLogic extends Model
             if(empty($dfvalue)) {
                 $dfvalue = '';
             }
-            $maxlen = 10002;
+            $maxlen = 1002;
             $fields[0] = " `$fieldname` varchar($maxlen) NOT NULL DEFAULT '$dfvalue' COMMENT '$fieldtitle';";
             $fields[1] = "varchar($maxlen)";
             $fields[2] = $maxlen;
@@ -150,23 +142,18 @@ class FieldLogic extends Model
         else if("checkbox" == $dtype)
         {
             $maxlen = 0;
-            $dfvalueArr = explode(',', $dfvalue);
-            $default_value = '';
-            // $default_value = !empty($dfvalueArr[0]) ? $dfvalueArr[0] : '';
             $dfvalue = str_replace(',', "','", $dfvalue);
             $dfvalue = "'".$dfvalue."'";
-            $fields[0] = " `$fieldname` SET($dfvalue) NULL DEFAULT '{$default_value}' COMMENT '$fieldtitle';";
+            $fields[0] = " `$fieldname` SET($dfvalue) NULL COMMENT '$fieldtitle';";
             $fields[1] = "SET($dfvalue)";
             $fields[2] = $maxlen;
         }
         else if("select" == $dtype || "radio" == $dtype)
         {
             $maxlen = 0;
-            $dfvalueArr = explode(',', $dfvalue);
-            $default_value = !empty($dfvalueArr[0]) ? $dfvalueArr[0] : '';
             $dfvalue = str_replace(',', "','", $dfvalue);
             $dfvalue = "'".$dfvalue."'";
-            $fields[0] = " `$fieldname` enum($dfvalue) NULL DEFAULT '{$default_value}' COMMENT '$fieldtitle';";
+            $fields[0] = " `$fieldname` enum($dfvalue) NULL COMMENT '$fieldtitle';";
             $fields[1] = "enum($dfvalue)";
             $fields[2] = $maxlen;
         }
@@ -358,9 +345,6 @@ class FieldLogic extends Model
             $new_arr[] = $fieldname;
             // 对比字段记录 表字段有 字段新增记录没有
             if (empty($channelfieldArr[$fieldname])) {
-                $ifcontrol = 0;
-                $is_release = 0;
-                $ifeditable = 1;
                 $dtype = $this->toDtype($val['Type']);
                 $dfvalue = $this->toDefault($val['Type'], $val['Default']);
                 if (in_array($fieldname, array('content'))) {
@@ -370,16 +354,6 @@ class FieldLogic extends Model
                 }
                 $maxlength = preg_replace('/^([^\(]+)\(([^\)]+)\)(.*)/i', '$2', $val['Type']);
                 $maxlength = intval($maxlength);
-
-                /*视频模型附加表内置的系统字段*/
-                if (5 == $channel_id && in_array($fieldname, ['total_video','total_duration','courseware_free','courseware'])) {
-                    $ifsystem = 1;
-                    $ifcontrol = 1;
-                    $is_release = 1;
-                    $ifeditable = 0;
-                }
-                /*end*/
-
                 $addData[] = array(
                     'name'  => $fieldname,
                     'channel_id'  => $channel_id,
@@ -388,11 +362,10 @@ class FieldLogic extends Model
                     'define'    => $val['Type'],
                     'maxlength' => $maxlength,
                     'dfvalue'   => $dfvalue,
-                    'is_release'    => $is_release,
-                    'ifeditable'    => $ifeditable,
+                    'ifeditable'    => 1,
                     'ifsystem'  => $ifsystem,
                     'ifmain'    => 0,
-                    'ifcontrol' => $ifcontrol,
+                    'ifcontrol' => 0,
                     'add_time'  => getTime(),
                     'update_time'  => getTime(),
                 );
@@ -416,6 +389,8 @@ class FieldLogic extends Model
         /*--end*/
 
         \think\Cache::clear('channelfield');
+
+        // cache($cacheKey, 1, null, 'channelfield');
     }
 
     /**
@@ -430,9 +405,6 @@ class FieldLogic extends Model
         $addData = array(); // 数据存储变量
 
         $controlFields = ['litpic','author'];
-        $channeltype_system_ids = Db::name('channeltype')->where([
-                'ifsystem'  => 1,
-            ])->column('id');
 
         $table = PREFIX.'archives';
         $row = Db::query("SHOW FULL COLUMNS FROM {$table}");
@@ -444,7 +416,7 @@ class FieldLogic extends Model
             if (empty($channelfieldArr[$fieldname])) {
                 $dtype = $this->toDtype($val['Type']);
                 $dfvalue = $this->toDefault($val['Type'], $val['Default']);
-                if (in_array($fieldname, $controlFields) && !in_array($channel_id, $channeltype_system_ids)) {
+                if (in_array($fieldname, $controlFields)) {
                     $ifcontrol = 0;
                 } else {
                     $ifcontrol = 1;
@@ -596,9 +568,9 @@ class FieldLogic extends Model
             $maxlen = preg_replace('/^varchar\((.*)\)/i', '$1', $fieldtype);
             if (250 == $maxlen) {
                 $dtype = 'img';
-            } else if (1001 == $maxlen || 10001 == $maxlen) {
+            } else if (1001 == $maxlen) {
                 $dtype = 'imgs';
-            } else if (1002 == $maxlen || 10002 == $maxlen) {
+            } else if (1002 == $maxlen) {
                 $dtype = 'files';
             } else {
                 $dtype = 'text';
@@ -628,7 +600,7 @@ class FieldLogic extends Model
     }
 
     /**
-     * 处理栏目自定义字段的值
+     * 处理自定义字段的值
      * @author 小虎哥 by 2018-4-16
      */
     public function handleAddonField($channel_id, $dataExt)
@@ -667,22 +639,6 @@ class FieldLogic extends Model
                     }
 
                     case 'imgs':
-                    {
-                        $imgData = [];
-                        $imgsIntroArr = !empty($dataExt[$key.'_eyou_intro']) ? $dataExt[$key.'_eyou_intro'] : [];
-                        foreach ($val as $k2 => $v2) {
-                            $v2 = trim($v2);
-                            if (!empty($v2)) {
-                                $imgData[] = [
-                                    'image_url' => $v2,
-                                    'intro'     => !empty($imgsIntroArr[$k2]) ? $imgsIntroArr[$k2] : '',
-                                ];
-                            }
-                        }
-                        $val = serialize($imgData);
-                        break;
-                    }
-
                     case 'files':
                     {
                         foreach ($val as $k2 => $v2) {

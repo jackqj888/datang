@@ -1,6 +1,11 @@
-<ul class="nav">
-  <li><a href="{eyou:global name='web_cmsurl' /}/" title="网站首页">网站首页</a></li>
-  {eyou:channel type="top" row="10" id='field'}
-  <li> <a href="{$field.typeurl}">{$field.typename}</a> </li>
-  {/eyou:channel}
-</ul>
+<header id="header" e-page="header">
+  <h1><a href="{eyou:global name='web_cmsurl' /}/" class="eyou-edit" e-id="900" e-type="upload">{eyou:uiupload e-id='900' e-page='header' id='field'}
+{$field.value}
+{eyou:else /}<img src="{eyou:global name='web_attr_10' /}" alt="{eyou:global name='web_name' /}" />{/eyou:uiupload}</a></h1>
+  <div class="wen eyou-edit" e-id="901" e-type="text">
+  {eyou:uitext e-id='901' e-page="header"}
+        {$field.value}
+        {eyou:else /}
+    <h2 ><em>贝壳粉生态涂料</em>领航者全国招商</h2>
+    <a href="tel:{eyou:global name='web_attr_1' /}">全国加盟咨询热线：{eyou:global name='web_attr_1' /}</a> {/eyou:uitext}</div>
+</header>

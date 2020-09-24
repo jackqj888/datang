@@ -1,51 +1,95 @@
-<!doctype html>
-<html>
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0;" />
 <meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
 <meta content="telephone=no" name="format-detection" />
-<script type="text/javascript" language="javascript" src="{eyou:global name='web_templets_m' /}/skin/js/jq.js"></script>
-<script type="text/javascript" language="javascript" src="{eyou:global name='web_templets_m' /}/skin/js/js.js"></script>
-<script src="{eyou:global name='web_templets_m' /}/skin/js/slide.js"></script>
-<script src="{eyou:global name='web_templets_m' /}/skin/js/swiper.min.js"></script>
 <title>{$eyou.field.seo_title}</title>
 <meta name="description" content="{$eyou.field.seo_description}" />
 <meta name="keywords" content="{$eyou.field.seo_keywords}" />
-<link href="{eyou:global name='web_cmspath' /}/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-<link href="{eyou:global name='web_templets_m' /}/skin/css/reset.css" type="text/css" rel="stylesheet" />
-<link href="{eyou:global name='web_templets_m' /}/skin/css/css.css" type="text/css" rel="stylesheet" />
-<link href="{eyou:global name='web_templets_m' /}/skin/css/swiper.min.css" type="text/css" rel="stylesheet" />
-<link rel="stylesheet" href="{eyou:global name='web_templets_m' /}/skin/css/iconfont.css" />
+<meta name="generator" content="eyoucms 1.0.0" data-variable="{eyou:global name='web_eyoucms' /}" />
+<link href="{eyou:version file='/favicon.ico' /}" rel="shortcut icon" type="image/x-icon" />
+<script type="text/javascript" src="{eyou:global name='web_templets_m' /}/skin/js/jquery.js"></script>
+<script type="text/javascript" src="{eyou:global name='web_templets_m' /}/skin/js/jquery1.js"></script>
+<link href="{eyou:global name='web_templets_m' /}/skin/css/fontsstyle.css" rel="stylesheet" />
+<link href="{eyou:global name='web_templets_m' /}/skin/css/reset.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_m' /}/skin/css/common.css" rel="stylesheet" />
+<link href="{eyou:global name='web_templets_m' /}/skin/css/prlist.css" rel="stylesheet" />
 </head>
 <body>
-<div id="container"> {eyou:include file="/template/mobile/header.htm" /}
-  <div class="mainboxbg"></div>
-  <!--header--> 
-  <div id="header" class="clearfix">
-    <div class="back abslt_l"><a class="iconfont" href="javascript:history.back(-1);">&#xe62a;</a></div>
-    <div class="contitle"><a href="{eyou:global name='web_cmsurl' /}/" title="{eyou:global name='web_title' /}"> <img src="{eyou:global name='web_attr_59' /}" alt="{eyou:global name='web_title' /}"/> </a></div>
-    <div class="flbox abslt_r sechan"><span class="sdmenut iconfont">&#xe687;</span></div>
-  </div>
-  <!--mainbox-->
-  <div class="mainbox clearfix" style="margin-top:0;"> 
-    <!--loginbox-->
-    <div class="menutt clearfix">
-      <div class="ttl"> {$eyou.field.typename}
-        <div class="spanfl"> 分类<em class="iconfont">&#xe63e;</em> </div>
-      </div>
-      <div class="flboxsub"> 分类：
-        <ul class="flboxlist">
-          {eyou:channel type='first' id='field' currentstyle='on'}
-          <li> <a href="{$field.typeurl}"><span class="iconfont">&#xe63e;</span>{$field.typename}</a></li>
-          {/eyou:channel}
-        </ul>
-        <div class="flcolose">关闭</div>
-      </div>
-      <div class="contentct"> {$eyou.field.content} </div>
-    </div>
-  </div>
-  <!--footer--> 
-  {eyou:include file="/template/mobile/footer.htm" /} </div>
+<!--header-->
+{eyou:include file="header.htm" /}
+{eyou:include file="nav.htm" /}
+<div class="CategoryList_Title"> <a href="javascript:history.go(-1);"><i class="icon-left fl"></i></a>{$eyou.field.typename}
+  <ul 
+    {eyou:notempty name='$eyou.field.has_children' /}
+    class="CategoryLista"
+    {eyou:else /}
+    style="display:none"
+    {/eyou:notempty}
+     id="fenl">
+    <li ><a href="#"><i class="icon-details"></i></a>
+      <ul class="list1">
+        {eyou:channel type='first' }
+        <li><a href="{$field.typeurl}">>{$field.typename}</a></li>
+       {/eyou:channel}
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="content"> 
+  {$eyou.field.content} 
+</div>
+<div class="searchSpan">
+  <form method="get" action="{eyou:searchurl /}">
+    <input type="hidden" name="channel" value="" />
+    <input type="hidden" name="typeid" value="" />
+    <input class="txtSearch" type="text" name="keywords" placeholder="输入您要搜索的关键词" id="se_key" />
+    <button type="submit" style="background-color:transparent;border:0;display: block; margin-left: auto;">
+    <a><i class="icon-search btnSearch"></i></a>
+    </button>
+  </form>
+   </div>
+<!--content:end--> 
+<!--info--> 
+{eyou:include file="footer.htm" /}
 </body>
+<script type="text/javascript" src="{eyou:global name='web_templets_m' /}/skin/js/sdw_mobile.js"></script>
+<script type="text/javascript" src="{eyou:global name='web_templets_m' /}/skin/js/tools.js"></script>
 </html>
+<script type="text/javascript">
+     $(".cont_c p").css("width", "100%");
+    $(".cont_c img").each(function() {
+        var width = $(this).attr("width");
+        if (width > 300) {
+            //$(this).css("float", "left");
+            $(this).attr("width", "95%");
+        }
+    });
+     $(".cont_c img").each(function() {
+        if ($(this).attr("src").indexOf("/UploadFiles") != -1) {
+            $(this).removeAttr("width");
+            $(this).removeAttr("style");
+            $(this).removeAttr("height");
+        }
+    });
+    $(".cont_c table").each(function() {
+        //        if ($(this).attr("src").indexOf("/UploadFiles") != -1)
+        //        {
+        $(this).removeAttr("width");
+        $(this).css("width", "100%");
+        $(this).css({ display: "block", marginLeft: "auto", marginRight: "auto" })
+        //        
+
+        //}
+    });
+   $(".cont_c table td").each(function() {
+        $(this).removeAttr("width"); 
+        $(this).removeAttr("style");
+      
+    });
+
+</script>

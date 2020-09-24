@@ -1,49 +1,82 @@
-<!doctype html>
-<html>
-<head>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>搜索页_{eyou:global name="web_name" /}</title>
-<meta name="keywords" content="" />
 <meta name="description" content="" />
+<meta name="keywords" content="" />
 <link href="{eyou:global name='web_cmspath' /}/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-<link rel="stylesheet" type="text/css" href="{eyou:global name='web_templets_pc' /}/skin/css/css.css">
-<link rel="stylesheet" href="{eyou:global name='web_templets_pc' /}/skin/css/red.css" type="text/css"  title="styles3" media="screen" />
-<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/jquery1.42.min.js"></script>
-<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/jquery.superslide.2.1.1.js"></script>
-<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/index.js"></script>
+<link href="{eyou:global name='web_templets_pc' /}/skin/css/common.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_pc' /}/skin/css/style.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_pc' /}/skin/css/temp.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/1.9.1jquery.min.js"></script>
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/ajax.js"></script>
 </head>
 <body>
-{eyou:include file="/template/pc/header.htm" /}
-<div class="n-box"><div class="n-l">
-    <div class="l-b">
-      <div class="fl-tit">
-        <p>Classification</p>
-        搜索页</div>
-    </div>
-    <div class="n-lx">
-      <div class="n-lx-ico">
-        <p></p>
-        {eyou:global name='web_attr_2' /}</div>
-      <div class="n-lx-wz">
-        传真：{eyou:global name='web_attr_57' /}<br>
-        手机：{eyou:global name='web_attr_60' /}<br>
-        邮箱：{eyou:global name='web_attr_55' /}<br>
-        地址：{eyou:global name='web_attr_56' /} </div>
-      <div class="n-lx-an"><a href="http://wpa.qq.com/msgrd?v=3&site={eyou:global name="web_name" /}&menu=yes&uin={eyou:global name='web_attr_3' /}" target="_blank">立即咨询</a></div>
-    </div>
-  </div>
-  <div class="n-r">
-    <div class="n-zb">搜索 <strong class="fc_03c">{$eyou.field.keywords}</strong> 的结果</div>
-    <div class="n-lb">
-      <ul>
-        {eyou:list pagesize='15' titlelen='40'}
-         <li> <span>{$field.add_time|MyDate='Y-m-d',###}</span><a href="{$field.arcurl}" title="{$field.title}">{$field.title}</a> </li>
+<!--Header:Start--> 
+
+<!--头部开始--> 
+<!--header--> 
+{eyou:include file="header.htm" /}
+<!--header--> 
+<!--Header:End--> 
+<!--Content:Start-->
+<div class="frendCont">
+  <div class="content">
+    <div class="plc2"> 搜索 <strong class="fc_03c">{$eyou.field.keywords}</strong> 的结果 </div>
+    <div class="left2">
+      <div class="left2top"></div>
+      <div class="left2_main">
+        <div class="search_con"> 
+        {eyou:list titlelen='40' pagesize='30'}
+          <dl class="sear_dl" style="padding-left:14px;">
+            <dt class="dt2"><a href="{$field.arcurl}"> <img src="{$field.litpic}" /></a></dt>
+            <dd class="d2"> <a href="{$field.arcurl}" class="a_d">{$field.title}</a></dd>
+          </dl>
         {/eyou:list}
-      </ul>
+          <div class="clear"></div>
+          <div class='pagingNav'>
+            <p></p>
+            <div class="uls fr">{eyou:pagelist listitem='index,pre,pageno,next,end' listsize='2' /}</div>
+          </div>
+        </div>
+      </div>
+      <div class="left2bot"> </div>
     </div>
-    <div class="pageListNav"> {eyou:pagelist listitem="info,pre,next,pageno" listsize="2"/} </div>
+    
+    <div class="right2">
+      <div class="right2top"> </div>
+      <div class="right2_main eyou-edit" e-id="s1" e-type="arclist" e-page="search">
+      {eyou:uiarclist e-id='s1' typeid='6' e-page="search"}
+      {eyou:channelartlist typeid=''}
+        <h4 class="t03"> <a href="{eyou:field name='typeurl' /}">{eyou:field name='typename' /}</a></h4>
+        <ul class="n_rt_ul2">
+          {eyou:arclist titlelen='20' row='15'}
+          <li> <img src="{eyou:global name='web_templets_pc' /}/skin/img/sico15.gif" alt="{$field.title}" title="{$field.title}" /><a
+                                    href="{$field.arcurl}" title="{$field.title}"> {$field.title}</a></li>
+          {/eyou:arclist}
+        </ul>
+        {/eyou:channelartlist}
+        {/eyou:uiarclist}
+      </div>
+      
+      <div class="left2bot"> </div>
+    </div>
+    
+    <div class="clear"> </div>
   </div>
 </div>
-{eyou:include file="/template/pc/footer.htm" /}
+<!--Content:End--> 
+<!--Footer:Start--> 
+
+{eyou:include file="footer.htm" /}
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/im.js"></script> 
+<!--footer--> 
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/jquery-3.3.1.min.js"></script>
+{eyou:ui open='off' /}
+<!--Footer:End--> 
+<script type="text/javascript">
+        $(".nav li").removeClass("cur");
+</script>
 </body>
 </html>

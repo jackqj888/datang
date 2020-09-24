@@ -42,28 +42,16 @@ if (!function_exists('set_arcseotitle'))
     function set_arcseotitle($title = '', $seo_title = '', $typename = '')
     {
         /*针对没有自定义SEO标题的文档*/
-        $title = trim($title);
-        $seo_title = trim($seo_title);
-        $typename = trim($typename);
         if (empty($seo_title)) {
-            static $web_name = null;
-            if (null === $web_name) {
-                $web_name = tpCache('web.web_name');
-                $web_name = trim($web_name);
-            }
-            static $seo_viewtitle_format = null;
-            null === $seo_viewtitle_format && $seo_viewtitle_format = tpCache('seo.seo_viewtitle_format');
+            $web_name = tpCache('web.web_name');
+            $seo_viewtitle_format = tpCache('seo.seo_viewtitle_format');
             switch ($seo_viewtitle_format) {
                 case '1':
                     $seo_title = $title;
                     break;
                 
                 case '3':
-                    $seo_title = $title;
-                    if (!empty($typename)) {
-                        $seo_title .= '_'.$typename;
-                    }
-                    $seo_title .= '_'.$web_name;
+                    $seo_title = $title.'_'.$typename.'_'.$web_name;
                     break;
                 
                 case '2':
@@ -102,11 +90,6 @@ if (!function_exists('set_typeseotitle'))
                     }
                     $seo_title = $typename.'_'.$web_name;
                     break;
-            }
-        } else {
-            $page = I('param.page/d', 1);
-            if ($page > 1) {
-                $seo_title .= "_第{$page}页";
             }
         }
 

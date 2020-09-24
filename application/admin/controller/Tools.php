@@ -59,7 +59,6 @@ class Tools extends Base {
     {
         //防止备份数据过程超时
         function_exists('set_time_limit') && set_time_limit(0);
-        @ini_set('memory_limit','-1');
 
         /*升级完自动备份所有数据表*/
         if ('all' == $tables) {
@@ -156,16 +155,14 @@ class Tools extends Base {
                             /*替换所有表的前缀为官方默认ey_，并重写安装数据包里*/
                             $eyouDbStr = file_get_contents($dstfile);
                             $dbtables = Db::query('SHOW TABLE STATUS');
-                            $tableName = $eyTableName = [];
                             foreach ($dbtables as $k => $v) {
-                                if (preg_match('/^'.PREFIX.'/i', $v['Name'])) {
-                                    $tableName[] = "`{$v['Name']}`";
-                                    $eyTableName[] = preg_replace('/^`'.PREFIX.'/i', '`ey_', "`{$v['Name']}`");
+                                $tableName = $v['Name'];
+                                if (preg_match('/^'.PREFIX.'/i', $tableName)) {
+                                    $eyTableName = preg_replace('/^'.PREFIX.'/i', 'ey_', $tableName);
+                                    $eyouDbStr = str_replace('`'.$tableName.'`', '`'.$eyTableName.'`', $eyouDbStr);
                                 }
                             }
-                            $eyouDbStr = str_replace($tableName, $eyTableName, $eyouDbStr);
                             @file_put_contents($dstfile, $eyouDbStr);
-                            unset($eyouDbStr);
                             /*--end*/
                         } else {
                             @unlink($dstfile); // 复制失败就删掉，避免安装错误的数据包
@@ -187,7 +184,7 @@ class Tools extends Base {
             }
 
         } else {//出错
-            return json(array('info'=>'参数有误', 'tab'=>['speed'=>-1], 'status'=>0, 'url'=>''));
+            return json(array('info'=>'参数有误', 'status'=>0, 'url'=>''));
         }
     }
         
@@ -259,7 +256,7 @@ class Tools extends Base {
         $list = array();
         $filenum = $total = 0;
         foreach ($glob as $name => $file) {
-            if(preg_match('/^\d{8,8}-\d{6,6}-\d+-v\d+\.\d+\.\d+(.*)\.sql(?:\.gz)?$/', $name)){
+            if(preg_match('/^\d{8,8}-\d{6,6}-\d+-v\d+\.\d+\.\d+\.sql(?:\.gz)?$/', $name)){
                 $name = sscanf($name, '%4s%2s%2s-%2s%2s%2s-%d-%s');
                 $date = "{$name[0]}-{$name[1]}-{$name[2]}";
                 $time = "{$name[3]}:{$name[4]}:{$name[5]}";
@@ -294,8 +291,6 @@ class Tools extends Base {
      */
     public function restoreUpload()
     {
-        $this->error('该功能仅限技术人员使用！');
-        
         $file = request()->file('sqlfile');
         if(empty($file)){
             $this->error('请上传sql文件');
@@ -312,6 +307,7 @@ class Tools extends Base {
             if (file_exists($file_path_full)) {
                 $sqls = Backup::parseSql($file_path_full);
                 if(Backup::install($sqls)){
+//                    array_map("unlink", glob($path));
                     /*清除缓存*/
                     delFile(RUNTIME_PATH);
                     /*--end*/
@@ -417,7 +413,6 @@ class Tools extends Base {
     public function new_import($time = 0)
     {
         function_exists('set_time_limit') && set_time_limit(0);
-        @ini_set('memory_limit','-1');
 
         if(is_numeric($time) && intval($time) > 0){
             //获取备份文件信息
@@ -431,7 +426,7 @@ class Tools extends Base {
             foreach($files as $name){
                 $basename = basename($name);
                 $match    = sscanf($basename, '%4s%2s%2s-%2s%2s%2s-%d-%s');
-                $gz       = preg_match('/^\d{8,8}-\d{6,6}-\d+-v\d+\.\d+\.\d+(.*)\.sql.gz$/', $basename);
+                $gz       = preg_match('/^\d{8,8}-\d{6,6}-\d+-v\d+\.\d+\.\d+\.sql.gz$/', $basename);
                 $list[$match[6]] = array($match[6], $name, $gz);
             }
             ksort($list);
@@ -441,7 +436,7 @@ class Tools extends Base {
             $file_path_full = !empty($last[1]) ? $last[1] : '';
             if (file_exists($file_path_full)) {
                 /*校验sql文件是否属于当前CMS版本*/
-                preg_match('/(\d{8,8})-(\d{6,6})-(\d+)-(v\d+\.\d+\.\d+(.*))\.sql/i', $file_path_full, $matches);
+                preg_match('/(\d{8,8})-(\d{6,6})-(\d+)-(v\d+\.\d+\.\d+)\.sql/i', $file_path_full, $matches);
                 $version = getCmsVersion();
                 if ($matches[4] != $version) {
                     $this->error('sql不兼容当前版本：'.$version, url('Tools/restore'));

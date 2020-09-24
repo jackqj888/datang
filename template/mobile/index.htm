@@ -1,140 +1,561 @@
-<!doctype html>
-<html>
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0;" />
 <meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
 <meta content="telephone=no" name="format-detection" />
-<script type="text/javascript" language="javascript" src="{eyou:global name='web_templets_m' /}/skin/js/jq.js"></script>
-<script type="text/javascript" language="javascript" src="{eyou:global name='web_templets_m' /}/skin/js/js.js"></script>
-<script src="{eyou:global name='web_templets_m' /}/skin/js/slide.js"></script>
-<script src="{eyou:global name='web_templets_m' /}/skin/js/swiper.min.js"></script>
 <title>{eyou:global name='web_title' /}</title>
 <meta name="description" content="{eyou:global name='web_description' /}" />
 <meta name="keywords" content="{eyou:global name='web_keywords' /}" />
 <link href="{eyou:global name='web_cmspath' /}/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-<link href="{eyou:global name='web_templets_m' /}/skin/css/reset.css" type="text/css" rel="stylesheet" />
-<link href="{eyou:global name='web_templets_m' /}/skin/css/css.css" type="text/css" rel="stylesheet" />
-<link rel="stylesheet" href="{eyou:global name='web_templets_m' /}/skin/css/iconfont.css" />
-<link href="{eyou:global name='web_templets_m' /}/skin/css/swiper.min.css" type="text/css" rel="stylesheet" />
+<link type="text/css" rel="stylesheet" href="{eyou:global name='web_templets_m' /}/skin/css/reset.css" />
+<link type="text/css" rel="stylesheet" href="{eyou:global name='web_templets_m' /}/skin/css/fontsstyle.css" />
+<link href="{eyou:global name='web_templets_m' /}/skin/css/index.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="{eyou:global name='web_templets_m' /}/skin/css/common.css" />
 </head>
 <body>
-<div id="container"> {eyou:include file="/template/mobile/header.htm" /}
-  <div class="mainboxbg"></div>
-  <!--header-->
-  <div id="header" class="clearfix">
-    <div id="logo"><a href="{eyou:global name='web_cmsurl' /}/" title="{eyou:global name='web_title' /}"> <img src="{eyou:global name='web_attr_59' /}" alt="{eyou:global name='web_title' /}"/> </a></div>
-    <div class="sechan"> <span class="icon iconfont"> &#xe687; </span> </div>
-  </div>
-  <!--mainbox-->
-  <div class="mainbox clearfix"> 
-    <!--banner--> 
-    <script type="text/javascript" language="javascript" src="{eyou:global name='web_templets_m' /}/skin/js/banner.js"></script>
-    <div id="slideBox" class="slideBox">
-      <div class="bd">
+<div class="mian">
+<!--header--> 
+{eyou:include file="header.htm" /}
+<mian e-page="index">
+<!--banner-->
+<div class="banner">
+  <div id="focus" class="focus">
+    <div class="hd">
+      <ul>
+        {eyou:adv pid='4' }
+          <li></li>
+        {/eyou:adv}
+      </ul>
+    </div>
+    <div class="bd">
+      <div >
         <ul>
-          {eyou:adv pid='3'}
-          <li><img src="{$field.litpic}"/></li>
+          {eyou:adv pid='4' }
+          <li  class="eyou-edit " e-id="{$field.id}" e-type="adv"><a href="{$field.links}"><img src="{$field.litpic}" alt="{$field.title}" width="320"/></a></li>
           {/eyou:adv}
         </ul>
       </div>
-      <div class="hd">
-        <ul>
+    </div>
+  </div>
+</div>
+<div class="centernar"> 
+  <!--nav--> 
+  <nav class="nav"> 
+  <a href="{eyou:global name='web_cmsurl' /}/">网站首页</a> 
+  {eyou:channel type="top" row="7" id="field"}
+  <a href="{$field.typeurl}" >{$field.typename}</a>
+  {/eyou:channel}
+  </nav>
+  <!--pro--> 
+  
+  <div id="pro" class="pro">
+    <div class="title eyou-edit" e-id="800" e-type="arclist" e-page="index">
+    {eyou:uiarclist e-id='800' typeid='2' e-page="index"}
+  {eyou:channelartlist typeid=''}
+    <h3 class="eyou-edit" e-id="801" e-type="text">{eyou:uitext e-id='801' e-page="index"}
+        {$field.value}
+        {eyou:else /}新一代环保涂贝壳粉，产品系列丰富{/eyou:uitext}</h3>
+    <p class="eyou-edit" e-id="802" e-type="text">{eyou:uitext e-id='802' e-page="index"}
+        {$field.value}
+        {eyou:else /}销路自然好的不得了{/eyou:uitext}</p>
+      <img src="{eyou:global name='web_templets_m' /}/skin/img/pro_t.png"> </div>
+    <ul class="menu hd">
+      {eyou:channel type='son' row='4' currentstyle='on'}
+      <li class="{$field.currentstyle}">{$field.typename}</li>
+      {/eyou:channel}   
+    </ul>
+    
+    {/eyou:channelartlist} 
+    {/eyou:uiarclist}
+    <div class="bd">
+      <div>
+        <ul class="list eyou-edit" e-id="8021" e-type="arclist" >
+          {eyou:uiarclist e-id='8021' typeid='12' e-page="index"}
+          {eyou:arclist titlelen='20' row='2' }
+          <li> <a href="{$field.arcurl}" title="{$field.title}"> <img src="{$field.litpic}" alt="{$field.title}" />
+            <p>{$field.title}</p>
+            </a> </li>
+          {/eyou:arclist}
+          {/eyou:uiarclist}
+        </ul>
+      </div>
+      <div>
+        <ul class="list eyou-edit" e-id="8022" e-type="arclist" >
+          {eyou:uiarclist e-id='8022' typeid='13' e-page="index"}
+          {eyou:arclist titlelen='20' row='2' }
+          <li> <a href="{$field.arcurl}" title="{$field.title}"> <img src="{$field.litpic}" alt="{$field.title}" />
+            <p>{$field.title}</p>
+            </a> </li>
+          {/eyou:arclist}
+          {/eyou:uiarclist}
+        </ul>
+      </div>
+      <div>
+        <ul class="list eyou-edit" e-id="8023" e-type="arclist" >
+          {eyou:uiarclist e-id='8023' typeid='14' e-page="index"}
+          {eyou:arclist titlelen='20' row='2' }
+          <li> <a href="{$field.arcurl}" title="{$field.title}"> <img src="{$field.litpic}" alt="{$field.title}" />
+            <p>{$field.title}</p>
+            </a> </li>
+          {/eyou:arclist}
+          {/eyou:uiarclist}
+        </ul>
+      </div>
+      <div>
+        <ul class="list eyou-edit" e-id="8024" e-type="arclist">
+          {eyou:uiarclist e-id='8024' typeid='15' e-page="index"}
+          {eyou:arclist titlelen='20' row='2' }
+          <li> <a href="{$field.arcurl}" title="{$field.title}"> <img src="{$field.litpic}" alt="{$field.title}" />
+            <p>{$field.title}</p>
+            </a> </li>
+          {/eyou:arclist}
+          {/eyou:uiarclist}
         </ul>
       </div>
     </div>
-    <div class="menubox clearfix">
-      <ul>
-        {eyou:channel type='top' row='8' id='field'}
-         <li><a href="{$field.typeurl}">{$field.typename}</a></li>
-        {/eyou:channel}
-      </ul>
+   <div class="eyou-edit" e-id="8025" e-type="type">
+{eyou:uitype typeid='2' e-id='8025' e-page='index'}
+{eyou:type type='self' empty='缺省文字'}
+    <a href="{$field.typeurl}" class="more">查看更多</a>
+    {/eyou:type}
+{/eyou:uitype}
     </div>
-    <!--关于我们--> 
-    {eyou:channelartlist typeid='1,0'}
-    <div class="aboutbox">
-      <div class="indextt">
-        <h3><span>{eyou:field name='englist_name'/}</span>{eyou:field name='typename'/}</h3>
-        <div class="lineth"> <span></span> </div>
-        <div class="aboutdesc">{eyou:type addtable='single_content'}{$field.content|html_msubstr=###,0,155}...{/eyou:type}</div>
-        <a class="aboutxq" href="{eyou:field name='typeurl'/}">了解详情</a> </div>
-    </div>
-    {/eyou:channelartlist} 
-    <!--产品展示--> 
-    {eyou:channelartlist typeid='35'}
-    <div class="inexcp">
-      <div class="indextt indexttw">
-        <h3><span>{eyou:field name='englist_name'/}</span>{eyou:field name='typename'/}</h3>
-        <div class="lineth"> <span></span> </div>
-      </div>
-      <ul class="cpzslist cpzslist2 imgautolist clearfix">
-        {eyou:arclist titlelen='20' row='4'}
-        <li> <a href="{$field.arcurl}" title='{$field.title}'>
-          <div class="imgbox">
-            <div class="imgpic"> <span><img src="{$field.litpic}" alt="{$field.title}"></span> </div>
-            <div class="ttbg">{$field.title}</div>
+     </div>
+  
+  <!--pk-->
+  <div class="pk" id="pk"><div class="eyou-edit" e-id="803" e-type="upload">
+    {eyou:uiupload e-id='803' e-page="index"}
+      {$field.value}
+    {eyou:else /} <img src="{eyou:global name='web_templets_m' /}/skin/img/jz_t.png" class="title">{/eyou:uiupload}</div>
+    <ul class="menu hd">
+      <li class="on eyou-edit" e-id="804" e-type="text">{eyou:uitext e-id='804' e-page="index"}
+        {$field.value}
+        {eyou:else /}品质{/eyou:uitext}</li>
+      <li class="eyou-edit" e-id="805" e-type="text">{eyou:uitext e-id='805' e-page="index"}
+        {$field.value}
+        {eyou:else /}成分{/eyou:uitext}</li>
+      <li class="eyou-edit" e-id="806" e-type="text">{eyou:uitext e-id='806' e-page="index"}
+        {$field.value}
+        {eyou:else /}分解力{/eyou:uitext}</li>  
+      <li class="eyou-edit" e-id="807" e-type="text">{eyou:uitext e-id='807' e-page="index"}
+        {$field.value}
+        {eyou:else /}环保{/eyou:uitext}</li>    
+    </ul>
+    <div class="bd">
+      <dl>
+        <dt class="eyou-edit" e-id="808" e-type="upload">
+    {eyou:uiupload e-id='808' e-page="index"}
+      {$field.value}
+    {eyou:else /} <img src="{eyou:global name='web_templets_m' /}/skin/img/20160531114905_79532.jpg"> {/eyou:uiupload}</dt>
+        <dd>
+          <div class="pkleft eyou-edit" e-id="808" e-type="text">{eyou:uitext e-id='808' e-page="index"}
+            {$field.value}
+            {eyou:else /}
+            <h4>我们的贝壳粉</h4>
+            <p>业內唯一从原材料生产到成品，自己工厂独立完成，能做到从一而终监控产品，保证产品质量！</p>
+            {/eyou:uitext}
           </div>
-          </a> </li>
-        {/eyou:arclist}
-      </ul>
-    </div>
-    {/eyou:channelartlist} 
-    <!--新闻资讯--> 
-    {eyou:channelartlist typeid='2'}
-    <div class="whtbb">
-      <div class="indextt">
-        <h3><span>{eyou:field name='englist_name'/}</span>{eyou:field name='typename'/}</h3>
-        <div class="lineth"> <span></span> </div>
-      </div>
-      <ul class="newslist">
-        {eyou:arclist titlelen='20' row='6'}
-        <li> <a href="{$field.arcurl}">{$field.title}</a> </li>
-        {/eyou:arclist}
-      </ul>
-    </div>
-    {/eyou:channelartlist} 
-    <!--案例展示--> 
-    {eyou:channelartlist typeid='36'}
-    <div class="inexcp casecp">
-      <div class="indextt">
-        <h3><span>{eyou:field name='englist_name'/}</span>{eyou:field name='typename'/}</h3>
-        <div class="lineth"> <span></span> </div>
-      </div>
-      <ul class="cpzslist imgautolist clearfix">
-        {eyou:arclist titlelen='20' row='4'}
-        <li> <a href="{$field.arcurl}" title='{$field.title}'>
-          <div class="imgbox">
-            <div class="imgpic"> <span><img src="{$field.litpic}" alt="{$field.title}"></span> </div>
-            <div class="ttbg">{$field.title}</div>
+          <div class="pkright eyou-edit" e-id="809" e-type="text">{eyou:uitext e-id='809' e-page="index"}
+            {$field.value}
+            {eyou:else /}
+            <h4>同行贝壳粉</h4>
+            <p>同行多数是采购别人的半成品，再进行加工，原材料已经被別人渗假;内地工厂由于离贝壳产地遥远，只能采购别人材料，不能保证原材料系质量。</p>
+            {/eyou:uitext}
           </div>
-          </a> </li>
-        {/eyou:arclist}
-      </ul>
-    </div>
-    {/eyou:channelartlist} 
-    <!--footer-->
-    <div id="footer">
-      <p> 版权所有：{eyou:global name='web_copyright' /} </p>
+        </dd>
+      </dl>
+      <dl>
+      <dt class="eyou-edit" e-id="810" e-type="upload">
+        {eyou:uiupload e-id='810' e-page="index"}
+          {$field.value}
+        {eyou:else /} <img src="{eyou:global name='web_templets_m' /}/skin/img/20160531151259_43052.jpg"> {/eyou:uiupload}</dt>
+        <dd>
+          <div class="pkleft eyou-edit" e-id="811" e-type="text">{eyou:uitext e-id='811' e-page="index"}
+            {$field.value}
+            {eyou:else /}
+            <h4>我们的贝壳粉</h4>
+            <p>贝壳粉含量高，高达90%以上，分解甲醛、苯、氨、VOC等有害气体的功能越强。</p>
+            {/eyou:uitext}
+          </div>
+          <div class="pkright eyou-edit" e-id="812" e-type="text">{eyou:uitext e-id='812' e-page="index"}
+            {$field.value}
+            {eyou:else /}
+            <h4>同行贝壳粉</h4>
+            <p>同行贝壳粉含量少，添加双飞粉、石灰粉、白水泥等强碱性物质，施工时会伤手，做成墙面会泛白现象。只能采购别人材料，不能保证原材料系质量。</p>
+            {/eyou:uitext}
+          </div>
+        </dd>
+      </dl>
+      <dl>
+        <dt class="eyou-edit" e-id="813" e-type="upload">
+        {eyou:uiupload e-id='813' e-page="index"}
+          {$field.value}
+        {eyou:else /} <img src="{eyou:global name='web_templets_m' /}/skin/img/20160531114838_41790.jpg"> {/eyou:uiupload}</dt>
+        <dd>
+          <div class="pkleft eyou-edit" e-id="814" e-type="text">{eyou:uitext e-id='814' e-page="index"}
+            {$field.value}
+            {eyou:else /}
+            <h4>我们的贝壳粉</h4>
+            <p>首创从竹炭中提取无机净化剂，净化性能高，速度快，消除量大。纯物理吸附净化，无需加化学剂，避免生成二次污染。</p>
+            {/eyou:uitext}
+          </div>
+          <div class="pkright eyou-edit" e-id="815" e-type="text">{eyou:uitext e-id='815' e-page="index"}
+            {$field.value}
+            {eyou:else /}
+            <h4>同行贝壳粉</h4>
+            <p>同行采用二氧化钛等化学物质，不够环保，有残留物，不彻底。</p>
+            {/eyou:uitext}
+          </div>
+        </dd>
+      </dl>
+      <dl>
+        <dt class="eyou-edit" e-id="816" e-type="upload">
+        {eyou:uiupload e-id='816' e-page="index"}
+          {$field.value}
+        {eyou:else /} <img src="{eyou:global name='web_templets_m' /}/skin/img/20160531114806_21687.jpg"> {/eyou:uiupload}</dt>
+        <dd>
+          <div class="pkleft eyou-edit" e-id="816" e-type="text">{eyou:uitext e-id='816' e-page="index"}
+            {$field.value}
+            {eyou:else /}
+            <h4>我们的贝壳粉</h4>
+            <p>采用木炭煅烧贝壳，没有残留物，对环境不造成污染。</p>
+            {/eyou:uitext}
+          </div>
+          <div class="pkright eyou-edit" e-id="817" e-type="text">{eyou:uitext e-id='817' e-page="index"}
+            {$field.value}
+            {eyou:else /}
+            <h4>同行贝壳粉</h4>
+            <p>同行采用煤煅烧贝壳，成品残留有害物，污染环境。</p>
+            {/eyou:uitext}
+          </div>
+        </dd>
+      </dl>
     </div>
   </div>
-  {eyou:include file="/template/mobile/footer.htm" /} </div>
+  <!--加盟优势-->
+  <div class="ys">
+    <div class="title">
+      <h3 class="eyou-edit" e-id="818" e-type="text">{eyou:uitext e-id='818' e-page="index"}
+            {$field.value}
+            {eyou:else /}
+            5大加盟优势 实力雄厚 彻底让您放心{/eyou:uitext}</h3>
+      <p class="eyou-edit" e-id="819" e-type="text">{eyou:uitext e-id='819' e-page="index"}
+            {$field.value}
+            {eyou:else /}
+            为您打造最强、最好、最放心的致富平台{/eyou:uitext}</p>
+      <img src="{eyou:global name='web_templets_m' /}/skin/img/pro_t.png"> </div>
+    <ul>
+      <li>
+      <div class="eyou-edit" e-id="820" e-type="upload">
+        {eyou:uiupload e-id='820' e-page="index"}
+          {$field.value}
+        {eyou:else /} 
+        <img src="{eyou:global name='web_templets_m' /}/skin/img/ys01.jpg">
+        {/eyou:uiupload}
+       </div>
+        <h5 class="eyou-edit" e-id="821" e-type="text">{eyou:uitext e-id='821' e-page="index"}
+            {$field.value}
+            {eyou:else /}
+            实力<em>雄厚</em>{/eyou:uitext}</h5>
+        <p class="eyou-edit" e-id="822" e-type="text">{eyou:uitext e-id='822' e-page="index"}
+            {$field.value}
+            {eyou:else /}
+            高端品牌{/eyou:uitext}</p>
+      </li>
+      <li>
+      <div class="eyou-edit" e-id="823" e-type="upload">
+        {eyou:uiupload e-id='823' e-page="index"}
+          {$field.value}
+        {eyou:else /} 
+        <img src="{eyou:global name='web_templets_m' /}/skin/img/ys02.jpg">
+        {/eyou:uiupload}
+        </div>
+        <h5 class="eyou-edit" e-id="824" e-type="text">{eyou:uitext e-id='824' e-page="index"}
+            {$field.value}
+            {eyou:else /}
+            专利<em>配方</em>{/eyou:uitext}</h5>
+        <p class="eyou-edit" e-id="825" e-type="text">{eyou:uitext e-id='825' e-page="index"}
+            {$field.value}
+            {eyou:else /}
+            产品市场竞争强{/eyou:uitext}</p>
+      </li>
+      <li>
+      <div class="eyou-edit" e-id="826" e-type="upload">
+        {eyou:uiupload e-id='826' e-page="index"}
+          {$field.value}
+        {eyou:else /} 
+        <img src="{eyou:global name='web_templets_m' /}/skin/img/ys03.jpg">
+        {/eyou:uiupload}
+        </div>
+        <h5 class="eyou-edit" e-id="827" e-type="text">{eyou:uitext e-id='827' e-page="index"}
+            {$field.value}
+            {eyou:else /}
+            免费<em>培训</em>{/eyou:uitext}</h5>
+        <p class="eyou-edit" e-id="828" e-type="text">{eyou:uitext e-id='828' e-page="index"}
+            {$field.value}
+            {eyou:else /}
+            快速上手{/eyou:uitext}</p>
+      </li>
+      <li>
+      <div class="eyou-edit" e-id="829" e-type="upload">
+        {eyou:uiupload e-id='829' e-page="index"}
+          {$field.value}
+        {eyou:else /} 
+        <img src="{eyou:global name='web_templets_m' /}/skin/img/ys04.jpg">
+        {/eyou:uiupload}
+        </div>
+        <h5 class="eyou-edit" e-id="830" e-type="text">{eyou:uitext e-id='830' e-page="index"}
+            {$field.value}
+            {eyou:else /}
+            价格<em>有优势</em>{/eyou:uitext}</h5>
+        <p class="eyou-edit" e-id="831" e-type="text">{eyou:uitext e-id='831' e-page="index"}
+            {$field.value}
+            {eyou:else /}
+            利润高，赚钱快{/eyou:uitext}</p>
+      </li>
+      <li>
+      <div class="eyou-edit" e-id="832" e-type="upload">
+        {eyou:uiupload e-id='832' e-page="index"}
+          {$field.value}
+        {eyou:else /} 
+        <img src="{eyou:global name='web_templets_m' /}/skin/img/ys05.jpg">
+        {/eyou:uiupload}
+        </div>
+        <h5 class="eyou-edit" e-id="833" e-type="text">{eyou:uitext e-id='833' e-page="index"}
+            {$field.value}
+            {eyou:else /}
+            最低<em>加盟门槛</em>{/eyou:uitext}</h5>
+        <p class="eyou-edit" e-id="834" e-type="text">{eyou:uitext e-id='834' e-page="index"}
+            {$field.value}
+            {eyou:else /}
+            免加盟费{/eyou:uitext}</p>
+      </li>
+      <li>
+      <div class="eyou-edit" e-id="835" e-type="upload">
+        {eyou:uiupload e-id='835' e-page="index"}
+          {$field.value}
+        {eyou:else /} 
+        <img src="{eyou:global name='web_templets_m' /}/skin/img/ys06.jpg">
+        {/eyou:uiupload}
+        </div>
+        <h5 class="eyou-edit" e-id="836" e-type="text">{eyou:uitext e-id='836' e-page="index"}
+            {$field.value}
+            {eyou:else /}
+            加盟<em>热线</em>{/eyou:uitext}</h5>
+        <a href="tel:{eyou:global name='web_attr_1' /}">
+        <p>{eyou:global name='web_attr_1' /}</p>
+        </a>
+      </li>
+
+    </ul>
+  </div>
+  <!--口碑-->
+  <div class="koubei">
+    <h3 class="eyou-edit" e-id="837" e-type="uitext">
+        {eyou:uitext e-id='837' e-page="index"}
+          {$field.value}
+        {eyou:else /} 事实和口碑胜于一切{/eyou:uitext}</h3>
+    <p class="eyou-edit" e-id="838" e-type="uitext">
+        {eyou:uitext e-id='838' e-page="index"}
+          {$field.value}
+        {eyou:else /} 他们选择我们，都赚钱了{/eyou:uitext}</p>
+    <div class="boxkb" id="boxkb">
+      <ul class="menu hd">
+        <li class="on eyou-edit" e-id="8381" e-type="type" >
+{eyou:uitype typeid='18' e-id='8381' e-page='index'}
+{eyou:type type='self' empty='缺省文字'}{$field.typename}{/eyou:type}
+{/eyou:uitype}</li>
+        <li class="eyou-edit" e-id="8382" e-type="type" >
+{eyou:uitype typeid='5' e-id='8382' e-page='index'}
+{eyou:type type='self' empty='缺省文字'}{$field.typename}{/eyou:type}
+{/eyou:uitype}</li>
+      </ul>
+      <div class="bd">
+        <div class="boxkbBox">
+          <ul class="list eyou-edit" e-id="8283" e-type="arclist">
+           {eyou:uiarclist e-id='8283' typeid='18' e-page="index"}
+            {eyou:arclist titlelen='20' row='2'}
+            <li> <a href="{$field.arcurl}"> <img src="{$field.litpic}" alt="{$field.title}"/>
+              <p> {$field.title} </p>
+              </a></li>
+            {/eyou:arclist}
+            {/eyou:uiarclist}
+          </ul>
+        </div>
+        <div class="boxkbBox">
+          <ul class="list eyou-edit" e-id="8284" e-type="arclist">
+           {eyou:uiarclist e-id='8284' typeid='5' e-page="index"}
+            {eyou:arclist titlelen='20' row='2'}
+            <li> <a href="{$field.arcurl}"> <img src="{$field.litpic}" alt="{$field.title}"/>
+              <p> {$field.title} </p>
+              </a></li>
+            {/eyou:arclist}
+            {/eyou:uiarclist}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <a href="{eyou:global name='web_attr_1' /}" class="ad01 eyou-edit" e-id="839" e-type="upload">
+        {eyou:uiupload e-id='839' e-page="index"}
+          {$field.value}
+        {eyou:else /} <img src="{eyou:global name='web_templets_m' /}/skin/img/ad01.jpg">{/eyou:uiupload}</a> 
+  <!--about-->
+  {eyou:channelartlist typeid='8'}
+  <div class="about">
+    <h4 ><a href="{eyou:field name='typeurl'/}" class="eyou-edit" e-id="8391" e-type="text">{eyou:uitext e-id='8391' e-page='index' id='field'}
+{$field.value}
+{eyou:else/}{eyou:global name='web_name' /}{/eyou:uitext}</a></h4>
+    <p class="eyou-edit" e-id="840" e-type="uitext">
+        {eyou:uitext e-id='840' e-page="index"}
+          {$field.value}
+        {eyou:else /}{eyou:type addtable='single_content'}{$field.content|html_msubstr=###,0,155}...{/eyou:type}{/eyou:uitext}</p>
+    <a href="{eyou:field name='typeurl'/}" class="eyou-edit" e-id="841" e-type="upload">
+        {eyou:uiupload e-id='841' e-page="index"}
+          {$field.value}
+        {eyou:else /}<img src="{eyou:global name='web_templets_m' /}/skin/img/about_tu.jpg">{/eyou:uiupload}</a> </div>
+  {/eyou:channelartlist} 
+  <!--news-->
+  <div class="news" id="news">
+    <ul class="menu hd">
+    <li class="on eyou-edit" e-id="8401" e-type="type" >
+{eyou:uitype typeid='20' e-id='8401' e-page='index'}
+{eyou:type type='self' empty='缺省文字'}{$field.typename}{/eyou:type}
+{/eyou:uitype}</li>
+        <li class="eyou-edit" e-id="8402" e-type="type" >
+{eyou:uitype typeid='21' e-id='8402' e-page='index'}
+{eyou:type type='self' empty='缺省文字'}{$field.typename}{/eyou:type}
+{/eyou:uitype}</li>
+    </ul>
+    <div class="newsBox">
+      <div class="newsList">
+      <div class="bd">
+        <div class="eyou-edit" e-id="8403" e-type="arclist" e-page="index">
+{eyou:uiarclist e-id='8403' typeid='20' e-page="index"}
+        {eyou:channelartlist typeid=''}
+           {eyou:arclist titlelen='20' limit='0,1' infolen='40'}
+            <dl>
+              <dt><a href="{$field.arcurl}" title="{$field.title}"> <img src="{$field.litpic}" title="{$field.title}"></a></dt>
+              <dd>
+                <h4><a href="{$field.arcurl}"> {$field.title}</a></h4>
+                <p>{$field.seo_description}...</p>
+              </dd>
+            </dl>
+            {/eyou:arclist}
+            <ul>
+              {eyou:arclist titlelen='20' limit='1,4'}
+              <li> <a href="{$field.arcurl}" title="{$field.title}"> {$field.title}</a> </li>
+              {/eyou:arclist}
+            </ul>
+            {/eyou:channelartlist}    
+          {/eyou:uiarclist}
+          </div>
+          
+          <div class="eyou-edit" e-id="8404" e-type="arclist" e-page="index">
+{eyou:uiarclist e-id='8404' typeid='21' e-page="index"}
+        {eyou:channelartlist typeid=''}
+           {eyou:arclist titlelen='20' limit='0,1' infolen='40'}
+            <dl>
+              <dt><a href="{$field.arcurl}" title="{$field.title}"> <img src="{$field.litpic}" title="{$field.title}"></a></dt>
+              <dd>
+                <h4><a href="{$field.arcurl}"> {$field.title}</a></h4>
+                <p>{$field.seo_description}...</p>
+              </dd>
+            </dl>
+            {/eyou:arclist}
+            <ul>
+              {eyou:arclist titlelen='20' limit='1,4'}
+              <li> <a href="{$field.arcurl}" title="{$field.title}"> {$field.title}</a> </li>
+              {/eyou:arclist}
+            </ul>
+            {/eyou:channelartlist}    
+          {/eyou:uiarclist}
+          </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <!--留言-->
+  <div class="liuyan">
+    <p class="eyou-edit" e-id="842" e-type="text">
+        {eyou:uitext e-id='842' e-page="index"}
+          {$field.value}
+        {eyou:else /}成功致富，从一个电话开始<a href="tel:{eyou:global name='web_attr_1' /}"></a>{/eyou:uitext}</p>
+    <p class="eyou-edit" e-id="843" e-type="text">
+        {eyou:uitext e-id='843' e-page="index"}
+          {$field.value}
+        {eyou:else /}现在留言，免费获取详细加盟资料以及多重好礼{/eyou:uitext}</p>   
+    {eyou:guestbookform type='default' typeid='24'}
+    <form method="POST" enctype="multipart/form-data" action="{$field.action}" onsubmit="return checkForm();">
+      <ul class="lyBox">
+        <li> <span>{$field.itemname_1}：</span>
+          <input type="text" id="attr_1" name="{$field.attr_1}"/>
+        </li>
+        <li> <span>{$field.itemname_2}：</span>
+          <input type="text" id="attr_2" name="{$field.attr_2}"/>
+        </li>
+        <li> <span>{$field.itemname_4}：</span>
+          <textarea id="attr_4" name="{$field.attr_4}" />
+          </textarea>
+        </li>
+        <li> 
+        <input class="btn" name="submit" type="submit" value="立即提交"/>
+         <em id="ErrorInfo" class="red pl10" style="margin-left: 6em;"></em> </li>
+      </ul>
+    {$field.hidden}
+  </form>
+  <script type="text/javascript">
+    function checkForm()
+    {
+      if(document.getElementById('attr_1').value.length == 0)
+      {
+        alert('请填写{$field.itemname_1}');
+        return false;
+      }
+      if(document.getElementById('attr_2').value.length == 0)
+      {
+        alert('请填写{$field.itemname_2}');
+        return false;
+      }
+      
+      return true;
+    }
+  </script>
+{/eyou:guestbookform}
+  </div>
+
+  <!--footer--> 
+  </div>
+ </mian>
+  <!--info--> 
+  {eyou:include file="footer.htm" /} </div>
+  
+<script src="{eyou:global name='web_templets_m' /}/skin/js/1.9.1jquery.min.js" type="text/javascript"></script>
+{eyou:ui open='off' /}
+<script type="text/javascript" src="{eyou:global name='web_templets_m' /}/skin/js/jquery.js"></script> 
+<script src="{eyou:global name='web_templets_m' /}/skin/js/tools.js" type="text/javascript"></script> 
+<script src="{eyou:global name='web_templets_m' /}/skin/js/touchslide.1.1.js" type="text/javascript"></script> 
+<!-- cb_mian[end] --> 
 <script type="text/javascript">
     TouchSlide({
-        slideCell: "#slideBox",
+        slideCell: "#focus",
         titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
         mainCell: ".bd ul",
         effect: "leftLoop",
+        autoPlay: true, //自动播放
         autoPage: true, //自动分页
-        autoPlay: true //自动播放
+        delayTime: 500,
+        interTime: 2800
     });
-</script> 
-<script>
-    $(window).resize(function () {
-        autoimg_list();
-        autoh();
-    })
-    autoimg_list();
-    autoh();
-</script>
+    TouchSlide({ slideCell: "#pro", autoPlay: true, interTime: 5000 }); 
+    TouchSlide({ slideCell: "#pk", autoPlay: true, interTime: 5000 });
+    TouchSlide({ slideCell: "#boxkb", autoPlay: true, interTime: 5000 });
+    TouchSlide({ slideCell: "#news", autoPlay: true, interTime: 5000 });
+   </script>
+   
 </body>
 </html>

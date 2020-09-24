@@ -1,36 +1,88 @@
-<!doctype html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 <title>{$eyou.field.seo_title}</title>
 <meta name="description" content="{$eyou.field.seo_description}" />
 <meta name="keywords" content="{$eyou.field.seo_keywords}" />
-<meta name="generator" content="eyoucms 1.0.0" data-variable="{eyou:global name='web_eyoucms' /}" />
-<link href="{eyou:version file='/favicon.ico' /}" rel="shortcut icon" type="image/x-icon" />
-<link rel="stylesheet" type="text/css" href="{eyou:global name='web_templets_pc' /}/skin/css/css.css">
-<link rel="stylesheet" href="{eyou:global name='web_templets_pc' /}/skin/css/red.css" type="text/css"  title="styles3" media="screen" />
-<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/jquery1.42.min.js"></script>
-<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/jquery.superslide.2.1.1.js"></script>
-<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/index.js"></script>
+<link href="{eyou:global name='web_cmspath' /}/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link href="{eyou:global name='web_templets_pc' /}/skin/css/common.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_pc' /}/skin/css/style.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_pc' /}/skin/css/temp.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" rev="stylesheet" href="{eyou:global name='web_templets_pc' /}/skin/css/pshow2.css" type="text/css" />
+<link rel="stylesheet" rev="stylesheet" href="{eyou:global name='web_templets_pc' /}/skin/css/base_v4.css" type="text/css" />
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/ajax.js"></script>
+<script  type="text/javascript"></script>
 </head>
 <body>
-{eyou:include file="/template/pc/header.htm" /}
-<div class="n-box"> {eyou:include file="/template/pc/left.htm" /}
-  <div class="n-r">
-    <div class="n-cont">
-      <div class="n-zb">当前位置：{eyou:position style="crumb" /}</div>
-      <p class="con_title">{$eyou.field.title}</p>
-      <p class="author">发布时间：{$eyou.field.add_time|MyDate='Y-m-d H:i:s',###} 丨 浏览次数：{$eyou.field.click}</p>
-      {$eyou.field.content}
-      <div class="fy">
-        <ul>
-          <li>{eyou:prenext get="pre" empty="上一篇：没有了"} <a href="{$field.arcurl}" title="{$field.title}">上一篇: {$field.title}</a> {/eyou:prenext}</li>
-          <li>{eyou:prenext get="next" empty="下一篇：没有了"} <a href="{$field.arcurl}" title="{$field.title}">下一篇: {$field.title}</a> {/eyou:prenext}</li>
-        </ul>
+<!--header:end--> 
+{eyou:include file="header.htm" /} 
+<!--content:start-->
+<div class="topadcs"> <a style='background:url({eyou:notempty name='$eyou.field.banner' /}{$eyou.field.banner} {eyou:else /}{$eyou.field.typeid|gettoptype=###,'banner'}{/eyou:notempty}) no-repeat center top;' ></a> </div>
+<div class="newscont">
+  <div class="content">
+    <div class="plc2"> 当前位置：{eyou:position style="crumb" /}</div>
+    <div class="left2">
+      <div class="left2top"> </div>
+      <div class="left2_main">
+        <div class="n_info_con" id="printableview">
+          <h1>{$eyou.field.title}</h1>
+          <div class="info_con_tit">
+            <div class="n_tit"> <span>文章作者：{$eyou.field.author}</span> <span>浏览次数：<span>{eyou:arcclick /}</span></span><span>发表时间：{$eyou.field.add_time|MyDate='Y-m-d H:i:s',###}</span> </div>
+          </div>
+          <div id="cntrBody"> {$eyou.field.content}
+            <div id="newContent"> </div>
+          </div>
+          <div class="gduo"> <span>{eyou:prenext get='next' empty='<a>下一篇：暂无</a>'} <a href="{$field.arcurl}" title="{$field.title}"> 下一篇：{$field.title} </a> {/eyou:prenext}</span>{eyou:prenext get='pre' empty='<a>上一篇：暂无</a>'} <a href="{$field.arcurl}" title="{$field.title}"> 上一篇：{$field.title} </a> {/eyou:prenext}</div>
+        </div>
+      </div>
+      <div class="left2bot"> </div>
+      <div class="n_info_con2" e-page="view_article">
+        <h4 class="t04 eyou-edit" e-id="u1"  e-type="text"> {eyou:uitext e-id='u1' e-page='view_article' id='field'}
+          {$field.value}
+          {eyou:else /}推荐产品{/eyou:uitext}</h4>
+        <div class="info_b eyou-edit" e-id="u2" e-type="arclist"> {eyou:uiarclist e-id='u2' typeid='2' e-page="view_article"}
+          {eyou:arclist titlelen='20' row='4' flag='c'}
+          <dl class=sear_dl>
+            <dt class='dt2'><a href="{$field.arcurl}"><img src="{$field.litpic}" alt="{$field.title}" /></a></dt>
+            <dd class='d2'><a href="{$field.arcurl}">{$field.title}</a></dd>
+          </dl>
+          {/eyou:arclist}  
+          {/eyou:uiarclist}
+          <div class="clear"></div>
+        </div>
       </div>
     </div>
+    <div class="right2">
+      <div class="right2top"> </div>
+      <div class="right2_main eyou-edit" e-id="u3" e-type="arclist">
+      {eyou:uiarclist e-id='u3' typeid='6' e-page="view_article"}
+        <h4 class="t03"> <a>热门文章排行</a></h4>
+        <ul class="n_rt_ul">
+          {eyou:arclist titlelen='20' row='10' orderby='click'}
+          <li><a href="{$field.arcurl}" title="{$field.title}">{$field.title}</a></li>
+          {/eyou:arclist}
+        </ul>
+        <h4 class="t03"> <a>最新资讯文章</a></h4>
+        <ul class="n_rt_ul" id="cntrLastArticle">
+          {eyou:arclist titlelen='20' row='20' orderby='now'}
+          <li><a href="{$field.arcurl}" title="{$field.title}">{$field.title}</a></li>
+          {/eyou:arclist}
+        </ul>
+        {/eyou:uiarclist}
+      </div>
+      <div class="right2bot"> </div>
+    </div>
+    <div class="clear"> </div>
   </div>
 </div>
-{eyou:include file="/template/pc/footer.htm" /}
+<!--content:end--> 
+<!--footer:start--> 
+{eyou:include file="footer.htm" /} 
+<!--footer:end--> 
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/jquery-3.3.1.min.js"></script> 
+{eyou:ui open='off' /}
 </body>
 </html>

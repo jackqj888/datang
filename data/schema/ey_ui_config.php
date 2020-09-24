@@ -21,7 +21,7 @@ return array (
   'theme_style' => 
   array (
     'name' => 'theme_style',
-    'type' => 'varchar(200)',
+    'type' => 'varchar(20)',
     'notnull' => false,
     'default' => 'pc',
     'primary' => false,

@@ -13,7 +13,6 @@
 
 namespace app\common\model;
 
-use think\Db;
 use think\Model;
 
 /**
@@ -59,7 +58,7 @@ class Channeltype extends Model
         $map = array(
             'id'   => array('IN', $ids),
         );
-        $result = Db::name('Channeltype')->field($field)
+        $result = db('Channeltype')->field($field)
             ->where($map)
             ->order('sort_order asc')
             ->select();
@@ -85,7 +84,7 @@ class Channeltype extends Model
         $cacheKey = json_encode($cacheKey);
         $result = cache($cacheKey);
         if (empty($result)) {
-            $result = Db::name('channeltype')->field($field)
+            $result = db('channeltype')->field($field)
                 ->where($map)
                 ->order('sort_order asc, id asc')
                 ->select();
@@ -161,7 +160,7 @@ class Channeltype extends Model
      */
     public function setChanneltypeStatus()
     {
-        $planPath = 'template/'.TPL_THEME.'pc';
+        $planPath = 'template/pc';
         $planPath = realpath($planPath);
         if (!file_exists($planPath)) {
             return true;

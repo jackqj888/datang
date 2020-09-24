@@ -14,14 +14,13 @@
 
 $html_cache_arr = array();
 // 全局变量数组
-$global = config('tpcache');
-empty($global) && $global = tpCache('global');
+$global = tpCache('global');
 // 系统模式
 $web_cmsmode = isset($global['web_cmsmode']) ? $global['web_cmsmode'] : 2;
 /*页面缓存有效期*/
 $app_debug = true;
-$uiset = input('param.uiset/s', 'off');
-if (1 == $web_cmsmode && 'on' != $uiset) { // 运营模式
+$web_htmlcache_expires_in = -1;
+if (1 == $web_cmsmode) { // 运营模式
     $app_debug = false;
     $html_cache_arr = config('HTML_CACHE_ARR');
 }

@@ -38,14 +38,13 @@ class Uploadify extends Base
         $func = input('func');
         $path = input('path','allimg');
         $num  = input('num/d', '1');
-        $is_water  = input('is_water/d', 1);
         $default_size = intval(tpCache('basic.file_size') * 1024 * 1024); // 单位为b
         $size = input('size/d'); // 单位为kb
         $size = empty($size) ? $default_size : $size*1024;
         $info = array(
             'num'      => $num,
             'title'    => '',          
-            'upload'   => url('Ueditor/imageUp',array('savepath'=>$path,'pictitle'=>'banner','dir'=>'images','is_water'=>$is_water)),
+            'upload'   => url('Ueditor/imageUp',array('savepath'=>$path,'pictitle'=>'banner','dir'=>'images')),
             'fileList' => url('Uploadify/fileList',array('path'=>$path)),
             'size'     => $size,
             'type'     => $this->image_type,
@@ -94,11 +93,6 @@ class Uploadify extends Base
                 $dirArr[$key] = [];
                 continue;
             }
-            /*图库显示数量*/
-            $countFile = 0;
-            $dirfileArr2 = glob("{$val['dirpath']}/*.*"); // 文件数量
-            $countFile = count($dirfileArr2);
-            /*end*/
             $dirname = preg_replace('/([^\/]+)$/i', '', $val['dirpath']);
             $arr_key = array_search(trim($dirname, '/'), $dirArr2);
             if (!empty($arr_key)) {
@@ -107,7 +101,6 @@ class Uploadify extends Base
                 $dirArr[$key]['pId'] = 0;
             }
             $dirArr[$key]['name'] = preg_replace('/^(.*)\/([^\/]+)$/i', '${2}', $val['dirpath']);
-            !empty($countFile) && $dirArr[$key]['name'] .= "({$countFile})"; // 图库显示数量
         }
 
         $zNodes = json_encode($dirArr,true);
@@ -304,34 +297,29 @@ class Uploadify extends Base
      */
     public function delupload()
     {
-        if (IS_POST) {
-            $action = input('action','del');  
-            $filename= input('filename/s');
-            $filename= empty($filename) ? input('url') : $filename;
-            $filename= str_replace('../','',$filename);
-            $filename= trim($filename,'.');
-            $filename = preg_replace('#^(/[/\w]+)?(/public/upload/|/uploads/|/public/static/admin/logo/)#i', '$2', $filename);
-            if(eyPreventShell($filename) && $action=='del' && !empty($filename) && file_exists('.'.$filename)){
-                if (stristr($filename, '/admin/logo/')) {
-                    $filetype = preg_replace('/^(.*)\.(\w+)$/i', '$2', $filename);
-                    $phpfile = strtolower(strstr($filename,'.php'));  //排除PHP文件
-                    $size = getimagesize('.'.$filename);
-                    $fileInfo = explode('/',$size['mime']);
-                    if($fileInfo[0] != 'image' || $phpfile || !in_array($filetype, explode(',', config('global.image_ext')))){
-                        exit;
-                    }
-                    if(@unlink('.'.$filename)){
-                        echo 1;
-                    }else{
-                        echo 0;
-                    }  
-                    exit;
-                }
-            }
-
-            echo 1;
-            exit;
-        }
+        // if (IS_POST) {
+        //     $action = input('action','del');                
+        //     $filename= input('filename/s');
+        //     $filename= empty($filename) ? input('url') : $filename;
+        //     $filename= str_replace('../','',$filename);
+        //     $filename= trim($filename,'.');
+        //     $filename= trim($filename,'/');
+        //     if(eyPreventShell($filename) && $action=='del' && !empty($filename) && file_exists($filename)){
+        //         $filetype = preg_replace('/^(.*)\.(\w+)$/i', '$2', $filename);
+        //         $phpfile = strtolower(strstr($filename,'.php'));  //排除PHP文件
+        //         $size = getimagesize($filename);
+        //         $fileInfo = explode('/',$size['mime']);
+        //         if($fileInfo[0] != 'image' || $phpfile || !in_array($filetype, explode(',', config('global.image_ext')))){
+        //             exit;
+        //         }
+        //         if(@unlink($filename)){
+        //             echo 1;
+        //         }else{
+        //             echo 0;
+        //         }  
+        //         exit;
+        //     }
+        // }
     }
     
     public function fileList(){
@@ -472,7 +460,7 @@ class Uploadify extends Base
         }
         if (!empty($mydir)) {
             foreach ($mydir as $key => $dir) {
-                if (stristr("$dir/", 'uploads/soft_tmp/') || stristr("$dir/", 'uploads/tmp/')) {
+                if (stristr("$dir/", 'uploads/soft_tmp/')) {
                     continue;
                 }
                 $num++;

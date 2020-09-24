@@ -94,13 +94,11 @@ class Filemanager extends Base
                 $this->error('请选择上传图片！');
                 exit;
             } else {
-                $image_type = tpCache('basic.image_type');
-                $fileExt = !empty($image_type) ? str_replace('|', ',', $image_type) : config('global.image_ext');
                 $image_upload_limit_size = intval(tpCache('basic.file_size') * 1024 * 1024);
                 $result = $this->validate(
-                    ['file' => $file], 
-                    ['file'=>'image|fileSize:'.$image_upload_limit_size.'|fileExt:'.$fileExt],
-                    ['file.image' => '上传文件必须为图片','file.fileSize' => '上传文件过大','file.fileExt'=>'上传文件后缀名必须为'.$fileExt]
+                    ['file' => $file],
+                    ['file'=>'image|fileSize:'.$image_upload_limit_size],
+                    ['file.image' => '上传文件必须为图片','file.fileSize' => '上传图片过大']
                 );
                 if (true !== $result || empty($file)) {
                     $this->error($result);
@@ -108,12 +106,9 @@ class Filemanager extends Base
                 }
             }
 
-            $res = $this->filemanagerLogic->upload('upfile', $activepath, $post['filename'], 'image');
-            if ($res['code'] == 1) {
-                $this->success('操作成功！', url('Filemanager/index', array('activepath'=>$this->filemanagerLogic->replace_path($activepath, ':', false))));
-            } else {
-                $this->error($res['msg'], url('Filemanager/index', array('activepath'=>$this->filemanagerLogic->replace_path($activepath, ':', false))));
-            }
+            $res = $this->filemanagerLogic->upload('upfile', $activepath, $post['filename']);
+            $this->success('操作成功！', url('Filemanager/index', array('activepath'=>$this->filemanagerLogic->replace_path($activepath, ':', false))));
+            exit;
         }
 
         $filename = input('param.filename/s', '', null);
@@ -194,12 +189,10 @@ class Filemanager extends Base
                 $fp = fopen($file, "r");
                 $content = fread($fp, $filesize);
                 fclose($fp);
-                if ('htm' == $path_parts['extension']) {
+                if ('css' != $path_parts['extension']) {
                     $content = htmlspecialchars($content, ENT_QUOTES);
-                    foreach ($this->filemanagerLogic->disableFuns as $key => $val) {
-                        $val_new = msubstr($val, 0, 1).'-'.msubstr($val, 1);
-                        $content = preg_replace("/(@)?".$val."(\s*)\(/i", "{$val_new}(", $content);
-                    }
+                    $content = preg_replace("/(@)?eval(\s*)\(/i", 'intval(', $content);
+                    // $content = preg_replace("/\?\bphp\b/i", "？ｍｕｍａ", $content);
                 }
             }
         }
@@ -252,13 +245,12 @@ class Filemanager extends Base
 
         $activepath = input('param.activepath/s', '', null);
         $activepath = $this->filemanagerLogic->replace_path($activepath, ':', true);
-        $filename = 'newfile.htm';
+        $filename = 'newfile.txt';
         $content = "";
         $info = array(
             'filename'  => $filename,
             'activepath'=> $activepath,
             'content'   => $content,
-            'extension' => 'text/html',
         );
         $this->assign('info', $info);
         return $this->fetch();

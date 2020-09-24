@@ -207,24 +207,6 @@ return array (
     'primary' => false,
     'autoinc' => false,
   ),
-  'is_release' => 
-  array (
-    'name' => 'is_release',
-    'type' => 'tinyint(1)',
-    'notnull' => false,
-    'default' => '0',
-    'primary' => false,
-    'autoinc' => false,
-  ),
-  'weapp_code' => 
-  array (
-    'name' => 'weapp_code',
-    'type' => 'varchar(50)',
-    'notnull' => false,
-    'default' => '',
-    'primary' => false,
-    'autoinc' => false,
-  ),
   'lang' => 
   array (
     'name' => 'lang',
@@ -249,6 +231,15 @@ return array (
     'type' => 'int(11)',
     'notnull' => false,
     'default' => '0',
+    'primary' => false,
+    'autoinc' => false,
+  ),
+  'banner' => 
+  array (
+    'name' => 'banner',
+    'type' => 'varchar(250)',
+    'notnull' => false,
+    'default' => '',
     'primary' => false,
     'autoinc' => false,
   ),

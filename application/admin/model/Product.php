@@ -13,7 +13,6 @@
 
 namespace app\admin\model;
 
-use think\Db;
 use think\Model;
 use app\admin\logic\ProductLogic;
 
@@ -36,12 +35,14 @@ class Product extends Model
      * @param array $post post数据
      * @param string $opt 操作
      */
-    public function afterSave($aid, $post, $opt, $new = '')
+    public function afterSave($aid, $post, $opt)
     {
         // -----------内容
         $post['aid'] = $aid;
         $addonFieldExt = !empty($post['addonFieldExt']) ? $post['addonFieldExt'] : array();
         model('Field')->dealChannelPostData($post['channel'], $post, $addonFieldExt);
+        // 自动推送链接给蜘蛛
+        push_zzbaidu($opt, $aid);
 
         // ---------产品多图
         model('ProductImg')->saveimg($aid, $post);
@@ -49,16 +50,15 @@ class Product extends Model
 
         // 处理产品 属性
         $productLogic = new ProductLogic();
-        if (empty($new)) {
-            // 旧参数处理
-            $productLogic->saveProductAttr($aid, $post['typeid']);
-        } else {
-            // 新参数处理
-            $productLogic->saveShopProductAttr($aid, $post['typeid']);
-        }
-        
+        $productLogic->saveProductAttr($aid, $post['typeid']); 
+
         // --处理TAG标签
-        model('Taglist')->savetags($aid, $post['typeid'], $post['tags'],$post['arcrank'], $opt);
+        model('Taglist')->savetags($aid, $post['typeid'], $post['tags']);
+
+        /*清除页面缓存*/
+        // $htmlCacheLogic = new \app\common\logic\HtmlCacheLogic;
+        // $htmlCacheLogic->clear_archives([$aid]);
+        /*--end*/
     }
 
     /**
@@ -69,7 +69,7 @@ class Product extends Model
     {
         $result = array();
         $field = !empty($field) ? $field : '*';
-        $result = Db::name('archives')->field($field)
+        $result = db('archives')->field($field)
             ->where([
                 'aid'   => $aid,
                 'lang'  => get_admin_lang(),
@@ -77,15 +77,14 @@ class Product extends Model
             ->find();
         if ($isshowbody) {
             $tableName = M('channeltype')->where('id','eq',$result['channel'])->getField('table');
-            $result['addonFieldExt'] = Db::name($tableName.'_content')->where('aid',$aid)->find();
+            $result['addonFieldExt'] = db($tableName.'_content')->where('aid',$aid)->find();
         }
 
         // 产品TAG标签
         if (!empty($result)) {
             $typeid = isset($result['typeid']) ? $result['typeid'] : 0;
             $tags = model('Taglist')->getListByAid($aid, $typeid);
-            $result['tags'] = $tags['tag_arr'];
-            $result['tag_id'] = $tags['tid_arr'];
+            $result['tags'] = $tags;
         }
 
         return $result;
@@ -125,9 +124,8 @@ class Product extends Model
             ->select();
         if (!empty($result)) {
             foreach ($result as $key => $val) {
-                $image_url = preg_replace('#^(/[/\w]+)?(/public/upload/|/uploads/)#i', '$2', $val['image_url']);
-                if (!is_http_url($image_url) && file_exists('.'.$image_url) && preg_match('#^(/uploads/|/public/upload/)(.*)/([^/]+)\.([a-z]+)$#i', $image_url)) {
-                    @unlink(realpath('.'.$image_url));
+                if (!is_http_url($val['image_url'])) {
+                    @unlink(ROOT_PATH.trim($val['image_url'], '/'));
                 }
             }
             M('product_img')->where(
@@ -137,12 +135,6 @@ class Product extends Model
             )
             ->delete();
         }
-        //同时删除虚拟商品
-        Db::name("product_netdisk")->where('aid','IN',$aidArr)->delete();
-        //产品规格数据表
-        Db::name("product_spec_data")->where('aid','IN',$aidArr)->delete();
-        //产品多规格组装表
-        Db::name("product_spec_value")->where('aid','IN',$aidArr)->delete();
         // 同时删除TAG标签
         model('Taglist')->delByAids($aidArr);
     }

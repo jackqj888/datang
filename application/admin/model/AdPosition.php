@@ -12,7 +12,6 @@
  */
 namespace app\admin\model;
 
-use think\Db;
 use think\Model;
 
 /**
@@ -33,7 +32,7 @@ class AdPosition extends Model
      */
     public function getInfo($id, $field = '*')
     {
-        $result = Db::name('AdPosition')->field($field)->find($id);
+        $result = db('AdPosition')->field($field)->find($id);
 
         return $result;
     }
@@ -48,7 +47,7 @@ class AdPosition extends Model
             'id'   => array('IN', $ids),
             'lang'  => get_admin_lang(),
         );
-        $result = Db::name('AdPosition')->field($field)
+        $result = db('AdPosition')->field($field)
             ->where($map)
             ->select();
 
@@ -61,7 +60,7 @@ class AdPosition extends Model
      */
     public function getAll($field = '*', $index_key = '')
     {
-        $result = Db::name('AdPosition')->field($field)
+        $result = db('AdPosition')->field($field)
             ->where([
                 'lang'  => get_admin_lang(),
             ])->select();

@@ -17,7 +17,6 @@ use think\Page;
 use think\Db;
 use app\common\logic\ArctypeLogic;
 use app\admin\logic\ProductLogic;
-use app\admin\logic\ProductSpecLogic; // 用于产品规格逻辑功能处理
 
 class Product extends Base
 {
@@ -27,13 +26,11 @@ class Product extends Base
     public $channeltype = '';
     // 表单类型
     public $attrInputTypeArr = array();
-
-    public function _initialize()
-    {
+    
+    public function _initialize() {
         parent::_initialize();
-        $channeltype_list  = config('global.channeltype_list');
+        $channeltype_list = config('global.channeltype_list');
         $this->channeltype = $channeltype_list[$this->nid];
-        empty($this->channeltype) && $this->channeltype = 2;
         $this->attrInputTypeArr = config('global.attr_input_type_arr');
         $this->assign('nid', $this->nid);
         $this->assign('channeltype', $this->channeltype);
@@ -54,7 +51,7 @@ class Product extends Base
         $end = strtotime(input('add_time_end'));
 
         // 应用搜索条件
-        foreach (['keywords','typeid','flag','is_release'] as $key) {
+        foreach (['keywords','typeid','flag'] as $key) {
             if (isset($param[$key]) && $param[$key] !== '') {
                 if ($key == 'keywords') {
                     $condition['a.title'] = array('LIKE', "%{$param[$key]}%");
@@ -67,6 +64,9 @@ class Product extends Base
                     if (0 < intval($admin_info['role_id'])) {
                         $auth_role_info = $admin_info['auth_role_info'];
                         if(! empty($auth_role_info)){
+                            if(isset($auth_role_info['only_oneself']) && 1 == $auth_role_info['only_oneself']){
+                                $condition['a.admin_id'] = $admin_info['admin_id'];
+                            }
                             if(! empty($auth_role_info['permission']['arctype'])){
                                 if (!empty($typeid)) {
                                     $typeids = array_intersect($typeids, $auth_role_info['permission']['arctype']);
@@ -77,33 +77,13 @@ class Product extends Base
                     /*--end*/
                     $condition['a.typeid'] = array('IN', $typeids);
                 } else if ($key == 'flag') {
-                    if ('is_release' == $param[$key]) {
-                        $condition['a.users_id'] = array('gt', 0);
-                    } else {
-                        $condition['a.'.$param[$key]] = array('eq', 1);
-                    }
-                // } else if ($key == 'is_release') {
-                //     if (0 < intval($param[$key])) {
-                //         $condition['a.users_id'] = array('gt', intval($param[$key]));
-                //     }
+                    $condition['a.'.$param[$key]] = array('eq', 1);
                 } else {
                     $condition['a.'.$key] = array('eq', $param[$key]);
                 }
             }
         }
 
-        /*权限控制 by 小虎哥*/
-        $admin_info = session('admin_info');
-        if (0 < intval($admin_info['role_id'])) {
-            $auth_role_info = $admin_info['auth_role_info'];
-            if(! empty($auth_role_info)){
-                if(isset($auth_role_info['only_oneself']) && 1 == $auth_role_info['only_oneself']){
-                    $condition['a.admin_id'] = $admin_info['admin_id'];
-                }
-            }
-        }
-        /*--end*/
-        
         // 时间检索
         if ($begin > 0 && $end > 0) {
             $condition['a.add_time'] = array('between',"$begin,$end");
@@ -120,17 +100,6 @@ class Product extends Base
         // 回收站
         $condition['a.is_del'] = array('eq', 0);
 
-        /*自定义排序*/
-        $orderby = input('param.orderby/s');
-        $orderway = input('param.orderway/s');
-        if (!empty($orderby)) {
-            $orderby = "a.{$orderby} {$orderway}";
-            $orderby .= ", a.aid desc";
-        } else {
-            $orderby = "a.aid desc";
-        }
-        /*end*/
-
         /**
          * 数据查询，搜索出主键ID的值
          */
@@ -140,7 +109,7 @@ class Product extends Base
             ->field("a.aid")
             ->alias('a')
             ->where($condition)
-            ->order($orderby)
+            ->order('a.aid desc')
             ->limit($Page->firstRow.','.$Page->listRows)
             ->getAllWithIndex('aid');
 
@@ -184,7 +153,6 @@ class Product extends Base
         /*--end*/
 
         $this->assign($assign_data);
-
         return $this->fetch();
     }
 
@@ -195,26 +163,13 @@ class Product extends Base
     {
         if (IS_POST) {
             $post = input('post.');
-
-            /* 处理TAG标签 */
-            if (!empty($post['tags_new'])) {
-                $post['tags'] = !empty($post['tags']) ? $post['tags'] . ',' . $post['tags_new'] : $post['tags_new'];
-                unset($post['tags_new']);
-            }
-            $post['tags'] = explode(',', $post['tags']);
-            $post['tags'] = array_unique($post['tags']);
-            $post['tags'] = implode(',', $post['tags']);
-            /* END */
-
             $content = input('post.addonFieldExt.content', '', null);
 
             // 根据标题自动提取相关的关键字
             $seo_keywords = $post['seo_keywords'];
-            if (!empty($seo_keywords)) {
-                $seo_keywords = str_replace('，', ',', $seo_keywords);
-            } else {
-                // $seo_keywords = get_split_word($post['title'], $content);
-            }
+            // if (empty($seo_keywords)) {
+            //     $seo_keywords = get_split_word($post['title'], $content);
+            // }
 
             // 自动获取内容第一张图片作为封面图
             $is_remote = !empty($post['is_remote']) ? $post['is_remote'] : 0;
@@ -256,36 +211,6 @@ class Product extends Base
                 unset($post['type_tempview']);
                 unset($post['tempview']);
             }
-            
-            //处理自定义文件名,仅由字母数字下划线和短横杆组成,大写强制转换为小写
-            if (!empty($post['htmlfilename'])) {
-                $post['htmlfilename'] = preg_replace("/[^a-zA-Z0-9_-]+/", "", $post['htmlfilename']);
-                $post['htmlfilename'] = strtolower($post['htmlfilename']);
-                //判断是否存在相同的自定义文件名
-                $filenameCount = Db::name('archives')->where([
-                        'htmlfilename'  => $post['htmlfilename'],
-                    ])->count();
-                if (!empty($filenameCount)) {
-                    $this->error("自定义文件名已存在，请重新设置！");
-                }
-            }
-
-            // 产品类型
-            if (!empty($post['prom_type'])) {
-                if ($post['prom_type_vir'] == 2) {
-                    $post['netdisk_url'] = trim($post['netdisk_url']);
-                    if (empty($post['netdisk_url'])) {
-                        $this->error("网盘地址不能为空！");
-                    }
-                    $post['prom_type'] = 2;
-                } else if ($post['prom_type_vir'] == 3) {
-                    $post['text_content'] = trim($post['text_content']);
-                    if (empty($post['text_content'])) {
-                        $this->error("虚拟文本内容不能为空！");
-                    }
-                    $post['prom_type'] = 3;
-                }
-            }
 
             // --存储数据
             $newData = array(
@@ -301,7 +226,6 @@ class Product extends Base
                 'seo_keywords'     => $seo_keywords,
                 'seo_description'     => $seo_description,
                 'admin_id'  => session('admin_info.admin_id'),
-                'stock_show'    => empty($post['stock_show']) ? 0 : $post['stock_show'],
                 'lang'  => $this->admin_lang,
                 'sort_order'    => 100,
                 'add_time'     => strtotime($post['add_time']),
@@ -309,27 +233,14 @@ class Product extends Base
             );
             $data = array_merge($post, $newData);
 
-            $aid = Db::name('archives')->insertGetId($data);
+            $aid = M('archives')->insertGetId($data);
             $_POST['aid'] = $aid;
             if ($aid) {
                 // ---------后置操作
                 model('Product')->afterSave($aid, $data, 'add');
                 // ---------end
-                // 添加产品规格
-                model('ProductSpecPreset')->ProductSpecInsertAll($aid, $data);
                 adminLog('新增产品：'.$data['title']);
-
-                //虚拟商品保存
-                if (!empty($post['prom_type']) && in_array($post['prom_type'], [2,3])) {
-                    model('ProductNetdisk')->saveProductNetdisk($aid, $data);
-                }
-
-                // 生成静态页面代码
-                $successData = [
-                    'aid'   => $aid,
-                    'tid'   => $post['typeid'],
-                ];
-                $this->success("操作成功!", null, $successData);
+                $this->success("操作成功!", $post['gourl']);
                 exit;
             }
 
@@ -364,15 +275,6 @@ class Product extends Base
         $assign_data['aid'] = 0;
         /*--end*/
 
-        /*可控制的字段列表*/
-        $assign_data['ifcontrolRow'] = Db::name('channelfield')->field('id,name')->where([
-                'channel_id'    => $this->channeltype,
-                'ifmain'        => 1,
-                'ifeditable'    => 1,
-                'ifcontrol'     => 0,
-                'status'        => 1,
-            ])->getAllWithIndex('name');
-
         // 阅读权限
         $arcrank_list = get_arcrank_list();
         $assign_data['arcrank_list'] = $arcrank_list;
@@ -393,19 +295,18 @@ class Product extends Base
         $this->assign('tempview', $tempview);
         /*--end*/
 
+        /*返回上一层*/
+        $gourl = input('param.gourl/s', '');
+        if (empty($gourl)) {
+            $gourl = url('Product/index', array('typeid'=>$typeid));
+        }
+        $assign_data['gourl'] = $gourl;
+        /*--end*/
+
         // 商城配置
         $shopConfig = getUsersConfigData('shop');
         $assign_data['shopConfig'] = $shopConfig;
 
-        // 商品规格
-        if (isset($shopConfig['shop_open_spec']) && 1 == $shopConfig['shop_open_spec']) {
-            // 预设值名称
-            $assign_data['preset_value'] = Db::name('product_spec_preset')->where('lang',$this->admin_lang)->field('preset_id,preset_mark_id,preset_name')->group('preset_mark_id')->order('preset_mark_id desc')->select();
-        }
-
-        // URL模式
-        $tpcache = config('tpcache');
-        $assign_data['seo_pseudo'] = !empty($tpcache['seo_pseudo']) ? $tpcache['seo_pseudo'] : 1;
         $this->assign($assign_data);
 
         return $this->fetch();
@@ -418,27 +319,14 @@ class Product extends Base
     {
         if (IS_POST) {
             $post = input('post.');
-
-            /* 处理TAG标签 */
-            if (!empty($post['tags_new'])) {
-                $post['tags'] = !empty($post['tags']) ? $post['tags'] . ',' . $post['tags_new'] : $post['tags_new'];
-                unset($post['tags_new']);
-            }
-            $post['tags'] = explode(',', $post['tags']);
-            $post['tags'] = array_unique($post['tags']);
-            $post['tags'] = implode(',', $post['tags']);
-            /* END */
-
             $typeid = input('post.typeid/d', 0);
             $content = input('post.addonFieldExt.content', '', null);
 
             // 根据标题自动提取相关的关键字
             $seo_keywords = $post['seo_keywords'];
-            if (!empty($seo_keywords)) {
-                $seo_keywords = str_replace('，', ',', $seo_keywords);
-            } else {
-                // $seo_keywords = get_split_word($post['title'], $content);
-            }
+            // if (empty($seo_keywords)) {
+            //     $seo_keywords = get_split_word($post['title'], $content);
+            // }
 
             // 自动获取内容第一张图片作为封面图
             $is_remote = !empty($post['is_remote']) ? $post['is_remote'] : 0;
@@ -481,37 +369,6 @@ class Product extends Base
                 unset($post['tempview']);
             }
 
-            // 产品类型
-            if (!empty($post['prom_type'])) {
-                if ($post['prom_type_vir'] == 2) {
-                    $post['netdisk_url'] = trim($post['netdisk_url']);
-                    if (empty($post['netdisk_url'])) {
-                        $this->error("网盘地址不能为空！");
-                    }
-                    $post['prom_type'] = 2;
-                } else if ($post['prom_type_vir'] == 3) {
-                    $post['text_content'] = trim($post['text_content']);
-                    if (empty($post['text_content'])) {
-                        $this->error("虚拟文本内容不能为空！");
-                    }
-                    $post['prom_type'] = 3;
-                }
-            }
-
-            //处理自定义文件名,仅由字母数字下划线和短横杆组成,大写强制转换为小写
-            if (!empty($post['htmlfilename'])) {
-                $post['htmlfilename'] = preg_replace("/[^a-zA-Z0-9_-]+/", "", $post['htmlfilename']);
-                $post['htmlfilename'] = strtolower($post['htmlfilename']);
-                //判断是否存在相同的自定义文件名
-                $filenameCount = Db::name('archives')->where([
-                        'aid'   => ['NEQ', $post['aid']],
-                        'htmlfilename'  => $post['htmlfilename'],
-                    ])->count();
-                if (!empty($filenameCount)) {
-                    $this->error("自定义文件名已存在，请重新设置！");
-                }
-            }
-
             // 同步栏目切换模型之后的文档模型
             $channel = Db::name('arctype')->where(['id'=>$typeid])->getField('current_channel');
             // --存储数据
@@ -527,13 +384,12 @@ class Product extends Base
                 'jumplinks' => $jumplinks,
                 'seo_keywords'     => $seo_keywords,
                 'seo_description'     => $seo_description,
-                'stock_show'    => empty($post['stock_show']) ? 0 : $post['stock_show'],
                 'add_time'     => strtotime($post['add_time']),
                 'update_time'     => getTime(),
             );
             $data = array_merge($post, $newData);
 
-            $r = Db::name('archives')->where([
+            $r = M('archives')->where([
                     'aid'   => $data['aid'],
                     'lang'  => $this->admin_lang,
                 ])->update($data);
@@ -541,25 +397,9 @@ class Product extends Base
             if ($r) {
                 // ---------后置操作
                 model('Product')->afterSave($data['aid'], $data, 'edit');
-                // 更新规格名称数据
-                // model('ProductSpecData')->ProducSpecNameEditSave($data);
-
-                //虚拟商品保存
-                if (!empty($post['prom_type']) && in_array($post['prom_type'], [2,3])) {
-                    model('ProductNetdisk')->saveProductNetdisk($data['aid'], $data);
-                }
-
-                // 更新规格值及金额数据
-                model('ProductSpecValue')->ProducSpecValueEditSave($data);
                 // ---------end
                 adminLog('编辑产品：'.$data['title']);
-
-                // 生成静态页面代码
-                $successData = [
-                    'aid'       => $data['aid'],
-                    'tid'       => $typeid,
-                ];
-                $this->success("操作成功!", null, $successData);
+                $this->success("操作成功!", $post['gourl']);
                 exit;
             }
 
@@ -571,10 +411,6 @@ class Product extends Base
 
         $id = input('id/d');
         $info = model('Product')->getInfo($id);
-
-        // 获取规格数据信息
-        // 包含：SpecSelectName、HtmlTable、spec_mark_id_arr、preset_value
-        $assign_data = model('ProductSpecData')->GetProductSpecData($id);
         if (empty($info)) {
             $this->error('数据不存在，请联系管理员！');
             exit;
@@ -588,7 +424,6 @@ class Product extends Base
         }
         /*--end*/
         $typeid = $info['typeid'];
-        $assign_data['typeid'] = $typeid;
 
         // 栏目信息
         $arctypeInfo = Db::name('arctype')->find($typeid);
@@ -637,19 +472,6 @@ class Product extends Base
         $assign_data['aid'] = $id;
         /*--end*/
 
-        /*可控制的主表字段列表*/
-        $assign_data['ifcontrolRow'] = Db::name('channelfield')->field('id,name')->where([
-                'channel_id'    => $this->channeltype,
-                'ifmain'        => 1,
-                'ifeditable'    => 1,
-                'ifcontrol'     => 0,
-                'status'        => 1,
-            ])->getAllWithIndex('name');
-
-        /*虚拟商品内容读取*/
-        $assign_data['netdisk'] = Db::name("product_netdisk")->where('aid', $id)->find();
-        /*end*/
-
         // 阅读权限
         $arcrank_list = get_arcrank_list();
         $assign_data['arcrank_list'] = $arcrank_list;
@@ -670,6 +492,14 @@ class Product extends Base
         $this->assign('tempview', $tempview);
         /*--end*/
 
+        /*返回上一层*/
+        $gourl = input('param.gourl/s', '');
+        if (empty($gourl)) {
+            $gourl = url('Product/index', array('typeid'=>$typeid));
+        }
+        $assign_data['gourl'] = $gourl;
+        /*--end*/
+
         // 商城配置
         $shopConfig = getUsersConfigData('shop');
         $assign_data['shopConfig'] = $shopConfig;
@@ -679,17 +509,11 @@ class Product extends Base
         if (empty($shopConfig['shop_type']) || 1 == $shopConfig['shop_type']) {
             if ($shopConfig['shop_type'] == $assign_data['field']['prom_type']) {
                 $IsSame = '0'; // 相同
-            }elseif ($shopConfig['shop_type']==1 && in_array($assign_data['field']['prom_type'], [2,3])) {
-                $IsSame = '0'; // 相同
             }else{
                 $IsSame = '1'; // 不相同
             }
         }
         $assign_data['IsSame'] = $IsSame;
-
-        // URL模式
-        $tpcache = config('tpcache');
-        $assign_data['seo_pseudo'] = !empty($tpcache['seo_pseudo']) ? $tpcache['seo_pseudo'] : 1;
 
         $this->assign($assign_data);
         return $this->fetch();
@@ -748,8 +572,7 @@ class Product extends Base
                 if ($key == 'keywords') {
                     $condition['a.attr_name'] = array('LIKE', "%{$get[$key]}%");
                 } else if ($key == 'typeid') {
-                    $typeids = model('Arctype')->getHasChildren($get[$key]);
-                    $condition['a.typeid'] = array('IN', array_keys($typeids));
+                    $condition['a.typeid'] = array('eq', $get[$key]);
                 } else {
                     $condition['a.'.$key] = array('eq', $get[$key]);
                 }
@@ -808,8 +631,7 @@ class Product extends Base
         $selected = $typeid;
         $arctypeLogic = new ArctypeLogic();
         $map = array(
-            'channeltype'   => $this->channeltype,
-            'is_del'        => 0,
+            'channeltype'    => $this->channeltype,
         );
         $arctype_max_level = intval(config('global.arctype_max_level'));
         $select_html = $arctypeLogic->arctype_list(0, $selected, true, $arctype_max_level, $map);

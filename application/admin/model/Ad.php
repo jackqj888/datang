@@ -10,7 +10,6 @@
  * Author: 小虎哥 <1105415366@qq.com>
  * Date: 2018-4-3
  */
-
 namespace app\admin\model;
 
 use think\Model;

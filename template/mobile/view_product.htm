@@ -1,0 +1,154 @@
+<div class="">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0;" />
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<title>{$eyou.field.seo_title}</title>
+<meta name="description" content="{$eyou.field.seo_description}" />
+<meta name="keywords" content="{$eyou.field.seo_keywords}" />
+<meta name="generator" content="eyoucms 1.0.0" data-variable="{eyou:global name='web_eyoucms' /}" />
+<link href="{eyou:version file='/favicon.ico' /}" rel="shortcut icon" type="image/x-icon" />
+<script type="text/javascript" src="{eyou:global name='web_templets_m' /}/skin/js/jquery.js"></script>
+<link href="{eyou:global name='web_templets_m' /}/skin/css/fontsstyle.css" rel="stylesheet" />
+<link href="{eyou:global name='web_templets_m' /}/skin/css/reset.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_m' /}/skin/css/common.css" rel="stylesheet" />
+<link href="{eyou:global name='web_templets_m' /}/skin/css/prlist.css" rel="stylesheet" />
+</head>
+<body>
+<!--header-->
+{eyou:include file="header.htm" /}
+{eyou:include file="nav.htm" /}
+<div class="CategoryList_Title"> <a href="javascript:history.go(-1);"><i class="icon-left fl"></i></a>{$eyou.field.typename}
+  <ul 
+    {eyou:notempty name='$eyou.field.has_children' /}
+    class="CategoryLista"
+    {eyou:else /}
+    style="display:none"
+    {/eyou:notempty}
+     id="fenl">
+    <li ><a href="#"><i class="icon-details"></i></a>
+      <ul class="list1">
+        {eyou:channel type='first' }
+        <li><a href="{$field.typeurl}">>{$field.typename}</a></li>
+       {/eyou:channel}
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="ProductDetailed">
+  <h3>{$eyou.field.title}</h3>
+  <div class="ProductScroll_img">
+    <div class="pro_gd j-slide-np">
+      <div class="m-nowra">
+        <div class="prev"> </div>
+        <div class="no_ov">
+          <div class="m-box"> 
+          {eyou:volist name="$eyou.field.image_list"} <img src="{$field.image_url}"  style="width:250px;" /> {/eyou:volist} 
+          </div>
+        </div>
+        <div class="next"> </div>
+      </div>
+    </div>
+   {eyou:volist name="$eyou.field.attr_list"}
+    <p>{$field.attr_name}:{$field.attr_value}</p>
+    {/eyou:volist}
+  </div>
+  <div class="TabBarBox">
+    <ul>
+      <li class="TabBarNow"><a href="#DetailedSpan">产品详情</a></li>
+      <li><a href="#order">在线留言</a></li>
+    </ul>
+  </div>
+  <div id="DetailedSpan" class="DetailedSpan">
+    {$eyou.field.content}
+  </div>
+  <div class="j-slide-np">
+    <div class="ProductTitle"> <span class="fl">推荐产品</span><span class="fr"><a href="tel:{eyou:global name='web_attr_1' /}">{eyou:global name='web_attr_1' /}</a></span></div>
+    <div class="SimilarBox m-con"> <a class="btnLeft fl prev" href="javascript:;"><i class="icon-arrow-left"></i></a>
+      
+      <div class="m-nowr eyou-edit" e-id="1" e-type="arclist" e-page="view_product">
+{eyou:uiarclist e-id='1' typeid='2' e-page="view_product"}
+        <ul class="clearfix fl m-box">
+          {eyou:arclist titlelen='20' row='6' flag='c' mod='2'}   
+           {eyou:eq name='$mod' value='1'}<li>{/eyou:eq}
+           <a href="{$field.arcurl}"><img src="{$field.litpic}" alt="{$field.title}"/>
+            <h5>{$field.title}</h5>
+            </a> 
+             {eyou:eq name='$mod' value='0'}</li>{/eyou:eq}
+          {/eyou:arclist} 
+        </ul>
+        {/eyou:uiarclist}
+      </div>
+      <a class="btnRight fr next" href="javascript:;"><i class="icon-arrow-right"></i> </a>
+      <div class="clear"> </div>
+    </div>
+  </div>
+  <div class="ProductTitle" id="order"> <span class="fl">在线留言</span><span class="fr"><a href="tel:{eyou:global name='web_attr_1' /}">{eyou:global name='web_attr_1' /}</a></span></div>
+  {eyou:guestbookform type='default' typeid='24'}
+  <form method="POST" enctype="multipart/form-data" action="{$field.action}" onsubmit="return checkForm();">
+    <table class="formSpan">
+      <tr>
+        <td class="td1"> {$field.itemname_1}: </td>
+        <td><input type="text" name="{$field.attr_1}" placeholder="请输入您的{$field.itemname_1}" id="attr_1" />
+          <br /></td>
+      </tr>
+      <tr>
+        <td> {$field.itemname_2}: </td>
+        <td><input type="phone" name="{$field.attr_2}" value="" placeholder="请输入您的{$field.itemname_2}" id="attr_2" /></td>
+      </tr>
+      <tr>
+        <td> {$field.itemname_4}: </td>
+        <td><textarea name="{$field.attr_4}" placeholder="请输入您的{$field.itemname_4}" id="attr_4"></textarea>
+          <p id="ErrorInfo" class="red pl10"> </p></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <button type="submit" class="sbutton">提交</button>
+         </td>
+      </tr>
+    </table>
+    {$field.hidden}
+  </form>
+  <script type="text/javascript">
+            function checkForm()
+            {
+              if(document.getElementById('attr_1').value.length == 0)
+              {
+                alert('请填写{$field.itemname_1}');
+                return false;
+              }
+              if(document.getElementById('attr_2').value.length == 0)
+              {
+                alert('请填写{$field.itemname_2}');
+                return false;
+              }
+              
+              return true;
+            }
+          </script> 
+  {/eyou:guestbookform}
+  
+  <div class="searchSpan">
+   <form method="get" action="{eyou:searchurl /}">
+    <input type="hidden" name="channel" value="" />
+    <input type="hidden" name="typeid" value="" />
+    <input class="txtSearch" type="text" name="keywords" placeholder="输入您要搜索的关键词" id="se_key" />
+    <button type="submit" style="background-color:transparent;border:0;display: block; margin-left: auto;"> <a><i class="icon-search btnSearch"></i></a></button>
+   </form>  </div>
+            
+</div>
+<!--info-->
+{eyou:include file="footer.htm" /}
+</body>
+<script src="{eyou:global name='web_templets_m' /}/skin/js/1.9.1jquery.min.js" type="text/javascript"></script>
+{eyou:ui open='off' /}
+<script type="text/javascript" src="{eyou:global name='web_templets_m' /}/skin/js/sdw_mobile.js"></script>
+<script type="text/javascript" src="{eyou:global name='web_templets_m' /}/skin/js/tools.js"></script>
+</html>
+</div>

@@ -13,7 +13,6 @@
 
 namespace app\admin\model;
 
-use think\Db;
 use think\Model;
 
 /**
@@ -34,19 +33,10 @@ class DownloadFile extends Model
      */
     public function getDownFile($aid, $field = '*')
     {
-        $result = Db::name('DownloadFile')->field($field)
+        $result = db('DownloadFile')->field($field)
             ->where('aid', $aid)
             ->order('sort_order asc')
             ->select();
-
-        foreach ($result as $key => $val) {
-            if (!empty($val['file_url'])) {
-                $result[$key]['file_url'] = handle_subdir_pic($val['file_url'], 'soft');
-            }
-            if (!isset($val['server_name'])) {
-                $result[$key]['server_name'] = $result[$key]['file_name'];
-            }
-        }
 
         return $result;
     }
@@ -60,10 +50,7 @@ class DownloadFile extends Model
         if (!is_array($aid)) {
             $aid = array($aid);
         }
-        $result = Db::name('DownloadFile')->where(array('aid'=>array('IN', $aid)))->delete();
-        if ($result !== false) {
-            Db::name('download_log')->where(array('aid'=>array('IN', $aid)))->delete();
-        }
+        $result = db('DownloadFile')->where(array('aid'=>array('IN', $aid)))->delete();
 
         return $result;
     }
@@ -76,85 +63,44 @@ class DownloadFile extends Model
      */
     public function savefile($aid, $post = array())
     {
-        // 拼装本地链接数据
-        $data = array();
         $fileupload = isset($post['fileupload']) ? $post['fileupload'] : array();
         if (!empty($fileupload)) {
+
+            // 删除
+            $this->delDownFile($aid);
+
+             // 添加文件
+            $data = array();
             $sort_order = 0;
-            foreach($fileupload['file_url'] as $key => $val)
+            foreach($fileupload as $key => $val)
             {
-                if($val == null || empty($val))  continue;
-                $title     = !empty($post['title']) ? $post['title'] : '';
-                $file_size = isset($post['fileupload']['file_size'][$key]) ? $post['fileupload']['file_size'][$key] : 0;
-                $file_mime = isset($post['fileupload']['file_mime'][$key]) ? $post['fileupload']['file_mime'][$key] : '';
-                $uhash     = isset($post['fileupload']['uhash'][$key]) ? $post['fileupload']['uhash'][$key] : '';
-                $md5file   = isset($post['fileupload']['md5file'][$key]) ? $post['fileupload']['md5file'][$key] : '';
-                $file_name   = isset($post['fileupload']['file_name'][$key]) ? $post['fileupload']['file_name'][$key] : '';
-                $file_ext   = isset($post['fileupload']['file_ext'][$key]) ? $post['fileupload']['file_ext'][$key] : '';
+                if($val == null || empty($val))  continue;    
+
+                $title = !empty($post['title']) ? $post['title'] : '';
+                $file_size = isset($post['fileSize'][$key]) ? $post['fileSize'][$key] : 0;
+                $file_mime = isset($post['fileMime'][$key]) ? $post['fileMime'][$key] : '';
+                $uhash = isset($post['uhash'][$key]) ? $post['uhash'][$key] : '';
+                $md5file = isset($post['md5file'][$key]) ? $post['md5file'][$key] : '';
+                $file_ext = pathinfo($val, PATHINFO_EXTENSION);
+                $file_name = pathinfo($val, PATHINFO_BASENAME);
                 ++$sort_order;
                 $data[] = array(
-                    'aid'        => $aid,
-                    'title'      => $title,
+                    'aid' => $aid,
+                    'title' => $title,
                     'file_url'   => $val,
-                    'extract_code'  => '',
                     'file_size'  => $file_size,
-                    'file_ext'   => $file_ext,
+                    'file_ext'  => $file_ext,
                     'file_name'  => $file_name,
                     'file_mime'  => $file_mime,
-                    'uhash'      => $uhash,
-                    'md5file'    => $md5file,
-                    'is_remote'  => 0,
-                    'sort_order' => $sort_order,
-                    'add_time'   => getTime(),
+                    'uhash'  => $uhash,
+                    'md5file'  => $md5file,
+                    'sort_order'    => $sort_order,
+                    'add_time' => getTime(),
                 );
             }
-        }
-
-        // 拼装远程链接数据
-        $data_new   = array();
-        if (!empty($post['remote_file'])) {
-            $sort_order = $sort_order;
-            foreach($post['remote_file'] as $kkk => $vvv)
-            {
-                if($vvv == null || empty($vvv)) continue;
-                $server_name = !empty($post['server_name'][$kkk]) ? trim($post['server_name'][$kkk]) : '';
-                $extract_code = !empty($post['extract_code'][$kkk]) ? trim($post['extract_code'][$kkk]) : '';
-                ++$sort_order;
-                $data_new[] = array(
-                    'aid'        => $aid,
-                    'title'      => $post['title'],
-                    'file_url'   => $vvv,
-                    'extract_code' => $extract_code,
-                    'file_size'  => '0',
-                    'file_ext'   => '',
-                    'file_name'  => $server_name,
-                    'file_mime'  => '',
-                    'uhash'      => md5($vvv),
-                    'md5file'    => md5($vvv),
-                    'is_remote'  => 1,
-                    'sort_order' => $sort_order,
-                    'add_time'   => getTime(),
-                );
+            if (!empty($data)) {
+                M('DownloadFile')->insertAll($data);
             }
-        }
-        
-        $data_new_new = [];
-        if (!empty($data) && !empty($data_new)) {
-            // 数组合并
-            $data_new_new = array_merge($data,$data_new);
-        }else if (!empty($data)) {
-            $data_new_new = $data;
-        }else if (!empty($data_new)) {
-            $data_new_new = $data_new;
-        }
-        
-        // 删除
-        $this->delDownFile($aid);
-
-        // 添加到数据库
-        if (!empty($data_new_new)) {
-            // 批量添加
-            M('DownloadFile')->insertAll($data_new_new);
         }
     }
 }

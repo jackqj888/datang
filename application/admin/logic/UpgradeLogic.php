@@ -37,10 +37,9 @@ class UpgradeLogic extends Model
         $this->version_txt_path = $this->data_path.'conf'.DS.'version.txt'; // 版本文件路径
         $this->curent_version = getCmsVersion();
         // api_Service_checkVersion
-        $upgrade_dev = config('global.upgrade_dev');
         $tmp_str = 'L2luZGV4LnBocD9tPWFwaSZjPVNlcnZpY2UmYT1jaGVja1ZlcnNpb24=';
         $this->service_url = base64_decode($this->service_ey).base64_decode($tmp_str);
-        $this->upgrade_url = $this->service_url . '&domain='.request()->host(true).'&v=' . $this->curent_version . '&dev=' . $upgrade_dev;
+        $this->upgrade_url = $this->service_url . '&domain='.request()->host(true).'&v=' . $this->curent_version;
     }
 
     /**
@@ -56,7 +55,7 @@ class UpgradeLogic extends Model
 
         $url = $this->upgrade_url; 
         $context = stream_context_set_default(array('http' => array('timeout' => 5,'method'=>'GET')));
-        $serviceVersionList = @file_get_contents($url,false,$context);
+        $serviceVersionList = @file_get_contents($url,false,$context);    
         $serviceVersionList = json_decode($serviceVersionList,true);
         if(!empty($serviceVersionList))
         {
@@ -112,14 +111,10 @@ class UpgradeLogic extends Model
             return ['code' => 0, 'msg' => "请联系空间商，开启 php.ini 中的php-zip扩展"];
         }
 
-        $serviceVersionList = @file_get_contents($this->upgrade_url);
-        if (false === $serviceVersionList) {
-            return ['code' => 0, 'msg' => "无法连接远程升级服务器！"];
-        } else {
-            $serviceVersionList = json_decode($serviceVersionList,true);
-            if (empty($serviceVersionList)) {
-                return ['code' => 0, 'msg' => "当前没有可升级的版本！"];
-            }
+        $serviceVersionList = file_get_contents($this->upgrade_url);
+        $serviceVersionList = json_decode($serviceVersionList,true);
+        if (empty($serviceVersionList)) {
+            return ['code' => 0, 'msg' => "没找到升级信息"];
         }
         
         clearstatcache(); // 清除文件夹权限缓存
@@ -241,7 +236,7 @@ class UpgradeLogic extends Model
                         }
                     }
                 } catch (\Exception $e) {
-                    return ['code' => -2, 'msg' => "数据库执行中途失败，请查看官方解决教程，否则将影响后续的版本升级！"];
+                    return ['code' => 0, 'msg' => "数据库执行中途失败，请第一时间请求技术支持，否则将影响后续的版本升级！"];
                 }
             }
         }
@@ -279,11 +274,6 @@ class UpgradeLogic extends Model
         // 清空缓存
         delFile(rtrim(RUNTIME_PATH, '/'));
         tpCache('global');
-
-        // 清空检测标记
-        $s_key = 'aXNzZXRfYXV0aG9y';
-        $s_key = base64_decode($s_key);
-        session($s_key, null);
 
         /*删除下载的升级包*/
         $ziplist = glob($this->data_path.'backup'.DS.'*.zip');
@@ -404,29 +394,13 @@ class UpgradeLogic extends Model
         $downFileName = end($downFileName);
         $saveDir = $this->data_path.'backup'.DS.$downFileName; // 保存目录
         tp_mkdir(dirname($saveDir));
-        $content = @file_get_contents($fileUrl, 0, null, 0, 1);
-        if (false === $content) {
-            $fileUrl = str_replace('http://service', 'https://service', $fileUrl);
-            $content = @file_get_contents($fileUrl, 0, null, 0, 1);
-        }
-
-        if(!$content){
+        if(!file_get_contents($fileUrl, 0, null, 0, 1)){
             return ['code' => 0, 'msg' => '官方升级包不存在']; // 文件存在直接退出
         }
-
-        if (!stristr($fileUrl, 'https://service')) {
-            $ch = curl_init($fileUrl);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_BINARYTRANSFER,1);
-            $file = curl_exec ($ch);
-        } else {
-            $file = httpRequest($fileUrl);
-        }
-
-        if (preg_match('#__HALT_COMPILER()#i', $file)) {
-            return ['code' => 0, 'msg' => '下载包损坏，请联系官方客服！'];
-        }
-
+        $ch = curl_init($fileUrl);            
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_BINARYTRANSFER,1);
+        $file = curl_exec ($ch);
         curl_close ($ch);                                                            
         $fp = fopen($saveDir,'w');
         fwrite($fp, $file);

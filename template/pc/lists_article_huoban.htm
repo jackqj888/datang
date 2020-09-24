@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+<title>{$eyou.field.seo_title}</title>
+<meta name="description" content="{$eyou.field.seo_description}" />
+<meta name="keywords" content="{$eyou.field.seo_keywords}" />
+<link href="{eyou:global name='web_cmspath' /}/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link href="{eyou:global name='web_templets_pc' /}/skin/css/common.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_pc' /}/skin/css/style.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_pc' /}/skin/css/temp.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/1.9.1jquery.min.js"></script>
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/ajax.js"></script>
+</head>
+<body>
+<!--Header:Start--> 
+
+<!--头部开始--> 
+<!--header--> 
+{eyou:include file="header.htm" /}
+<!--header--> 
+<!--Header:End--> 
+<!--Content:Start-->
+<div class="topadcs"> <a style='background:url({eyou:notempty name='$eyou.field.banner' /}{$eyou.field.banner} {eyou:else /}{$eyou.field.typeid|gettoptype=###,'banner'}{/eyou:notempty}) no-repeat center top;' ></a> </div>
+<div class="cpMain">
+  <div class="container">
+    {eyou:include file="left.htm" /}
+    <!--nlist-->
+    <div class="cpright">
+      <div class="rtop">
+        <h5> <a>{$eyou.field.typename}</a></h5>
+        <span> <span><em>您的位置：</em> {eyou:position style="crumb" /}</span> </span> </div>
+      <div class="agent_con">
+       {eyou:list titlelen='40' pagesize='9' mod='3'}
+        <dl class="dl_2">
+          <dt><a> <img src="{$field.litpic}" alt="{$field.title}" /></a></dt>
+          <dd><a>{$field.title}</a></dd>
+        </dl>
+        {eyou:eq name='$mod' value='0'}<div class="clear"></div>{/eyou:eq}
+        {/eyou:list}
+        <div class="clear"> </div>
+        <div class="fenye">
+          <div class='pagingNav'>
+            <p></p>
+            <div class="uls fr">{eyou:pagelist listitem='index,pre,pageno,next,end' listsize='2' /}</div>
+          </div>
+          <!--OranPager:end--> 
+        </div>
+        {eyou:include file="boot.htm" /}
+      </div>
+      <div class="clear"> </div>
+    </div>
+    <div class="clear"> </div>
+  </div>
+</div>
+<!--Content:End--> 
+<!--Footer:Start--> 
+{eyou:include file="footer.htm" /}
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/im.js"></script> 
+<!--footer--> 
+<!--Footer:End-->
+{eyou:ui open='off' /}
+</body>
+</html>

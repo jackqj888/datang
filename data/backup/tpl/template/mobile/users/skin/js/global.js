@@ -8,20 +8,12 @@
  */
 var layer_GetUploadify;
 // PC端上传头像
-function GetUploadify(num,elementid,path,callback,url,title)
+function GetUploadify(num,elementid,path,callback,url)
 {
     if (layer_GetUploadify){
         layer.close(layer_GetUploadify);
     }
     if (num > 0) {
-        if (!title) {
-            if (callback.indexOf('head_pic_call_back') > -1) {
-                title = '上传头像';
-            } else {
-                title = '选择上传';
-            }
-        }
-
         if (!url) {
             url = GetUploadify_url;
         }
@@ -35,7 +27,7 @@ function GetUploadify(num,elementid,path,callback,url,title)
         var upurl = url+'num='+num+'&input='+elementid+'&path='+path+'&func='+callback;
         layer_GetUploadify = layer.open({
             type: 2,
-            title: title,
+            title: '上传头像',
             shadeClose: false,
             shade: 0.3,
             maxmin: true, //开启最大化最小化按钮

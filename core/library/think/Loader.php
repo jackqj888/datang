@@ -465,6 +465,7 @@ class Loader
     public static function controller($name, $layer = 'controller', $appendSuffix = false, $empty = '')
     {
         list($module, $class) = self::getModuleAndClass($name, $layer, $appendSuffix);
+
         if (class_exists($class)) {
             return App::invokeClass($class);
         }

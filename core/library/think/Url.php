@@ -18,7 +18,7 @@ class Url
      * @param string    $seo_pseudo_format URL格式
      * @return string
      */
-    public static function build($url = '', $vars = '', $suffix = true, $domain = false, $seo_pseudo = null, $seo_pseudo_format = null, $seo_inlet = null)
+    public static function build($url = '', $vars = '', $suffix = true, $domain = false, $seo_pseudo = null, $seo_pseudo_format = null)
     {
         static $request = null;
         if (null == $request) {
@@ -32,7 +32,7 @@ class Url
 
         /*自动识别系统环境隐藏入口文件 by 小虎哥*/
         self::root($request->baseFile().'/');
-        null === $seo_inlet && $seo_inlet = config('ey_config.seo_inlet');
+        $seo_inlet = config('ey_config.seo_inlet');
         if (1 == $seo_inlet) {
             if ('admin' != $module) { // 排除后台分组模块
                 self::root(ROOT_DIR.'/');
@@ -48,9 +48,7 @@ class Url
             // aaa=1&bbb=2 转换成数组
             parse_str($vars, $vars);
         }
-
-        $is_language = is_language();
-        if ($is_language) {
+        if (is_language()) {
             if (empty($vars['lang'])) {
                 $lang = $request->param('lang/s', '');
                 if ('admin' == $module) {
@@ -193,10 +191,9 @@ class Url
                 $seo_pseudo_format = $ey_config['seo_rewrite_format'];
             }
         }
-        if ((1 == $seo_pseudo && 1 == $seo_pseudo_format) || 2 == $seo_pseudo) {
+        if (1 == $seo_pseudo && 1 == $seo_pseudo_format) {
             /*默认兼容模式，支持不开启pathinfo模式*/
-            $urlinfo = $mca;
-            // $urlinfo = explode('/', $url);
+            $urlinfo = explode('/', $url);
             $len = count($urlinfo);
             $m = !empty($urlinfo[$len - 3]) ? $urlinfo[$len - 3] : $request->module();
             $c = !empty($urlinfo[$len - 2]) ? $urlinfo[$len - 2] : $request->controller();
@@ -207,9 +204,6 @@ class Url
             $url = $domain . rtrim(self::$root ?: $request->root(), '/');
             if (1 == $seo_inlet && 'admin' != $m) {
                 $url .= "/";
-                if (2 == $seo_pseudo || stristr($request->url(), '/index.php')) {
-                    $url .= "index.php";
-                }
             }
             $url .= "?m={$m}&c={$c}&a={$a}";
             /*URL全局参数（比如：可视化uiset、多模板v、多语言lang）*/
@@ -231,15 +225,6 @@ class Url
                     if (3 == count($mca) && 'admin' != $mca[0]) { // 排除带有admin分组模块
                         unset($vars['lang']);
                     }
-                } else {
-                    if (2 == count($mca) || 'admin' == $mca[0]) { // 排除带有admin分组模块
-                        !isset($vars['lang']) && $vars['lang'] = get_current_lang();
-                    }
-                }
-            } else {
-                /*URL全局参数（单语言不携带lang参数）*/
-                if (!$is_language) {
-                    unset($vars['lang']);
                 }
             }
             /*--end*/
@@ -438,7 +423,7 @@ class Url
                 $suffix = substr($suffix, 0, $pos);
             }
         }
-        return (empty($suffix) || 0 === strpos($suffix, '.') || '/' == $suffix) ? $suffix : '.' . $suffix;
+        return (empty($suffix) || 0 === strpos($suffix, '.')) ? $suffix : '.' . $suffix;
     }
 
     // 匹配路由地址
@@ -449,20 +434,6 @@ class Url
             if (empty($pattern)) {
                 return [rtrim($url, '$'), $domain, $suffix];
             }
-
-            /*同个模块、控制器、操作名对应多个路由规则，进行优先级别匹配 by 许宇资*/
-            $unequal = 0;
-            foreach ($pattern as $key => $val){
-                if (!isset($vars[$key])){
-                    $unequal = 1;
-                    break;
-                }
-            }
-            if ($unequal){
-                continue;
-            }
-            /*end*/
-            
             $type = Config::get('url_common_param');
             foreach ($pattern as $key => $val) {
                 if (isset($vars[$key])) {

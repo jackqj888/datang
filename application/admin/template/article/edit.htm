@@ -9,9 +9,9 @@
 <div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none; visibility: visible; left: 95px; top: 573px;"></div>
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
-<div class="page" style="min-width:auto;box-shadow:none;">
+<div class="page" style="min-width:auto;">
     <div class="fixed-bar">
-        <div class="item-title"><a class="back" href="javascript:history.back();" title="返回列表"><i class="fa fa-chevron-left"></i></a>
+        <div class="item-title"><a class="back" href="javascript:history.back();" title="返回列表"><i class="fa fa-arrow-circle-o-left"></i></a>
             <div class="subject">
                 <h3>编辑文章</h3>
                 <h5></h5>
@@ -91,7 +91,7 @@
                                  title="点击前方预览图可查看大图，点击按钮选择文件并提交表单后上传生效">
                         </span>
                     </div>
-                    <input type="text" id="litpic_remote" name="litpic_remote" value="{$field.litpic_remote|default=''}" placeholder="http://" class="input-txt" onKeyup="keyupRemote(this, 'litpic');" {neq name="$field.is_remote" value="1"}style="display: none;"{/neq}>
+                    <input type="text" id="litpic_remote" name="litpic_remote" value="{$field.litpic_remote|default=''}" placeholder="http://" class="input-txt" {neq name="$field.is_remote" value="1"}style="display: none;"{/neq}>
                     &nbsp;
                     <label><input type="checkbox" name="is_remote" id="is_remote" value="1" {eq name="$field.is_remote" value="1"}checked="checked"{/eq} onClick="clickRemote(this, 'litpic');">远程图片</label>
                     <span class="err"></span>
@@ -99,8 +99,7 @@
                     &nbsp;<a href="javascript:void(0);" onclick="system_thumb();" class="ncap-btn ncap-btn-green">缩略图配置</a>
                 </dd>
             </dl>
-
-            {include file="archives/get_field_addonextitem" /}
+            {include file="field/addonextitem" /}
         </div>
         <!-- 常规信息 -->
         <!-- SEO参数 -->
@@ -109,18 +108,11 @@
                 <dt class="tit">
                     <label>TAG标签</label>
                 </dt>
-                <dd class="opt opt1591870121">
+                <dd class="opt">          
                     <input type="text" value="{$field.tags}" name="tags" id="tags" class="input-txt">
-                    <script type="text/javascript">
-                        $(function() { $('#tags').tagsInput({width: '450px', height: 'auto'}); });
-                    </script>
-                    <a href="javascript:void(0);" onclick="TagListSelect1591784354(this);" class="ncap-btn ncap-btn-green">快速选择</a>
+                    &nbsp;<a href="javascript:void(0);" onclick="tags_list(this);" class="ncap-btn ncap-btn-green">管理</a>
                     <span class="err"></span>
-                    <p class="notic">输入标签结束后可用回车或空格分开</p>
-                    <input type="hidden" id="TagOldSelectID" value="{$field.tag_id}">
-                    <input type="hidden" id="NewTagOldSelectID" value="{$field.tag_id}">
-                    <input type="hidden" id="TagOldSelectTag" value="{$field.tags}">
-                    <input type="hidden" name="tags_new" id="NewTagOldSelectTag" value="{$field.tags}">
+                    <p class="notic">多个标签用英文逗号（,）分开，单个标签小于12字节</p>
                 </dd>
             </dl>
             <dl class="row">
@@ -195,7 +187,7 @@
                     <label for="articleForm">发布时间</label>
                 </dt>
                 <dd class="opt">
-                    <input type="text" class="input-txt" id="add_time" name="add_time" value="{$field.add_time|date='Y-m-d H:i:s',###}" autocomplete="off">        
+                    <input type="text" class="input-txt" id="add_time" name="add_time" value="{$field.add_time|date='Y-m-d H:i:s',###}">        
                     <span class="add-on input-group-addon">
                         <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
                     </span> 
@@ -214,16 +206,6 @@
                     </select>
                     <input type="hidden" name="type_tempview" value="{$tempview}" />
                     <span class="err"></span>
-                </dd>
-            </dl>
-            <dl class="row" {neq name='$seo_pseudo' value='2'}style="display: none;"{/neq}>
-                <dt class="tit">
-                    <label>自定义文件名</label>
-                </dt>
-                <dd class="opt">
-                    <input type="text" value="{$field.htmlfilename}" name="htmlfilename" id="htmlfilename" style="width: 120px;" onkeyup="this.value=this.value.replace(/[^\w\-]/g,'');" onpaste="this.value=this.value.replace(/[^\w\-]/g,'');">.html
-                    <span class="err"></span>
-                    <p class="notic">自定义文件名可由字母/数字/'_'/'-'等符号组成</p>
                 </dd>
             </dl>
 <!--             <dl class="row">
@@ -280,7 +262,6 @@
             } else if ({$channeltype} == current_channel) {
                 layer.closeAll();
             }
-            GetAddonextitem($(this).val(), {$channeltype}, {$aid}, true);
         });
     });
 
@@ -292,7 +273,7 @@
             function(val, index){
                 var admin_id = '{$Think.session.admin_info.admin_id}';
                 $.ajax({
-                    url: "{:url('Admin/ajax_setfield', ['_ajax'=>1])}",
+                    url: "{:url('Admin/ajax_setfield')}",
                     type: 'POST',
                     dataType: 'JSON',
                     data: {id_name:'admin_id',id_value:admin_id,field:'pen_name',value:val},
@@ -306,7 +287,7 @@
                         }
                     },
                     error: function(e){
-                        showErrorMsg(ey_unknown_error);
+                        showErrorMsg('网络失败，请刷新页面后重试');
                         return false;
                     }
                 });
@@ -317,17 +298,18 @@
 
     function tags_list(obj)
     {
-        layer.closeAll();
         var url = "{:url('Tags/index')}";
         //iframe窗
-        var iframes = layer.open({
+        layer.open({
             type: 2,
             title: 'TAG标签管理',
             fixed: true, //不固定
             shadeClose: false,
+            shade: 0.3,
+            maxmin: true, //开启最大化最小化按钮
+            area: ['80%', '80%'],
             content: url
         });
-        layer.full(iframes);
     }
 
     function system_thumb()
@@ -363,10 +345,9 @@
 
     function img_call_back(fileurl_tmp)
     {
-        $("#litpic_local").val(fileurl_tmp);
-        $("#img_a").attr('href', fileurl_tmp);
-        $("#img_i").attr('onmouseover', "layer_tips=layer.tips('<img src="+fileurl_tmp+" class=\\'layer_tips_img\\'>',this,{tips: [1, '#fff']});");
-        $("input[name=is_litpic]").attr('checked', true); // 自动勾选属性[图片]
+      $("#litpic_local").val(fileurl_tmp);
+      $("#img_a").attr('href', fileurl_tmp);
+      $("#img_i").attr('onmouseover', "layer_tips=layer.tips('<img src="+fileurl_tmp+" class=\\'layer_tips_img\\'>',this,{tips: [1, '#fff']});");
     }
 </script>
 

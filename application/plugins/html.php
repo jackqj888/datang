@@ -14,8 +14,7 @@
 
 $html_cache_arr = array();
 // 全局变量数组
-$global = config('tpcache');
-empty($global) && $global = tpCache('global');
+$global = tpCache('global');
 // 系统模式
 $web_cmsmode = isset($global['web_cmsmode']) ? $global['web_cmsmode'] : 2;
 /*页面缓存有效期*/
@@ -32,12 +31,9 @@ $html_cache_arr = array();
 /*--end*/
 
 /*引入全部插件的页面缓存规则*/
-$weappRow = \think\Db::name('weapp')->field('code')->where([
-    'status'    => 1,
-])->cache(true, null, "weapp")->select();
-foreach ($weappRow as $key => $val) {
-    $file = WEAPP_DIR_NAME.DS.$val['code'].DS.'html.php';
-    if (file_exists($file)) {
+$html_list = glob(WEAPP_DIR_NAME.DS.'*'.DS.'html.php');
+if (!empty($html_list)) {
+    foreach ($html_list as $key => $file) {
         $html_value = include_once $file;
         if (empty($html_value)) {
             continue;

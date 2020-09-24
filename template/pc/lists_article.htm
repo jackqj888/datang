@@ -1,33 +1,60 @@
-<!doctype html>
-<html>
-<head>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 <title>{$eyou.field.seo_title}</title>
 <meta name="description" content="{$eyou.field.seo_description}" />
 <meta name="keywords" content="{$eyou.field.seo_keywords}" />
-<meta name="generator" content="eyoucms 1.0.0" data-variable="{eyou:global name='web_eyoucms' /}" />
-<link href="{eyou:version file='/favicon.ico' /}" rel="shortcut icon" type="image/x-icon" />
-<link rel="stylesheet" type="text/css" href="{eyou:global name='web_templets_pc' /}/skin/css/css.css">
-<link rel="stylesheet" href="{eyou:global name='web_templets_pc' /}/skin/css/red.css" type="text/css"  title="styles3" media="screen" />
-<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/jquery1.42.min.js"></script>
-<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/jquery.superslide.2.1.1.js"></script>
-<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/index.js"></script>
+<link href="{eyou:global name='web_cmspath' /}/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link href="{eyou:global name='web_templets_pc' /}/skin/css/common.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_pc' /}/skin/css/style.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_pc' /}/skin/css/temp.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/1.9.1jquery.min.js">
+</script><script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/ajax.js"></script>
 </head>
 <body>
-{eyou:include file="/template/pc/header.htm" /}
-<div class="n-box"> {eyou:include file="/template/pc/left.htm" /}
-  <div class="n-r">
-    <div class="n-zb">当前位置：{eyou:position style="crumb" /}</div>
-    <div class="n-lb">
-      <ul>
-        {eyou:list pagesize='15' titlelen='40'}
-         <li> <span>{$field.add_time|MyDate='Y-m-d',###}</span><a href="{$field.arcurl}" title="{$field.title}">{$field.title}</a> </li>
-        {/eyou:list}
-      </ul>
+<!--Header:Start--> 
+
+<!--头部开始--> 
+<!--header--> 
+{eyou:include file="header.htm" /}
+<!--header--> 
+<!--Header:End--> 
+<!--Content:Start-->
+<div class="topadcs"> <a style='background:url({eyou:notempty name='$eyou.field.banner' /}{$eyou.field.banner} {eyou:else /}{$eyou.field.typeid|gettoptype=###,'banner'}{/eyou:notempty}) no-repeat center top;' ></a> </div>
+<div class="cpMain">
+  <div class="container">
+    {eyou:include file="left.htm" /}
+    <div class="cpright">
+      <div class="rtop">
+        <h5> <a>{$eyou.field.typename}</a></h5>
+        <span><em>您的位置：</em> {eyou:position style="crumb" /}</span> </div>
+      <div class="newsList">
+        <ul>
+          {eyou:list titlelen='40' pagesize='20'}
+          <li><a href="{$field.arcurl}" title="{$field.title}">{$field.title}</a><span class="last">[
+            {$field.add_time|MyDate='Y-m-d',###}
+            ]</span></li>
+          {/eyou:list}
+        </ul>
+        <div class="clear"> </div>
+        <div class='pagingNav'>
+          <p></p>
+          <div class="uls fr">{eyou:pagelist listitem='index,pre,pageno,next,end' listsize='2' /}</div>
+        </div>
+      </div>
     </div>
-    <div class="pageListNav"> {eyou:pagelist listitem="info,pre,next,pageno" listsize="2"/} </div>
+    <div class="clear"> </div>
   </div>
 </div>
-{eyou:include file="/template/pc/footer.htm" /}
+<!--Content:End--> 
+<!--Footer:Start--> 
+{eyou:include file="footer.htm" /}
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/im.js"></script> 
+<!--footer--> 
+<!--Footer:End-->
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/jquery-3.3.1.min.js"></script>
+{eyou:ui open='off' /}
 </body>
 </html>

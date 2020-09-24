@@ -63,7 +63,7 @@ function ShopDelAddress(addr_id){
         layer_loading('正在处理');
         $.ajax({
             url: url,
-            data: {addr_id:addr_id,_ajax:1},
+            data: {addr_id:addr_id},
             type:'post',
             dataType:'json',
             success:function(res){
@@ -77,7 +77,7 @@ function ShopDelAddress(addr_id){
             },
             error: function () {
                 layer.closeAll();
-                layer.alert('未知错误，无法继续！', {icon: 2, title:false});
+                layer.alert('网络失败，请刷新页面后重试', {icon: 2, title:false});
             }
         });
     }, function (index) {
@@ -103,7 +103,7 @@ function SetDefault(obj, addr_id){
         layer_loading('正在处理');
         $.ajax({
             url: url,
-            data: {addr_id:addr_id,_ajax:1},
+            data: {addr_id:addr_id},
             type:'post',
             dataType:'json',
             success:function(res){
@@ -128,7 +128,7 @@ function SetDefault(obj, addr_id){
             },
             error: function () {
                 layer.closeAll();
-                layer.alert('未知错误，无法继续！', {icon: 2, title:false});
+                layer.alert('网络失败，请刷新页面后重试', {icon: 2, title:false});
             }
         });
     }, function (index) {

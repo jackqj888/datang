@@ -305,25 +305,10 @@
             dataType:'json',
             success:function(res){
                 if (1 == res.data.status) {
-                    var IsSendEmail = 1;
-                    if (res.data.email) IsSendEmail = SendEmail(res.data.email);
-                    if (IsSendEmail) window.location.href = res.url;
+                    window.location.href = res.url;
                 }
             }
         });
-    }
-
-    function SendEmail(result) {
-        var ResultID = 1;
-        if (result) {
-            $.ajax({
-                url: result.url,
-                data: result.data,
-                type:'post',
-                dataType:'json'
-            });
-        }
-        return ResultID;
     }
 </script>
 {eyou:include file="users/users_footer.htm" /}

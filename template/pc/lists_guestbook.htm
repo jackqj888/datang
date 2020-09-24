@@ -1,64 +1,77 @@
-<!doctype html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 <title>{$eyou.field.seo_title}</title>
 <meta name="description" content="{$eyou.field.seo_description}" />
 <meta name="keywords" content="{$eyou.field.seo_keywords}" />
-<meta name="generator" content="eyoucms 1.0.0" data-variable="{eyou:global name='web_eyoucms' /}" />
-<link href="{eyou:version file='/favicon.ico' /}" rel="shortcut icon" type="image/x-icon" />
-<link rel="stylesheet" type="text/css" href="{eyou:global name='web_templets_pc' /}/skin/css/css.css">
-<link rel="stylesheet" href="{eyou:global name='web_templets_pc' /}/skin/css/red.css" type="text/css"  title="styles3" media="screen" />
-<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/jquery1.42.min.js"></script>
-<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/jquery.superslide.2.1.1.js"></script>
-<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/index.js"></script>
+<link href="{eyou:global name='web_cmspath' /}/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link href="{eyou:global name='web_templets_pc' /}/skin/css/common.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_pc' /}/skin/css/style.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_pc' /}/skin/css/temp.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/1.9.1jquery.min.js"></script>
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/ajax.js"></script>
+
 </head>
 <body>
-{eyou:include file="/template/pc/header.htm" /}
-<div class="n-box"> {eyou:include file="/template/pc/left.htm" /}
-  <div class="n-r">
-    <div class="n-zb">当前位置：{eyou:position style="crumb" /}</div>
-    <div class="lyb-box">
-      <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" style="font-size:12px">
-        {eyou:guestbookform type='default'}
-        <form class="ui-from" method="POST" enctype="multipart/form-data" action="{$field.action}" onsubmit="return checkForm();" >
-          <tr>
-            <td width="275" height="30" align="right">{$field.itemname_14}：</td>
-            <td width="574"><input name="{$field.attr_14}" type="text" class="oinput2" id="attr_14" size="20" />
-              *</td>
-          </tr>
-          <tr>
-            <td height="30" align="right">{$field.itemname_15}：</td>
-            <td><input name="{$field.attr_15}" type="text" id="attr_15" class="oinput2" size="20" />
-              *</td>
-          </tr>
-          <tr>
-            <td height="30" align="right">{$field.itemname_16}：</td>
-            <td><input name="{$field.attr_16}" type="text" class="oinput2" size="20" /></td>
-          </tr>
-          <tr>
-            <td height="30" align="right">{$field.itemname_17}：</td>
-            <td><textarea name="{$field.attr_17}" cols="50" rows="6" class="textarea1"></textarea></td>
-          </tr>
-          <tr>
-            <td height="30" align="left">&nbsp;</td>
-            <td height="30"><input name="submit" type="submit" value="提交" style=" font-family:微软雅黑; color:#fff; font-weight:bold; background:#e01515; width:57px; height:25px; border:none; cursor:pointer; display:block; float:left;margin-top:4px;" />
-              <input name="reset" type="reset" value="重置" style=" font-family:微软雅黑; color:#fff; font-weight:bold; background:#929292; width:57px; height:25px; border:none; cursor:pointer; display:block; float:left;margin-left:15px;margin-top:4px;" /></td>
-          </tr>
-          
-        {$field.hidden}
-         </form>
-         <script type="text/javascript">
+<!--Header:Start--> 
+
+<!--头部开始--> 
+<!--header-->
+{eyou:include file="header.htm" /}
+<!--header--> 
+<!--Header:End--> 
+<!--Content:Start-->
+<div class="topadcs"> <a style='background:url({eyou:notempty name='$eyou.field.banner' /}{$eyou.field.banner} {eyou:else /}{$eyou.field.typeid|gettoptype=###,'banner'}{/eyou:notempty}) no-repeat center top;' ></a> </div>
+<div class="cpMain">
+  <div class="container">
+    {eyou:include file="left.htm" /}
+    <div class="cpright">
+      <div class="rtop">
+        <h5> <a>{$eyou.field.typename}</a> </h5>
+        <span> <span><em>您的位置：</em>{eyou:position style="crumb" /}</span> </span> </div>
+      <div class="agent_con">
+        <div class="help_tab">
+          <div class="tjwtBox">
+            <h4> 请留下您的问题,我们将尽快与您联系！</h4>
+            {eyou:guestbookform type='default'}
+            <form method="POST" class="guest-form" enctype="multipart/form-data" action="{$field.action}" onsubmit="return checkForm();">
+              <ul class="m_form">
+                <li class="clearfix">
+                  <label> {$field.itemname_1}：</label>
+                  <input name="{$field.attr_1}" type="text" id="attr_1" class="iptTxt" />
+                </li>
+                <li class="clearfix">
+                  <label> {$field.itemname_2}：</label>
+                  <input name="{$field.attr_2}" type="text" id="attr_2" class="iptTxt" />
+                </li>
+                <li class="clearfix">
+                  <label> {$field.itemname_3}：</label>
+                  <input name="{$field.attr_3}" type="text" id="attr_3" class="iptTxt" />
+                </li>
+                <li class="areLi clearfix">
+                  <label> {$field.itemname_4}：</label>
+                  <textarea name="{$field.attr_4}" id="attr_4" class="txtAre" o=""></textarea>
+                </li>
+                <li class="btnLi">
+                  <input type="submit" name="submit"  value="提 交" class="btnSubmit" />
+                  <input type="reset" name="reset" class="btnReset" value="重 填" />
+                </li>
+              </ul>
+            {$field.hidden}
+          </form>
+          <script type="text/javascript">
             function checkForm()
             {
-              if(document.getElementById('attr_14').value.length == 0)
+              if(document.getElementById('attr_1').value.length == 0)
               {
-                alert('请输入{$field.itemname_14}');
+                alert('请填写{$field.itemname_1}');
                 return false;
               }
-              if(document.getElementById('attr_15').value.length == 0)
+              if(document.getElementById('attr_2').value.length == 0)
               {
-                alert('请输入{$field.itemname_15}');
+                alert('请填写{$field.itemname_2}');
                 return false;
               }
               
@@ -66,10 +79,17 @@
             }
           </script>
         {/eyou:guestbookform}
-      </table>
+          </div>
+        </div>
+      </div>
     </div>
+    <div class="clear"> </div>
   </div>
 </div>
-{eyou:include file="/template/pc/footer.htm" /}
+<!--Content:End--> 
+{eyou:include file="footer.htm" /}
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/im.js"></script> 
+<!--footer--> 
+{eyou:ui open='off' /}
 </body>
 </html>

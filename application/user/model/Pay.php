@@ -32,61 +32,17 @@ class Pay extends Model
         $this->home_lang = get_home_lang();
     }
 
-    /**
-     * 虚拟网盘支付后自动发货,收货
-     * @param array $where =[ 'users_id'=>'','lang'=> $this->home_lang,'order_id'=> ''] 用户id  语言  订单id
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
-     */
-    public function afterVirtualProductPay($where = [])
-    {
-        //判断是否为需要自动发货的虚拟商品  archives表prom_type=2,3
-        $details_data = Db::name('shop_order_details')->where($where)->select();
-        $result       = true;//多商品合并的订单，需要先判断是否都是需要自动发货的
-        foreach ($details_data as &$key) {
-            if ($key['prom_type'] == 0 || $key['prom_type'] == 1) {
-                $result = false;
-                break;    //只要存在一个需要手动发货的就结束循环，并且不进入自动发货
-            }
-        }
-        //直接发货
-        if ($result){
-            $UpdateData = [
-                'order_status' => 2,
-                'express_time' => getTime(),
-                'update_time'  => getTime(),
-                //'virtual_delivery' => $virtual_delivery,  //注释,每次取出的时候再拼接
-            ];
-
-            $updateOrder = Db::name('shop_order')->where($where)->update($UpdateData);
-            if ($updateOrder) {
-                AddOrderAction($where['order_id'], 0, session('admin_id'), 2, 1, 1, '虚拟商品自动发货成功！', '发货成功');
-                //自动确认收货
-                $confirmOrder = Db::name('shop_order')->where($where)->update([
-                    'order_status' => 3,
-                    'confirm_time' => getTime(),
-                    'update_time'  => getTime(),
-                ]);
-                if ($confirmOrder) {
-                    AddOrderAction($where['order_id'], 0, session('admin_id'), 3, 1, 1, '虚拟商品自动收货成功！', '确认订单已收货');
-                }
-            }
-        }
-    }
-
     // 处理充值订单，超过指定时间修改为已取消订单，针对未付款订单
-    public function UpdateOrderData($users_id)
-    {
+    public function UpdateOrderData($users_id){
         $time  = getTime() - Config::get('global.get_order_validity');
         $where = array(
-            'users_id' => $users_id,
+            'users_id'  => $users_id,
             'status'   => 1,
-            'add_time' => array('<', $time),
+            'add_time' => array('<',$time),
         );
-        $data  = [
-            'status'      => 4, // 订单取消
-            'update_time' => getTime(),
+        $data = [
+            'status'        => 4, // 订单取消
+            'update_time'   => getTime(),
         ];
         Db::name('users_money')->where($where)->update($data);
     }
@@ -98,28 +54,15 @@ class Pay extends Model
      *   @params number $total_fee : 订单金额，单位分
      *   return string  $ReturnData : 微信支付所需参数数组
      */
-    public function getWechatPay($openid, $out_trade_no, $total_fee, $body="支付", $attach="微信端H5支付", $is_applets = 0)
+    public function getWechatPay($openid,$out_trade_no,$total_fee,$body="支付",$attach="微信端H5支付")
     {
         // 获取微信配置信息
-        $where = [
-            'pay_id' => 1,
-            'pay_mark' => 'wechat'
-        ];
-        $pay_wechat_config = Db::name('pay_api_config')->where($where)->getField('pay_info');
+        $pay_wechat_config = getUsersConfigData('pay.pay_wechat_config');
         if (empty($pay_wechat_config)) {
-            $pay_wechat_config = getUsersConfigData('pay.pay_wechat_config');
-            if (empty($pay_wechat_config)) return false;
+            return false;
         }
         $wechat = unserialize($pay_wechat_config);
         $this->key = $wechat['key'];
-
-        if (1 === $is_applets) {
-            // 小程序配置
-            $MiniproValue = Db::name('weapp_minipro0002')->where('type', 'minipro')->getField('value');
-            if (empty($MiniproValue)) return false;
-            $MiniproValue = !empty($MiniproValue) ? json_decode($MiniproValue, true) : [];
-            $wechat['appid'] = $MiniproValue['appId'];
-        }
 
         //支付数据
         $data['body']             = $body;
@@ -133,7 +76,7 @@ class Pay extends Model
         $data['trade_type']       = "JSAPI";
         $data['notify_url']       = url('users/Pay/mobile_pay_notify');
         $data['openid']           = $openid;
- 
+
         $sign = $this->getParam($data);
         $dataXML = "<xml>
            <appid>".$data['appid']."</appid>
@@ -153,8 +96,7 @@ class Pay extends Model
         $url    = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
         $result =  $this->https_post($url,$dataXML);
         $ret    =  $this->xmlToArray($result);
-
-        if ($ret['return_code'] == 'SUCCESS' && $ret['return_msg'] == 'OK') {
+        if($ret['return_code'] == 'SUCCESS' && $ret['return_msg'] == 'OK') {
             $timeStamp  = getTime();
             $ReturnData = [
                 'appId'     => $wechat['appid'],
@@ -166,11 +108,10 @@ class Pay extends Model
             $ReturnSign = $this->getParam($ReturnData);
             $ReturnData['paySign'] = $ReturnSign;
             return $ReturnData;
-        } else if ($ret['return_code'] == 'FAIL') {
-            return $ret;
-        } else {
-            return $ret;
+        }else{
+            return false;
         }
+
     }
 
     /*
@@ -183,14 +124,9 @@ class Pay extends Model
     public function getMobilePay($out_trade_no,$total_fee,$body="支付",$attach="手机浏览器微信H5支付")
     {
         // 获取微信配置信息
-        $where = [
-            'pay_id' => 1,
-            'pay_mark' => 'wechat'
-        ];
-        $pay_wechat_config = Db::name('pay_api_config')->where($where)->getField('pay_info');
+        $pay_wechat_config = getUsersConfigData('pay.pay_wechat_config');
         if (empty($pay_wechat_config)) {
-            $pay_wechat_config = getUsersConfigData('pay.pay_wechat_config');
-            if (empty($pay_wechat_config)) return false;
+            return false;
         }
         $wechat = unserialize($pay_wechat_config);
         $this->key = $wechat['key'];
@@ -247,14 +183,9 @@ class Pay extends Model
     public function payForQrcode($out_trade_no,$total_fee,$body="支付",$attach="微信扫码支付")
     {
         // 获取微信配置信息
-        $where = [
-            'pay_id' => 1,
-            'pay_mark' => 'wechat'
-        ];
-        $pay_wechat_config = Db::name('pay_api_config')->where($where)->getField('pay_info');
+        $pay_wechat_config = getUsersConfigData('pay.pay_wechat_config');
         if (empty($pay_wechat_config)) {
-            $pay_wechat_config = getUsersConfigData('pay.pay_wechat_config');
-            if (empty($pay_wechat_config)) return false;
+            return false;
         }
         $wechat = unserialize($pay_wechat_config);
         $this->key = $wechat['key'];
@@ -298,18 +229,17 @@ class Pay extends Model
     }
 
     // 获取客户端IP
-    private function get_client_ip()
-    {
-        if (getenv('HTTP_CLIENT_IP') && strcasecmp(getenv('HTTP_CLIENT_IP'), 'unknown')) {
+    private function get_client_ip() {
+        if(getenv('HTTP_CLIENT_IP') && strcasecmp(getenv('HTTP_CLIENT_IP'), 'unknown')) {
             $ip = getenv('HTTP_CLIENT_IP');
-        } elseif (getenv('HTTP_X_FORWARDED_FOR') && strcasecmp(getenv('HTTP_X_FORWARDED_FOR'), 'unknown')) {
+        } elseif(getenv('HTTP_X_FORWARDED_FOR') && strcasecmp(getenv('HTTP_X_FORWARDED_FOR'), 'unknown')) {
             $ip = getenv('HTTP_X_FORWARDED_FOR');
-        } elseif (getenv('REMOTE_ADDR') && strcasecmp(getenv('REMOTE_ADDR'), 'unknown')) {
+        } elseif(getenv('REMOTE_ADDR') && strcasecmp(getenv('REMOTE_ADDR'), 'unknown')) {
             $ip = getenv('REMOTE_ADDR');
-        } elseif (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] && strcasecmp($_SERVER['REMOTE_ADDR'], 'unknown')) {
+        } elseif(isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] && strcasecmp($_SERVER['REMOTE_ADDR'], 'unknown')) {
             $ip = $_SERVER['REMOTE_ADDR'];
         }
-        return preg_match('/[\d\.]{7,15}/', $ip, $matches) ? $matches [0] : '';
+        return preg_match ( '/[\d\.]{7,15}/', $ip, $matches ) ? $matches [0] : '';
     }
 
     //对参数排序，生成MD5加密签名
@@ -319,13 +249,14 @@ class Pay extends Model
         ksort($paramArray);
         $i = 0;
 
-        foreach ($paramArray as $key => $value) {
-            if ($key == 'Signature') {
+        foreach ($paramArray as $key => $value)
+        {
+            if ($key == 'Signature'){
                 continue;
             }
-            if ($i == 0) {
+            if ($i == 0){
                 $paramStr .= '';
-            } else {
+            }else{
                 $paramStr .= '&';
             }
             $paramStr .= $key . '=' . ($isencode ? urlencode($value) : $value);
@@ -376,37 +307,23 @@ class Pay extends Model
      *   @params string $data   : 订单表数据，必须传入
      *   return string $alipay_url : 支付宝支付链接
      */
-    public function getNewAliPayPayUrl($data)
-    {
+    public function getNewAliPayPayUrl($data){
         // 引入SDK文件
         vendor('alipay.pagepay.service.AlipayTradeService');
         vendor('alipay.pagepay.buildermodel.AlipayTradePagePayContentBuilder');
         // 获取支付宝配置信息
-        $where = [
-            'pay_id' => 2,
-            'pay_mark' => 'alipay'
-        ];
-        $pay_alipay_config = Db::name('pay_api_config')->where($where)->getField('pay_info');
+        $pay_alipay_config = getUsersConfigData('pay.pay_alipay_config');
         if (empty($pay_alipay_config)) {
-            $pay_alipay_config = getUsersConfigData('pay.pay_alipay_config');
-            if (empty($pay_alipay_config)) return false;
+            return false;
         }
         $alipay = unserialize($pay_alipay_config);
-        
-        $type = $data['transaction_type'];
+        $transaction_type = $data['transaction_type'];
         // 参数拼装
         $config['app_id'] = $alipay['app_id'];
         $config['merchant_private_key'] = $alipay['merchant_private_key'];
-        $config['transaction_type'] = $type;
-
-        // 异步地址
-        $notify_url = request()->domain().'/index.php?transaction_type='.$type.'&is_ailpay_notify=1';
-        $config['notify_url'] = $notify_url;
-
-        // 同步地址
-        $return_url = url('user/Pay/alipay_return', ['transaction_type'=>$type,'is_ailpay_notify'=>2], true, true);
-        $config['return_url'] = $return_url;
-
+        $config['transaction_type'] = $transaction_type;
+        $config['notify_url'] = url('user/Pay/alipay_return', ['transaction_type'=>$transaction_type], true, true);
+        $config['return_url'] = url('user/Pay/alipay_return', ['transaction_type'=>$transaction_type], true, true);
         $config['charset']    = 'UTF-8';
         $config['sign_type']  = 'RSA2';
         $config['gatewayUrl'] = 'https://openapi.alipay.com/gateway.do';
@@ -416,7 +333,7 @@ class Pay extends Model
         $aop               = new \AlipayTradeService($config);
 
         $out_trade_no = trim($data['unified_number']);//商户订单号，商户网站订单系统中唯一订单号，必填
-        $subject      = trim('订单支付');//订单名称，必填
+        $subject      = trim('支付');//订单名称，必填
         $total_amount = trim($data['unified_amount']);//付款金额，必填
         $body         = trim('支付宝支付');//商品描述，可空
         //构造参数
@@ -435,32 +352,24 @@ class Pay extends Model
      *   @params string $alipay : 支付宝配置信息，通过 getUsersConfigData 方法调用数据
      *   return string $alipay_url : 支付宝支付链接
      */
-    public function getOldAliPayPayUrl($data, $alipay)
-    {
+    public function getOldAliPayPayUrl($data,$alipay){
         // 重要参数，支付宝配置信息
         if (empty($alipay)) {
-            $where = [
-                'pay_id' => 2,
-                'pay_mark' => 'alipay'
-            ];
-            $alipay = Db::name('pay_api_config')->where($where)->getField('pay_info');
-            if (empty($alipay)) {
-                $alipay = getUsersConfigData('pay.pay_alipay_config');
-                if (empty($alipay)) return false;
-            }
-            $alipay = unserialize($alipay);
+            return false;
         }
-
+        
         // 参数设置
         $order['out_trade_no'] = $data['unified_number']; //订单号
         $order['price']        = $data['unified_amount']; //订单金额
         $charset               = 'utf-8';  //编码格式
         $real_method           = '2';      //调用方式
         $agent                 = 'C4335994340215837114'; //代理机构
+
         $seller_email          = $alipay['account'];//支付宝用户账号
         $security_check_code   = $alipay['code'];   //交易安全校验码
         $partner               = $alipay['id'];     //合作者身份ID
 
+        $transaction_type      = $data['transaction_type']; //自定义，用于验证
         switch ($real_method){
             case '0':
                 $service = 'trade_create_by_buyer';
@@ -472,21 +381,15 @@ class Pay extends Model
                 $service = 'create_direct_pay_by_user';
                 break;
         }
-
-        $type       = $data['transaction_type']; //自定义，用于验证
-        // 异步地址
-        $notify_url = request()->domain().'/index.php?transaction_type='.$type.'&is_ailpay_notify=1';
-        // 同步地址
-        $return_url = url('user/Pay/alipay_return', ['transaction_type'=>$type,'is_ailpay_notify'=>2], true, true);
-        // 参数拼装
+        
         $parameter = array(
           'agent'             => $agent,
           'service'           => $service,
           //合作者ID
           'partner'           => $partner,
           '_input_charset'    => $charset,
-          'notify_url'        => $notify_url,
-          'return_url'        => $return_url,
+          'notify_url'        => url('user/Pay/alipay_return', ['transaction_type'=>$transaction_type], true, true),
+          'return_url'        => url('user/Pay/alipay_return', ['transaction_type'=>$transaction_type], true, true),
           /* 业务参数 */
           'subject'           => "支付订单号:".$order['out_trade_no'],
           'out_trade_no'      => $order['out_trade_no'],
@@ -506,26 +409,26 @@ class Pay extends Model
         $param = '';
         $sign  = '';
 
-        foreach ($parameter AS $key => $val) {
-            $param .= "$key=" . urlencode($val) . "&";
+        foreach ($parameter AS $key => $val)
+        {
+            $param .= "$key=" .urlencode($val). "&";
             $sign  .= "$key=$val&";
         }
-
-        $param      = substr($param, 0, -1);
-        $sign       = substr($sign, 0, -1) . $security_check_code;
-        $alipay_url = 'https://www.alipay.com/cooperate/gateway.do?' . $param . '&sign=' . MD5($sign) . '&sign_type=MD5';
+        
+        $param = substr($param, 0, -1);
+        $sign  = substr($sign, 0, -1). $security_check_code;
+        $alipay_url = 'https://www.alipay.com/cooperate/gateway.do?'.$param. '&sign='.MD5($sign).'&sign_type=MD5';
         return $alipay_url;
     }
 
     // 获取随机字符串
     // 长度 length
     // 结果 str
-    public function GetRandomString($length)
-    {
+    public function GetRandomString($length){
         $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         $str   = "";
         for ($i = 0; $i < $length; $i++) {
-            $str .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
+          $str .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
         }
         return $str;
     }

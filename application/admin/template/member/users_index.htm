@@ -1,6 +1,6 @@
 {include file="public/layout" /}
 
-<body class="bodystyle" style="overflow-y: scroll; cursor: default; -moz-user-select: inherit;">
+<body style="background-color: rgb(255, 255, 255); overflow-y: scroll; cursor: default; -moz-user-select: inherit;">
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
 <div class="page">
@@ -8,8 +8,8 @@
     <div class="flexigrid">
         <div class="mDiv">
             <div class="ftitle">
-                <h3>会员列表</h3>
-                <h5>(共{$pager->totalRows}条数据)</h5>
+                <h3>用户列表</h3>
+                <h5>(共{$pager->totalRows}条记录)</h5>
             </div>
             <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
             <form class="navbar-form form-inline" action="{:url('Member/users_index')}" method="get" onsubmit="layer_loading('正在处理');">
@@ -41,14 +41,11 @@
                             <div class="">用户名</div>
                         </th>
                         <th abbr="ac_id" axis="col4" class="w100">
-                            <div class="tc">会员级别</div>
+                            <div class="tc">用户级别</div>
                         </th>
                         <th abbr="ac_id" axis="col4" class="w60">
                             <div class="tc">是否激活</div>
                         </th>
-                        <!-- <th abbr="ac_id" axis="col4" class="w150">
-                            <div class="tc">注册日期</div>
-                        </th> -->
                         <th axis="col1" class="w120">
                             <div class="tc">操作</div>
                         </th>
@@ -101,18 +98,13 @@
                                     {/eq}
                                 </div>
                             </td>
-                            <!-- <td>
-                                <div class="w150 tc">
-                                    {$vo.reg_time|MyDate='Y-m-d H:i:s',###}
-                                </div>
-                            </td> -->
                             <td class="">
                                 <div class="w120 tc">
                                     {eq name="'Member@users_edit'|is_check_access" value="1"}
                                         <a href="{:url('Member/users_edit',array('id'=>$vo['users_id']))}" class="btn blue"><i class="fa fa-pencil-square-o"></i>编辑</a>
                                     {/eq}
                                     {eq name="'Member@users_del'|is_check_access" value="1"}
-                                        <a class="btn red"  href="javascript:void(0);" data-url="{:url('Member/users_del')}" data-id="{$vo.users_id}" data-admin_id="{$vo.admin_id}" data-username="{$vo.username}" onClick="usersdel(this);"><i class="fa fa-trash-o"></i>删除</a>
+                                        <a class="btn red"  href="javascript:void(0);" data-url="{:url('Member/users_del')}" data-id="{$vo.users_id}" data-username="{$vo.username}" onClick="usersdel(this);"><i class="fa fa-trash-o"></i>删除</a>
                                     {/eq}
                                 </div>
                             </td>
@@ -175,7 +167,7 @@
             $.ajax({
                 type : 'get',
                 url : "{:url('Member/ajax_syn_theme_users')}",
-                data : {_ajax:1},
+                data : {},
                 dataType : 'json',
                 success : function(res){
                     layer.closeAll();
@@ -191,7 +183,7 @@
                 },
                 error: function(e){
                     layer.closeAll();
-                    layer.alert(ey_unknown_error, {icon: 2, title:false}, function(){
+                    layer.alert('网络失败，请刷新页面后重试', {icon: 2, title:false}, function(){
                         window.location.reload();
                     });
                 }
@@ -201,13 +193,7 @@
 
     // 删除
     function usersdel(obj){
-        var admin_id = $(obj).data('admin_id');
-        if (0 < admin_id) {
-            var title = "系统管理员前台ID，删除不可恢复？";
-        } else {
-            var title = "此操作不可恢复，确认彻底删除？";
-        }
-        layer.confirm(title, {
+        layer.confirm('此操作不可逆，确认彻底删除？', {
             title: false,//$(obj).attr('data-username'),
             btn: ['确定','取消'] //按钮
         }, function(){
@@ -216,7 +202,7 @@
             $.ajax({
                 type : 'post',
                 url : $(obj).attr('data-url'),
-                data : {del_id:$(obj).attr('data-id'), _ajax:1},
+                data : {del_id:$(obj).attr('data-id')},
                 dataType : 'json',
                 success : function(data){
                     layer.closeAll();
@@ -249,7 +235,7 @@
             return;
         }
         // 删除按钮
-        layer.confirm('此操作不可恢复，确认批量彻底删除？', {
+        layer.confirm('此操作不可逆，确认批量彻底删除？', {
             title: false,
             btn: ['确定', '取消'] //按钮
         }, function () {
@@ -257,7 +243,7 @@
             $.ajax({
                 type: "POST",
                 url: $(obj).attr('data-url'),
-                data: {del_id:a, _ajax:1},
+                data: {del_id:a},
                 dataType: 'json',
                 success: function (data) {
                     layer.closeAll();
@@ -270,7 +256,7 @@
                 },
                 error:function(){
                     layer.closeAll();
-                    layer.alert(ey_unknown_error, {icon: 2, title:false});
+                    layer.alert('网络失败，请刷新页面后重试', {icon: 2, title:false});
                 }
             });
         }, function (index) {

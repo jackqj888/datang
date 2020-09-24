@@ -13,7 +13,6 @@
 
 namespace app\common\model;
 
-use think\Db;
 use think\Model;
 
 /**
@@ -34,7 +33,7 @@ class Taglist extends Model
      */
     public function getInfo($tid, $field = '*')
     {
-        $result = Db::name('Taglist')->field($field)->where('tid', $tid)->find();
+        $result = db('Taglist')->field($field)->where('tid', $tid)->find();
 
         return $result;
     }
@@ -43,18 +42,16 @@ class Taglist extends Model
      * 获取单篇文章的标签
      * @author wengxianhu by 2017-7-26
      */
-    public function getListByAid($aid = '', $typeid = 0, $field = 'tid, tag')
+    public function getListByAid($aid = '', $typeid = 0, $field = 'tag')
     {
-        $str = [];
-        $result = Db::name('Taglist')->field($field)
+        $str = '';
+        $result = db('Taglist')->field($field)
             ->where(array('aid'=>$aid, 'typeid'=>$typeid))
             ->order('aid asc')
             ->select();
         if ($result) {
             $tag_arr = get_arr_column($result, 'tag');
-            $str['tag_arr'] = implode(',', $tag_arr);
-            $id_arr = get_arr_column($result, 'tid');
-            $str['tid_arr'] = implode(',', $id_arr);
+            $str = implode(',', $tag_arr);
         }
 
         return $str;
@@ -67,7 +64,7 @@ class Taglist extends Model
     public function getListByAids($aids = array(), $field = '*')
     {
         $data = array();
-        $result = Db::name('Taglist')->field($field)
+        $result = db('Taglist')->field($field)
             ->where(array('aid'=>array('IN', $aids)))
             ->order('aid asc')
             ->select();
@@ -82,187 +79,58 @@ class Taglist extends Model
     }
 
     /**
-     *  插入Tags
-     *
-     * @access    public
-     * @param     int  $aid  文档AID
-     * @param     int  $typeid  栏目ID
-     * @param     string  $tag  tag标签
-     * @return    void
+     * 写入文章标签
      */
-    public function savetags($aid = 0, $typeid = 0, $tag = '', $arcrank = 0, $opt = 'add')
+    public function savetags($aid = 0, $typeid = 0, $tags = '')
     {
-        if ($opt == 'add') {
-            $tag = str_replace('，', ',', $tag);
-            $tags = explode(',', $tag);
-            $tags = array_unique($tags);
-
-            foreach($tags as $tag)
-            {
-                $tag = trim($tag);
-                if($tag != stripslashes($tag))
-                {
-                    continue;
-                }
-                $this->InsertOneTag($tag, $aid, $typeid,$arcrank);
+        if (intval($aid) > 0 && intval($typeid) > 0 && !empty($tags)) {
+            // --处理TAG标签
+            $tags = func_preg_replace(array('，'), ',', $tags);
+            $tags_arr = explode(',', $tags);
+            // 去除左右空格
+            foreach ($tags_arr as $key => $val) {
+                $tags_arr[$key] = trim($val);
             }
-        } else if ($opt == 'edit') {
-            $this->UpdateOneTag($aid, $typeid, $tag,$arcrank);
-        }
-    }
-
-    /**
-     *  插入一个tag
-     *
-     * @access    public
-     * @param     string  $tag  标签
-     * @param     int  $aid  文档AID
-     * @param     int  $typeid  栏目ID
-     * @return    void
-     */
-    private function InsertOneTag($tag, $aid, $typeid = 0, $arcrank = 0)
-    {
-        $tag = trim($tag);
-        if(empty($tag))
-        {
-            return true;
-        }
-        if(empty($typeid))
-        {
-            $typeid = 0;
-        }
-        $rs = false;
-        $addtime = getTime();
-        $row = Db::name('tagindex')->where([
-                'tag'   => $tag,
-                'lang'  => get_admin_lang(),
-            ])->find();
-        if(empty($row))
-        {
-            $rs = $tid = Db::name('tagindex')->insertGetId([
-                    'tag'       => $tag,
-                    'typeid'    => $typeid,
-                    'seo_title' => '',
-                    'seo_keywords' => '',
-                    'seo_description' => '',
-                    'total'     => 1,
-                    'weekup'    => $addtime,
-                    'monthup'   => $addtime,
-                    'add_time'  => $addtime,
-                    'lang'      => get_admin_lang(),
-                ]);
-        }
-        else
-        {
-            $rs = Db::name('tagindex')->where([
-                    'tag'   => $tag,
-                    'lang'  => get_admin_lang(),
-                ])->update([
-                    'total'     => Db::raw('total + 1'),
-                    'add_time'  => $addtime,
-                    'lang'      => get_admin_lang(),
-                ]);
-            $tid = $row['id'];
-        }
-
-        if($rs)
-        {
-            Db::name('taglist')->insert([
-                    'tid'       => $tid,
-                    'aid'       => $aid,
-                    'typeid'    => $typeid,
-                    'tag'       => $tag,
-                    'arcrank'   => $arcrank,
-                    'lang'      => get_admin_lang(),
-                    'add_time'  => $addtime,
-                ]);
-        }
-    }
-
-    /**
-     *  更新Tag
-     *
-     * @access    public
-     * @param     int  $aid  文档ID
-     * @param     int  $typeid  栏目ID
-     * @param     string  $tags  tag标签
-     * @return    string
-     */
-    private function UpdateOneTag($aid, $typeid, $tags='', $arcrank = 0)
-    {
-        $lang = get_admin_lang();
-        $oldtag = $this->GetTags($aid);
-        $oldtags = explode(',', $oldtag);
-        $tags = str_replace('，', ',', $tags);
-        $new_tags = explode(',', $tags);
-        if(!empty($tags) || !empty($oldtags))
-        {
-            foreach($new_tags as $tag)
-            {
-                $tag = trim($tag);
-                if(empty($tag) || $tag != stripslashes($tag))
-                {
-                    continue;
-                }
-                if(!in_array($tag, $oldtags))
-                {
-                    $this->InsertOneTag($tag, $aid, $typeid,$arcrank);
-                }
+            // 移除重复值
+            $tags_arr = array_unique($tags_arr);
+            // 获取存在的标签
+            $tagindexlist = M('tagindex')->field('id,tag')->where(array('tag'=>array('in', $tags_arr)))->select();
+            foreach ($tagindexlist as $key => $val) {
+                $tagmd5 = md5($val['tag']);
+                $tagindexlist[$tagmd5] = $val;
+                unset($tagindexlist[$key]);
             }
 
-            $taglistRow = Db::name('taglist')->field('count(tid) as total, tag')->where([
-                    'tag'       => ['IN', $oldtags],
-                    'lang'      => $lang,
-                ])->group('tag')->select();
-            foreach ($taglistRow as $key => $val) {
-                $taglistRow[md5($val['tag'])] = $val;
-                unset($taglistRow[$key]);
-            }
+            // 删除标签
+            M('taglist')->where(array('aid'=>$aid))->delete();
 
-            foreach($oldtags as $tag)
-            {
-                if(!in_array($tag, $new_tags))
-                {
-                    Db::name('taglist')->where(['aid'=>$aid,'tag'=>$tag])->delete();
-                    $total = !empty($taglistRow[md5($tag)]) ? $taglistRow[md5($tag)]['total'] - 1 : 0;
-                    if (0 < $total) {
-                        Db::name('tagindex')->where(['tag'=>$tag,'lang'=>$lang])->update([
-                                'total' => $total,
-                                'add_time'  => getTime(),
-                            ]);
-                    } else {
-                        Db::name('tagindex')->where(['tag'=>$tag,'lang'=>$lang])->delete();
-                    }
+            // 组装数据写入数据表
+            $time = getTime();
+            $add_data = array();
+            $now_data = array();
+            foreach ($tags_arr as $key => $val) {
+                $tagmd5 = md5($val);
+                if (isset($tagindexlist[$tagmd5]) && !empty($tagindexlist[$tagmd5])) {
+                    $tid = $tagindexlist[$tagmd5]['id'];
+                } else {
+                    $now_data = array(
+                        'tag'   => $val,
+                        'typeid'    => $typeid,
+                        'add_time'  => $time,
+                    );
+                    $tid = M('tagindex')->insertGetId($now_data);
                 }
-                else
-                {
-                    Db::name('taglist')->where(['tag'=>$tag,'lang'=>$lang])->update([
-                            'typeid' => $typeid,
-                            'update_time'  => getTime(),
-                        ]);
-                    Db::name('taglist')->where(['aid'=>$aid])->update([
-                            'arcrank' => $arcrank,
-                            'update_time'  => getTime(),
-                        ]);
-                }
+                $add_data[] = array(
+                    'tid'   => $tid,
+                    'aid'   => $aid,
+                    'typeid'   => $typeid,
+                    'tag'   => $val,
+                    'add_time'  => $time,
+                );
             }
+            // 保存标签
+            M('taglist')->insertAll($add_data);
         }
-    }
-
-    /**
-     *  获得某文档的所有tag
-     *
-     * @param     int     $aid  文档id
-     * @return    string
-     */
-    public function GetTags($aid)
-    {
-        $tags = '';
-        $row = Db::name('taglist')->field('tag')->where(['aid'=>$aid])->select();
-        foreach ($row as $key => $val) {
-            $tags .= (empty($tags) ? $val['tag'] : ','.$val['tag']);
-        }
-        return $tags;
     }
 
     /**
@@ -271,28 +139,7 @@ class Taglist extends Model
     public function delByAids($aids = array())
     {
         if (!empty($aids)) {
-            $tags = Db::name('taglist')->where(['aid'=>['IN', $aids]])->column('tag');
-            if (!empty($tags)) {
-                Db::name('taglist')->where(['aid'=>['IN', $aids]])->delete();
-                $tagsgroup = Db::name('taglist')->field('tag')->where(['tag'=>['IN', $tags]])->group('tag')->getAllWithIndex('tag');
-                // 更新标签的文档总数
-                foreach ($tags as $key => $tag) {
-                    if (empty($tagsgroup[$tag])) {
-                        Db::name('tagindex')->where(['tag'=>$tag])->delete();
-                    } else {
-                        $total = Db::name('taglist')->where(['tag'=>$tag])->count();
-                        Db::name('tagindex')->where([
-                                'tag'=>$tag,
-                                'total'=>['gt', 0],
-                                'lang'=>get_admin_lang()
-                            ])
-                            ->update([
-                                'total' => $total,
-                                'add_time'  => getTime(),
-                            ]);
-                    }
-                }
-            }
+            M('taglist')->where(array('aid'=>array('IN', $aids)))->delete();
         }
     }
 }

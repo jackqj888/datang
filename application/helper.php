@@ -244,8 +244,7 @@ if (!function_exists('typeurl')) {
     function typeurl($url = '', $param = '', $suffix = true, $domain = false, $seo_pseudo = null, $seo_pseudo_format = null)
     {
         $eyouUrl = '';
-        static $uiset = null;
-        null === $uiset && $uiset = input('param.uiset/s', 'off');
+        $uiset = I('param.uiset/s', 'off');
         $uiset = trim($uiset, '/');
         $seo_pseudo = !empty($seo_pseudo) ? $seo_pseudo : config('ey_config.seo_pseudo');
         if (empty($seo_pseudo_format)) {
@@ -272,58 +271,10 @@ if (!function_exists('typeurl')) {
                 $eyouUrl .= '&';
             }
             $eyouUrl .= $vars;
-        } elseif ('on' != $uiset && 2 == $seo_pseudo) { // 生成静态页面代码
-            
-            if (isMobile()) { // 手机端访问非静态页面
-                if (is_array($param)) {
-                    $vars = array(
-                        'tid'   => $param['id'],
-                    );
-                    $vars = http_build_query($vars);
-                } else {
-                    $vars = $param;
-                }
-                static $home_lang = null;
-                null == $home_lang && $home_lang = get_home_lang(); // 前台语言 by 小虎哥
-                static $main_lang = null;
-                null == $main_lang && $main_lang = get_main_lang(); // 前台主体语言 by 小虎哥
-                if ($home_lang != $main_lang) {
-                    $vars .= "&lang=".get_home_lang();
-                }
-                $eyouUrl = url('home/Lists/index', $vars, true, false, 1);
-            }
-            else
-            { // PC端访问是静态页面
-                static $seo_html_listname = null;
-                null === $seo_html_listname && $seo_html_listname = tpCache('seo.seo_html_listname');
-                static $seo_html_arcdir = null;
-                null === $seo_html_arcdir && $seo_html_arcdir = tpCache('seo.seo_html_arcdir');
-                if($seo_html_listname == 1){//存放顶级目录
-                    $dirpath = explode('/',$param['dirpath']);
-                    if($param['parent_id'] == 0){
-                        $url = $seo_html_arcdir.'/'.$dirpath[1].'/';
-                    }else{
-                        $url = $seo_html_arcdir.'/'.$dirpath[1]."/lists_".$param['id'].'.html';
-                    }
-                } else if ($seo_html_listname == 3) { // 存放子级目录
-                    $dirpath = explode('/',$param['dirpath']);
-                    $url = $seo_html_arcdir.'/'.end($dirpath).'/';
-                }else{
-                    $url = $seo_html_arcdir.$param['dirpath'].'/';
-                }
-                
-                $eyouUrl = ROOT_DIR.$url;
-                if (false !== $domain) {
-                    static $re_domain = null;
-                    null === $re_domain && $re_domain = request()->domain();
-                    if (true === $domain) {
-                        $eyouUrl = $re_domain.$eyouUrl;
-                    } else {
-                        $eyouUrl = rtrim($domain, '/').$eyouUrl;
-                    }
-                }
-            }
-
+        } elseif ('on' != $uiset && 2 == $seo_pseudo) {
+            $vars = array();
+            $url = $param['dirpath']."/";
+            $eyouUrl = url($url, $vars, false, request()->domain(), $seo_pseudo, $seo_pseudo_format);
         } elseif ('on' != $uiset && 3 == $seo_pseudo) {
             if (is_array($param)) {
                 $vars = array(
@@ -335,15 +286,7 @@ if (!function_exists('typeurl')) {
             /*伪静态格式*/
             $seo_rewrite_format = config('ey_config.seo_rewrite_format');
             if (1 == intval($seo_rewrite_format)) {
-                $eyouUrl = url('home/Lists/index', $vars, $suffix, $domain, $seo_pseudo, $seo_pseudo_format);
-                if (!strstr($eyouUrl, '.htm')){
-                    $eyouUrl .= '/';
-                }
-            } else if (3 == intval($seo_rewrite_format)) {
-                $eyouUrl = url('home/Lists/index', $vars, $suffix, $domain, $seo_pseudo, $seo_pseudo_format);
-                if (!strstr($eyouUrl, '.htm')){
-                    $eyouUrl .= '/';
-                }
+                $eyouUrl = url('home/Lists/index', $vars, $suffix, $domain, $seo_pseudo, $seo_pseudo_format).'/';
             } else {
                 $eyouUrl = url($url, $vars, $suffix, $domain, $seo_pseudo, $seo_pseudo_format); // 兼容v1.1.6之前被搜索引擎收录的URL
             }
@@ -358,6 +301,8 @@ if (!function_exists('typeurl')) {
             }
             $eyouUrl = url('home/Lists/index', $vars, $suffix, $domain, $seo_pseudo, $seo_pseudo_format);
         }
+
+        // $eyouUrl = auto_hide_index($eyouUrl);
 
         return $eyouUrl;
     }
@@ -376,9 +321,9 @@ if (!function_exists('arcurl')) {
      */
     function arcurl($url = '', $param = '', $suffix = true, $domain = false, $seo_pseudo = '', $seo_pseudo_format = null)
     {
+        // \think\Url::root('/');
         $eyouUrl = '';
-        static $uiset = null;
-        null === $uiset && $uiset = input('param.uiset/s', 'off');
+        $uiset = I('param.uiset/s', 'off');
         $uiset = trim($uiset, '/');
         $seo_pseudo = !empty($seo_pseudo) ? $seo_pseudo : config('ey_config.seo_pseudo');
         if (empty($seo_pseudo_format)) {
@@ -405,74 +350,22 @@ if (!function_exists('arcurl')) {
                 $eyouUrl .= '&';
             }
             $eyouUrl .= $vars;
-        } elseif ($seo_pseudo == 2 && $uiset != 'on') { // 生成静态页面代码
-            
-            if (isMobile()) { // 手机端访问非静态页面
-                if (is_array($param)) {
-                    $vars = array(
-                        'aid'   => $param['aid'],
-                    );
-                    $vars = http_build_query($vars);
-                } else {
-                    $vars = $param;
-                }
-                static $home_lang = null;
-                null == $home_lang && $home_lang = get_home_lang(); // 前台语言 by 小虎哥
-                static $main_lang = null;
-                null == $main_lang && $main_lang = get_main_lang(); // 前台主体语言 by 小虎哥
-                if ($home_lang != $main_lang) {
-                    $vars .= "&lang=".get_home_lang();
-                }
-                $eyouUrl = url('home/View/index', $vars, true, false, 1);
-            }
-            else
-            { // PC端访问是静态页面
-                if (!empty($param['htmlfilename'])){
-                    $aid = $param['htmlfilename'];
-                }else{
-                    $aid = $param['aid'];
-                }
-                $url = $param['dirpath']."/{$aid}.html";
-                static $seo_html_pagename = null;
-                null === $seo_html_pagename && $seo_html_pagename = tpCache('seo.seo_html_pagename');
-                static $seo_html_arcdir = null;
-                null === $seo_html_arcdir && $seo_html_arcdir = tpCache('seo.seo_html_arcdir');
-                if($seo_html_pagename == 1){//存放顶级目录
-                    $dirpath = explode('/',$param['dirpath']);
-                    $url = $seo_html_arcdir.'/'.$dirpath[1].'/'.$aid.'.html';
-                } else if ($seo_html_pagename == 3) {
-                    $dirpath = explode('/',$param['dirpath']);
-                    $url = $seo_html_arcdir.'/'.end($dirpath).'/'.$aid.'.html';
-                }else{
-                    $url = $seo_html_arcdir.$param['dirpath'].'/'.$aid.'.html';
-                }
-                
-                $eyouUrl = ROOT_DIR.$url;
-                if (false !== $domain) {
-                    static $re_domain = null;
-                    null === $re_domain && $re_domain = request()->domain();
-                    if (true === $domain) {
-                        $eyouUrl = $re_domain.$eyouUrl;
-                    } else {
-                        $eyouUrl = rtrim($domain, '/').$eyouUrl;
-                    }
-                }
-            }
-
+        } elseif ($seo_pseudo == 2 && $uiset != 'on') {
+            $vars = array();
+            $aid = $param['aid'];
+            $url = $param['dirpath']."/{$aid}.html";
+            $eyouUrl = url($url, $vars, false, request()->domain(), $seo_pseudo, $seo_pseudo_format);
         } elseif ($seo_pseudo == 3 && $uiset != 'on') {
             /*伪静态格式*/
             $seo_rewrite_format = config('ey_config.seo_rewrite_format');
             if (1 == intval($seo_rewrite_format)) {
                 $url = 'home/View/index';
                 /*URL里第一层级固定是顶级栏目的目录名称*/
-                static $tdirnameArr = null;
-                null === $tdirnameArr && $tdirnameArr = every_top_dirname_list();
+                $tdirnameArr = every_top_dirname_list();
                 if (!empty($param['dirname']) && isset($tdirnameArr[md5($param['dirname'])]['tdirname'])) {
                     $param['dirname'] = $tdirnameArr[md5($param['dirname'])]['tdirname'];
                 }
                 /*--end*/
-            } else if (3 == intval($seo_rewrite_format)) {
-                $url = 'home/View/index';
             }
             /*--end*/
             if (is_array($param)) {
@@ -496,40 +389,7 @@ if (!function_exists('arcurl')) {
             $eyouUrl = url('home/View/index', $vars, $suffix, $domain, $seo_pseudo, $seo_pseudo_format);
         }
 
-        return $eyouUrl;
-    }
-}
-
-if (!function_exists('tagurl')) {
-    /**
-     * Tag标签Url生成
-     * @param string        $url 路由地址
-     * @param string|array  $param 变量
-     * @param bool|string   $suffix 生成的URL后缀
-     * @param bool|string   $domain 域名
-     * @param string          $seo_pseudo URL模式
-     * @param string          $seo_pseudo_format URL格式
-     * @return string
-     */
-    function tagurl($url = '', $param = '', $suffix = true, $domain = false, $seo_pseudo = '', $seo_pseudo_format = null)
-    {
-        $eyouUrl = '';
-        $seo_pseudo = !empty($seo_pseudo) ? $seo_pseudo : config('ey_config.seo_pseudo');
-        if (empty($seo_pseudo_format)) {
-            if (1 == $seo_pseudo) {
-                $seo_pseudo_format = config('ey_config.seo_dynamic_format');
-            }
-        }
-        
-        if (is_array($param)) {
-            $vars = array(
-                'tagid'   => $param['tagid'],
-            );
-            $vars = http_build_query($vars);
-        } else {
-            $vars = $param;
-        }
-        $eyouUrl = url('home/Tags/lists', $vars, $suffix, $domain, $seo_pseudo, $seo_pseudo_format);
+        // $eyouUrl = auto_hide_index($eyouUrl);
 
         return $eyouUrl;
     }
@@ -572,8 +432,6 @@ if (!function_exists('eyPreventShell')) {
         $data = true;
         if (is_string($data) && (preg_match('/^phar:\/\//i', $data) || stristr($data, 'phar://'))) {
             $data = false;
-        } else if (is_numeric($data)) {
-            $data = intval($data);
         }
 
         return $data;

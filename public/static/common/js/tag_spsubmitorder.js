@@ -85,7 +85,7 @@ function ShopDelAddress(addr_id){
 
         $.ajax({
             url: url,
-            data: {addr_id:addr_id,_ajax:1},
+            data: {addr_id:addr_id},
             type:'post',
             dataType:'json',
             success:function(res){
@@ -125,7 +125,7 @@ function SelectEd(idname,addr_id)
         
         $.ajax({
             url : url,
-            data: {addr_id:addr_id,_ajax:1},
+            data: {addr_id:addr_id},
             type:'post',
             dataType:'json',
             success:function(res){
@@ -146,59 +146,19 @@ function ShopPaymentPage(){
     layer_loading('正在处理');
     var JsonData = b1decefec6b39feb3be1064e27be2a9;
     var url = JsonData.shop_payment_page;
-    if (url.indexOf('?') > -1) {
-        url += '&';
-    } else {
-        url += '?';
-    }
-    url += '_ajax=1';
     
     $.ajax({
         url : url,
         data: $('#theForm').serialize(),
         type:'post',
         dataType:'json',
-        success:function(res) {
+        success:function(res){
             if (1 == res.code) {
-                var IsSendEmail = 1;
-                var IsSendMobile = 1;
-                if (res.data.email) IsSendEmail = SendEmail(res.data.email);
-                if (res.data.mobile) IsSendMobile = SendMobile(res.data.mobile);
-                if (IsSendEmail || IsSendMobile) window.location.href = res.url;
+                window.location.href = res.url;
             } else {
                 layer.closeAll();
-                layer.msg(res.msg, {icon: 2,time: 1000}, function(){
-                    if (1 == res.data.add_addr) ShopAddAddress();
-                });
+                layer.msg(res.msg, {icon: 2,time: 2000});
             }
         }
     });
-}
-
-// 邮箱发送
-function SendEmail(result) {
-    var ResultID = 1;
-    if (result) {
-        $.ajax({
-            url: result.url,
-            data: result.data,
-            type:'post',
-            dataType:'json'
-        });
-    }
-    return ResultID;
-}
- 
-// 手机发送
-function SendMobile(result) {
-    var ResultID = 1;
-    if (result) {
-        $.ajax({
-            url: result.url,
-            data: result.data,
-            type:'post',
-            dataType:'json'
-        });
-    }
-    return ResultID;
 }

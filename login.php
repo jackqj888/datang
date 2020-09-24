@@ -25,7 +25,11 @@ if(version_compare(PHP_VERSION,'5.4.0','<'))  die('本系统要求PHP版本 >= 5
 // error_reporting(E_ALL ^ E_NOTICE);//显示除去 E_NOTICE 之外的所有错误信息
 error_reporting(E_ERROR | E_WARNING | E_PARSE);//报告运行时错误
 
-
+// 检测是否已安装EyouCMS系统
+if(file_exists("./install/") && !file_exists("./install/install.lock")){
+    header('Location:./install/index.php');
+    exit(); 
+}
 
 // 绑定当前访问到admin模块
 define('BIND_MODULE','admin');

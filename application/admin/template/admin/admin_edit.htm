@@ -1,5 +1,5 @@
 {include file="public/layout" /}
-<body class="rolecss bodystyle">
+<body class="rolecss">
 <div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none; visibility: visible; left: 95px; top: 573px;"></div>
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
@@ -10,19 +10,7 @@
         <div class="ncap-form-default">
             <dl class="row">
                 <dt class="tit">
-                    <label for="head_pic">用户头像</label>
-                </dt>
-                <dd class="opt">
-                    <div class="txpic" onClick="GetUploadify(1,'','allimg','head_pic_call_back');">
-                        <input type="hidden" name="head_pic" id="head_pic" value="{$info.head_pic}" />
-                        <img id="img_head_pic" src="{$info.head_pic|get_head_pic=###}" />
-                        <em>更换头像</em>
-                    </div>
-                </dd>
-            </dl>
-            <dl class="row">
-                <dt class="tit">
-                    <label for="username">用&nbsp;&nbsp;户&nbsp;&nbsp;名</label>
+                    <label for="user_name">用户名</label>
                 </dt>
                 <dd class="opt">
                     {$info.user_name}
@@ -31,24 +19,22 @@
             </dl>
             <dl class="row">
                 <dt class="tit">
-                    <label for="password">用户密码</label>
+                    <label for="password">登录密码</label>
                 </dt>
                 <dd class="opt">
-                    <input type="text" name="password" value="" id="password" autocomplete="off" class="input-txt" placeholder="不修改留空">
-                    <p class="notic">推荐密码至少是以0-9a-zA-Z.@_-!等符号组合！</p>
-                    <p id="password_tips"></p>
+                    <input type="password" name="password" value="" id="password" class="input-txt">
+                    <p class="notic"></p>
                 </dd>
             </dl>
-<!--             <dl class="row">
+            <dl class="row">
                 <dt class="tit">
                     <label for="password">确认密码</label>
                 </dt>
                 <dd class="opt">
-                    <input type="password" name="password2" value="" id="password2" autocomplete="off" class="input-txt">
+                    <input type="password" name="password2" value="" id="password2" class="input-txt">
                     <p class="notic"></p>
-                    <p id="password2_tips"></p>
                 </dd>
-            </dl> -->
+            </dl>
             <dl class="row">
                 <dt class="tit">
                     <label for="pen_name">笔名</label>
@@ -73,15 +59,6 @@
                 </dt>
                 <dd class="opt">
                     <input type="text" name="mobile" value="{$info.mobile}" id="mobile" class="input-txt">
-                    <p class="notic"></p>
-                </dd>
-            </dl>
-            <dl class="row">
-                <dt class="tit">
-                    <label for="email">Email邮箱</label>
-                </dt>
-                <dd class="opt">
-                    <input type="text" name="email" value="{$info.email}" id="email" class="input-txt">
                     <p class="notic"></p>
                 </dd>
             </dl>
@@ -236,7 +213,7 @@
                 </dd>
             </dl>
             {/if}
-            <div class="bot" style="position: relative;"><a href="JavaScript:void(0);" onclick="adsubmit();" class="ncap-btn-big ncap-btn-green" id="submitBtn">确认提交</a></div>
+            <div class="bot"><a href="JavaScript:void(0);" onclick="adsubmit();" class="ncap-btn-big ncap-btn-green" id="submitBtn">确认提交</a></div>
         </div>
     </form>
 </div>
@@ -370,6 +347,7 @@
         for(var i in admin_role_list){
             var item = admin_role_list[i];
             if(item.id == value){
+                console.log(item);
                 if(item.language){
                     item.language.map(function(row){
                         $('#postForm input[name^="language"][value="'+row+'"]').attr('checked', 'checked');
@@ -449,44 +427,8 @@
         changeRole(new_role_id);
     }
 
-    function head_pic_call_back(fileurl_tmp)
-    {
-      $("#head_pic").val(fileurl_tmp);
-      $("#img_head_pic").attr('src', fileurl_tmp);
-    }
-
-    $('#password').keyup(function(){
-        var password = $(this).val();
-        $.ajax({
-            url: "{:url('Admin/ajax_checkPasswordLevel')}",
-            type: "POST",
-            dataType: "JSON",
-            data: {password:password, _ajax:1},
-            success: function(res){
-                $('#password_tips').removeAttr('class');
-                if (1 == res.code) {
-                    $('#password_tips').addClass('rank r'+res.data.pwdLevel);
-                }
-            }
-        });
-    });
-/*
-    $('#password2').keyup(function(){
-        var password = $('#password').val();
-        var password2 = $('#password2').val();
-        $('#password2_tips').hide();
-        if (password != '' || password2 != '') {
-            if (password != password2) {
-                $('#password2_tips').html('<font color="red">两次密码输入不一致！</font>').show();
-            } else {
-                $('#password2_tips').html('<font color="green">校验通过！</font>').show();
-            }
-        }
-    });
-*/
     // 判断输入框是否为空
     function adsubmit(){
-/*        
         var password = $('#password').val();
         var password2 = $('#password2').val();
         if (password != '' || password2 != '') {
@@ -496,7 +438,7 @@
                 return false;
             }
         }
-*/
+
         layer_loading('正在处理');
         $('#postForm').submit();
     }

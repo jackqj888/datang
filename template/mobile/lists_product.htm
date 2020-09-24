@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0;" />
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<title>{$eyou.field.seo_title}</title>
+<meta name="description" content="{$eyou.field.seo_description}" />
+<meta name="keywords" content="{$eyou.field.seo_keywords}" />
+<meta name="generator" content="eyoucms 1.0.0" data-variable="{eyou:global name='web_eyoucms' /}" />
+<link href="{eyou:version file='/favicon.ico' /}" rel="shortcut icon" type="image/x-icon" />
+<link href="{eyou:global name='web_templets_m' /}/skin/css/fontsstyle.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_m' /}/skin/css/reset.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_m' /}/skin/css/common.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_m' /}/skin/css/prlist.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{eyou:global name='web_templets_m' /}/skin/js/jquery.js"></script>
+</head>
+<body>
+
+<!--header-->
+{eyou:include file="header.htm" /}
+{eyou:include file="nav.htm" /}
+<div class="CategoryList_Title"> <a href="javascript:history.go(-1);"><i class="icon-left fl"></i></a>{$eyou.field.typename}
+  <ul 
+    {eyou:notempty name='$eyou.field.has_children' /}
+    class="CategoryLista"
+    {eyou:else /}
+    style="display:none"
+    {/eyou:notempty}
+     id="fenl">
+    <li ><a href="#"><i class="icon-details"></i></a>
+      <ul class="list1">
+        {eyou:channel type='first' }
+        <li><a href="{$field.typeurl}">>{$field.typename}</a></li>
+       {/eyou:channel}
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="productLayout">
+{eyou:list pagesize ='8' titlelen='20' mod='2'}
+  <dl>
+    <dt><a href="{$field.arcurl}" title="{$field.title}"> <img src="{$field.litpic}" alt="{$field.title}"  width="100%"/></a></dt>
+    <dd>
+      <h5>{$field.title}</h5>
+    </dd>
+  </dl>
+   {eyou:eq name='$mod' value='0'}<div class="clear"></div>{/eyou:eq}
+{/eyou:list}
+  <!-- cb_分页 --> 
+</div>
+  <div class='pagingNav'>
+  <p></p>
+  <div class="uls fr">{eyou:pagelist listitem='index,pre,next,end' listsize='1' /}</div>
+</div>
+
+<!--info--> 
+{eyou:include file="footer.htm" /}
+<script type="text/javascript" src="{eyou:global name='web_templets_m' /}/skin/js/prefixfree.min.js"></script> 
+<script type="text/javascript" src="{eyou:global name='web_templets_m' /}/skin/js/sdw_mobile.js"></script> 
+<script type="text/javascript" src="{eyou:global name='web_templets_m' /}/skin/js/jquery1.js"></script> 
+<script src="{eyou:global name='web_templets_m' /}/skin/js/tools.js"></script>
+</body>
+</html>

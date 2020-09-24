@@ -35,9 +35,6 @@ class CustomModel extends Base
         
         $channeltype_list = config('global.channeltype_list');
         $this->channeltype = $channeltype_list[$this->nid];
-        if (empty($this->channeltype)) {
-            $this->channeltype = Db::name('channeltype')->where(['nid'=>['eq',$this->nid]])->getField('id');
-        }
         $this->assign('nid', $this->nid);
         $this->assign('channeltype', $this->channeltype);
     }
@@ -57,7 +54,7 @@ class CustomModel extends Base
         $end = strtotime(input('add_time_end'));
 
         // 应用搜索条件
-        foreach (['keywords','typeid','flag','is_release'] as $key) {
+        foreach (['keywords','typeid','flag'] as $key) {
             if (isset($param[$key]) && $param[$key] !== '') {
                 if ($key == 'keywords') {
                     $condition['a.title'] = array('LIKE', "%{$param[$key]}%");
@@ -84,10 +81,6 @@ class CustomModel extends Base
                     $condition['a.typeid'] = array('IN', $typeids);
                 } else if ($key == 'flag') {
                     $condition['a.'.$param[$key]] = array('eq', 1);
-                } else if ($key == 'is_release') {
-                    if (0 < intval($param[$key])) {
-                        $condition['a.users_id'] = array('gt', intval($param[$key]));
-                    }
                 } else {
                     $condition['a.'.$key] = array('eq', $param[$key]);
                 }
@@ -110,17 +103,6 @@ class CustomModel extends Base
         // 回收站
         $condition['a.is_del'] = array('eq', 0);
 
-        /*自定义排序*/
-        $orderby = input('param.orderby/s');
-        $orderway = input('param.orderway/s');
-        if (!empty($orderby)) {
-            $orderby = "a.{$orderby} {$orderway}";
-            $orderby .= ", a.aid desc";
-        } else {
-            $orderby = "a.aid desc";
-        }
-        /*end*/
-
         /**
          * 数据查询，搜索出主键ID的值
          */
@@ -130,7 +112,7 @@ class CustomModel extends Base
             ->field("a.aid")
             ->alias('a')
             ->where($condition)
-            ->order($orderby)
+            ->order('a.aid desc')
             ->limit($Page->firstRow.','.$Page->listRows)
             ->getAllWithIndex('aid');
 
@@ -174,7 +156,6 @@ class CustomModel extends Base
         /*--end*/
 
         $this->assign($assign_data);
-        
         return $this->fetch();
     }
 
@@ -196,11 +177,9 @@ class CustomModel extends Base
 
             // 根据标题自动提取相关的关键字
             $seo_keywords = $post['seo_keywords'];
-            if (!empty($seo_keywords)) {
-                $seo_keywords = str_replace('，', ',', $seo_keywords);
-            } else {
-                // $seo_keywords = get_split_word($post['title'], $content);
-            }
+            // if (empty($seo_keywords)) {
+            //     $seo_keywords = get_split_word($post['title'], $content);
+            // }
 
             // 自动获取内容第一张图片作为封面图
             $is_remote = !empty($post['is_remote']) ? $post['is_remote'] : 0;
@@ -271,13 +250,7 @@ class CustomModel extends Base
                 model($this->table)->afterSave($aid, $data, 'add');
                 // ---------end
                 adminLog('新增数据：'.$data['title']);
-
-                // 生成静态页面代码
-                $successData = [
-                    'aid'   => $aid,
-                    'tid'   => $post['typeid'],
-                ];
-                $this->success("操作成功!", null, $successData);
+                $this->success("操作成功!", $post['gourl']);
                 exit;
             }
 
@@ -335,6 +308,14 @@ class CustomModel extends Base
         $this->assign('tempview', $tempview);
         /*--end*/
 
+        /*返回上一层*/
+        $gourl = input('param.gourl/s', '');
+        if (empty($gourl)) {
+            $gourl = url('CustomModel/index', array('typeid'=>$typeid));
+        }
+        $assign_data['gourl'] = $gourl;
+        /*--end*/
+
         $this->assign($assign_data);
 
         return $this->fetch();
@@ -359,11 +340,9 @@ class CustomModel extends Base
 
             // 根据标题自动提取相关的关键字
             $seo_keywords = $post['seo_keywords'];
-            if (!empty($seo_keywords)) {
-                $seo_keywords = str_replace('，', ',', $seo_keywords);
-            } else {
-                // $seo_keywords = get_split_word($post['title'], $content);
-            }
+            // if (empty($seo_keywords)) {
+            //     $seo_keywords = get_split_word($post['title'], $content);
+            // }
 
             // 自动获取内容第一张图片作为封面图
             $is_remote = !empty($post['is_remote']) ? $post['is_remote'] : 0;
@@ -436,13 +415,7 @@ class CustomModel extends Base
                 model($this->table)->afterSave($data['aid'], $data, 'edit');
                 // ---------end
                 adminLog('编辑文章：'.$data['title']);
-
-                // 生成静态页面代码
-                $successData = [
-                    'aid'       => $data['aid'],
-                    'tid'       => $typeid,
-                ];
-                $this->success("操作成功!", null, $successData);
+                $this->success("操作成功!", $post['gourl']);
                 exit;
             }
 
@@ -529,6 +502,14 @@ class CustomModel extends Base
         $tempview = $info['tempview'];
         empty($tempview) && $tempview = $arctypeInfo['tempview'];
         $this->assign('tempview', $tempview);
+        /*--end*/
+
+        /*返回上一层*/
+        $gourl = input('param.gourl/s', '');
+        if (empty($gourl)) {
+            $gourl = url('CustomModel/index', array('typeid'=>$typeid));
+        }
+        $assign_data['gourl'] = $gourl;
         /*--end*/
 
         $this->assign($assign_data);

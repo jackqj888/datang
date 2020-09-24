@@ -87,7 +87,7 @@ class Language extends Model
         }
         /*--end*/
 
-        /*复制网站配置表数据*/
+        /*复制基础信息表数据*/
         $config_db = Db::name('config');
         $configCount = $config_db->where('lang',$mark)->count();
         if (empty($configCount)) {
@@ -96,40 +96,13 @@ class Language extends Model
                 ->order('id asc')
                 ->select();
             if (!empty($configRow)) {
-
-                /* 生成静态页面代码 */
-                $markArr = Db::name('language')->field('mark')->order('id asc')->limit('1,1')->select();
-                if (!empty($markArr)) {
-                    $seo_pseudo_lang = tpCache('seo.seo_pseudo', [], $markArr[0]['mark']);
-                    $seo_dynamic_format_lang = tpCache('seo.seo_dynamic_format', [], $markArr[0]['mark']);
-                    $seo_rewrite_format_lang = tpCache('seo.seo_rewrite_format', [], $markArr[0]['mark']);
-                }
-                $seo_pseudo_lang = !empty($seo_pseudo_lang) ? $seo_pseudo_lang : 1;
-                $seo_dynamic_format_lang = !empty($seo_dynamic_format_lang) ? $seo_dynamic_format_lang : 1;
-                $seo_rewrite_format_lang = !empty($seo_rewrite_format_lang) ? $seo_rewrite_format_lang : 1;
-                /* end */
-
                 foreach ($configRow as $key => $val) {
                     $configRow[$key]['lang'] = $mark;
                     /*临时测试*/
-                    if ('web_name' == $val['name']) {
+                    if ($val['name'] == 'web_name') {
                         $configRow[$key]['value'] = $mark.$val['value'];
                     }
                     /*--end*/
-                    
-                    /**
-                     * 生成静态页面代码
-                     * 新增语言的URL模式必须与第二个语言一致
-                     * 如果没有第二个语言，那么URL模式默认为动态 
-                     */
-                    if ('seo_pseudo' == $val['name']) {
-                        $configRow[$key]['value'] = $seo_pseudo_lang;
-                    } else if ('seo_dynamic_format' == $val['name']) {
-                        $configRow[$key]['value'] = $seo_dynamic_format_lang;
-                    } else if ('seo_rewrite_format' == $val['name']) {
-                        $configRow[$key]['value'] = $seo_rewrite_format_lang;
-                    }
-                    /* end */
                 }
                 $insertObject = model('Config')->saveAll($configRow);
                 $insertNum = count($insertObject);
@@ -252,25 +225,8 @@ class Language extends Model
     {
         \think\Cache::clear('system_langnum');
         $languageRow = Db::name('language')->field('mark')->select();
-        $system_langnum = count($languageRow);
         foreach ($languageRow as $key => $val) {
-            tpCache('system', ['system_langnum'=>$system_langnum], $val['mark']);
-        }
-
-        // 记录多语言启用数量
-        $system_langnum = 1;
-        $web_language_switch = tpCache('web.web_language_switch');
-        if (!empty($web_language_switch)) {
-            $system_langnum = Db::name('language')->where(['status'=>1])->count();
-        }
-        $tfile = DATA_PATH.'conf'.DS.'lang_enable_num.txt';
-        $fp = @fopen($tfile,'w');
-        if(!$fp) {
-            @file_put_contents($tfile, $system_langnum);
-        }
-        else {
-            fwrite($fp, $system_langnum);
-            fclose($fp);
+            tpCache('system', ['system_langnum'=>count($languageRow)], $val['mark']);
         }
     }
 

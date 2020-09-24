@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0;" />
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<title>搜索页_{eyou:global name="web_name" /}</title>
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<link href="{eyou:global name='web_cmspath' /}/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link href="{eyou:global name='web_templets_m' /}/skin/css/reset.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_m' /}/skin/css/common.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_m' /}/skin/css/prlist.css" rel="stylesheet" type="text/css" />
+<link type="text/css" rel="stylesheet" href="{eyou:global name='web_templets_m' /}/skin/css/fontsstyle.css" />
+<script type="text/javascript" src="{eyou:global name='web_templets_m' /}/skin/js/prefixfree.min.js"></script>
+<script type="text/javascript" src="{eyou:global name='web_templets_m' /}/skin/js/jquery.js"></script>
+<script src="{eyou:global name='web_templets_m' /}/skin/js/tools.js"></script>
+<script type="text/javascript" src="{eyou:global name='web_templets_m' /}/skin/js/sdw_mobile.js"></script>
+</head>
+<body>
+{eyou:include file="header.htm" /}
+{eyou:include file="nav.htm" /}
+<div class="CategoryList_Title">  搜索 <strong class="fc_03c">{$eyou.field.keywords}</strong> 的结果 </div>
+<div class="nyContent" style="margin-bottom:0em;">
+  <div class="newsList">
+    <ul>
+     {eyou:list pagesize='10' titlelen='40'}
+      <li><a href="{$field.arcurl}"> {$field.title}</a><span class="last" style="float: right;">[{$field.add_time|MyDate='Y-m-d',###}]</span></li>
+     {/eyou:list}     
+    </ul>
+  </div>
+</div>
+<div class='pagingNav'>
+  <p></p>
+  <div class="uls fr">{eyou:pagelist listitem='index,pre,next,end' listsize='1' /}</div>
+</div>
+{eyou:include file="footer.htm" /}
+  <script type="text/javascript">
+	    var Oshow = document.getElementsByClassName("dhshow")[0];
+	    var Ojadh = document.getElementsByClassName("jadh")[0];
+	    var Oclose = document.getElementsByClassName("dhclose")[0];
+	    Oshow.onclick = function () {
+	        Ojadh.style.display = "block";
+	        Oshow.style.display = "none";
+	    }
+
+	    Oclose.onclick = function () {
+	        Ojadh.style.display = "none";
+	        Oshow.style.display = "block";
+	    }
+	</script>
+
+</body>
+<script type="text/javascript" src="{eyou:global name='web_templets_m' /}/skin/js/prefixfree.min.js"></script>
+<script src="{eyou:global name='web_templets_m' /}/skin/js/tools.js"></script>
+</html>

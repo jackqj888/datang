@@ -27,7 +27,6 @@ class Images extends Base
         parent::_initialize();
         $channeltype_list = config('global.channeltype_list');
         $this->channeltype = $channeltype_list[$this->nid];
-        empty($this->channeltype) && $this->channeltype = 3;
         $this->assign('nid', $this->nid);
         $this->assign('channeltype', $this->channeltype);
     }
@@ -47,7 +46,7 @@ class Images extends Base
         $end = strtotime(input('add_time_end'));
 
         // 应用搜索条件
-        foreach (['keywords','typeid','flag','is_release'] as $key) {
+        foreach (['keywords','typeid','flag'] as $key) {
             if (isset($param[$key]) && $param[$key] !== '') {
                 if ($key == 'keywords') {
                     $condition['a.title'] = array('LIKE', "%{$param[$key]}%");
@@ -60,6 +59,9 @@ class Images extends Base
                     if (0 < intval($admin_info['role_id'])) {
                         $auth_role_info = $admin_info['auth_role_info'];
                         if(! empty($auth_role_info)){
+                            if(isset($auth_role_info['only_oneself']) && 1 == $auth_role_info['only_oneself']){
+                                $condition['a.admin_id'] = $admin_info['admin_id'];
+                            }
                             if(! empty($auth_role_info['permission']['arctype'])){
                                 if (!empty($typeid)) {
                                     $typeids = array_intersect($typeids, $auth_role_info['permission']['arctype']);
@@ -70,33 +72,13 @@ class Images extends Base
                     /*--end*/
                     $condition['a.typeid'] = array('IN', $typeids);
                 } else if ($key == 'flag') {
-                    if ('is_release' == $param[$key]) {
-                        $condition['a.users_id'] = array('gt', 0);
-                    } else {
-                        $condition['a.'.$param[$key]] = array('eq', 1);
-                    }
-                // } else if ($key == 'is_release') {
-                //     if (0 < intval($param[$key])) {
-                //         $condition['a.users_id'] = array('gt', intval($param[$key]));
-                //     }
+                    $condition['a.'.$param[$key]] = array('eq', 1);
                 } else {
                     $condition['a.'.$key] = array('eq', $param[$key]);
                 }
             }
         }
 
-        /*权限控制 by 小虎哥*/
-        $admin_info = session('admin_info');
-        if (0 < intval($admin_info['role_id'])) {
-            $auth_role_info = $admin_info['auth_role_info'];
-            if(! empty($auth_role_info)){
-                if(isset($auth_role_info['only_oneself']) && 1 == $auth_role_info['only_oneself']){
-                    $condition['a.admin_id'] = $admin_info['admin_id'];
-                }
-            }
-        }
-        /*--end*/
-        
         // 时间检索
         if ($begin > 0 && $end > 0) {
             $condition['a.add_time'] = array('between',"$begin,$end");
@@ -113,17 +95,6 @@ class Images extends Base
         // 回收站
         $condition['a.is_del'] = array('eq', 0);
 
-        /*自定义排序*/
-        $orderby = input('param.orderby/s');
-        $orderway = input('param.orderway/s');
-        if (!empty($orderby)) {
-            $orderby = "a.{$orderby} {$orderway}";
-            $orderby .= ", a.aid desc";
-        } else {
-            $orderby = "a.aid desc";
-        }
-        /*end*/
-
         /**
          * 数据查询，搜索出主键ID的值
          */
@@ -133,7 +104,7 @@ class Images extends Base
             ->field("a.aid")
             ->alias('a')
             ->where($condition)
-            ->order($orderby)
+            ->order('a.aid desc')
             ->limit($Page->firstRow.','.$Page->listRows)
             ->getAllWithIndex('aid');
 
@@ -177,7 +148,6 @@ class Images extends Base
         /*--end*/
 
         $this->assign($assign_data);
-        
         return $this->fetch();
     }
 
@@ -188,26 +158,13 @@ class Images extends Base
     {
         if (IS_POST) {
             $post = input('post.');
-
-            /* 处理TAG标签 */
-            if (!empty($post['tags_new'])) {
-                $post['tags'] = !empty($post['tags']) ? $post['tags'] . ',' . $post['tags_new'] : $post['tags_new'];
-                unset($post['tags_new']);
-            }
-            $post['tags'] = explode(',', $post['tags']);
-            $post['tags'] = array_unique($post['tags']);
-            $post['tags'] = implode(',', $post['tags']);
-            /* END */
-
             $content = input('post.addonFieldExt.content', '', null);
 
             // 根据标题自动提取相关的关键字
             $seo_keywords = $post['seo_keywords'];
-            if (!empty($seo_keywords)) {
-                $seo_keywords = str_replace('，', ',', $seo_keywords);
-            } else {
-                // $seo_keywords = get_split_word($post['title'], $content);
-            }
+            // if (empty($seo_keywords)) {
+            //     $seo_keywords = get_split_word($post['title'], $content);
+            // }
 
             // 自动获取内容第一张图片作为封面图
             $is_remote = !empty($post['is_remote']) ? $post['is_remote'] : 0;
@@ -250,17 +207,6 @@ class Images extends Base
                 unset($post['tempview']);
             }
 
-            //处理自定义文件名,仅由字母数字下划线和短横杆组成,大写强制转换为小写
-            if (!empty($post['htmlfilename'])) {
-                $post['htmlfilename'] = preg_replace("/[^a-zA-Z0-9_-]+/", "", $post['htmlfilename']);
-                $post['htmlfilename'] = strtolower($post['htmlfilename']);
-                //判断是否存在相同的自定义文件名
-                $filenameCount = Db::name('archives')->where('htmlfilename', $post['htmlfilename'])->count();
-                if (!empty($filenameCount)) {
-                    $this->error("自定义文件名已存在，请重新设置！");
-                }
-            }
-
             // --存储数据
             $newData = array(
                 'typeid'=> empty($post['typeid']) ? 0 : $post['typeid'],
@@ -282,20 +228,14 @@ class Images extends Base
             );
             $data = array_merge($post, $newData);
 
-            $aid = Db::name('archives')->insertGetId($data);
+            $aid = M('archives')->insertGetId($data);
             $_POST['aid'] = $aid;
             if ($aid) {
-                // ---------后置操作
-                model('Images')->afterSave($aid, $data, 'add');
-                // ---------end
+            	// ---------后置操作
+            	model('Images')->afterSave($aid, $data, 'add');
+            	// ---------end
                 adminLog('新增图集：'.$data['title']);
-
-                // 生成静态页面代码
-                $successData = [
-                    'aid'   => $aid,
-                    'tid'   => $post['typeid'],
-                ];
-                $this->success("操作成功!", null, $successData);
+                $this->success("操作成功!", $post['gourl']);
                 exit;
             }
 
@@ -346,9 +286,13 @@ class Images extends Base
         $this->assign('tempview', $tempview);
         /*--end*/
 
-        // URL模式
-        $tpcache = config('tpcache');
-        $assign_data['seo_pseudo'] = !empty($tpcache['seo_pseudo']) ? $tpcache['seo_pseudo'] : 1;
+        /*返回上一层*/
+        $gourl = input('param.gourl/s', '');
+        if (empty($gourl)) {
+            $gourl = url('Images/index', array('typeid'=>$typeid));
+        }
+        $assign_data['gourl'] = $gourl;
+        /*--end*/
 
         $this->assign($assign_data);
 
@@ -362,27 +306,14 @@ class Images extends Base
     {
         if (IS_POST) {
             $post = input('post.');
-
-            /* 处理TAG标签 */
-            if (!empty($post['tags_new'])) {
-                $post['tags'] = !empty($post['tags']) ? $post['tags'] . ',' . $post['tags_new'] : $post['tags_new'];
-                unset($post['tags_new']);
-            }
-            $post['tags'] = explode(',', $post['tags']);
-            $post['tags'] = array_unique($post['tags']);
-            $post['tags'] = implode(',', $post['tags']);
-            /* END */
-
             $typeid = input('post.typeid/d', 0);
             $content = input('post.addonFieldExt.content', '', null);
 
             // 根据标题自动提取相关的关键字
             $seo_keywords = $post['seo_keywords'];
-            if (!empty($seo_keywords)) {
-                $seo_keywords = str_replace('，', ',', $seo_keywords);
-            } else {
-                // $seo_keywords = get_split_word($post['title'], $content);
-            }
+            // if (empty($seo_keywords)) {
+            //     $seo_keywords = get_split_word($post['title'], $content);
+            // }
 
             // 自动获取内容第一张图片作为封面图
             $is_remote = !empty($post['is_remote']) ? $post['is_remote'] : 0;
@@ -424,20 +355,6 @@ class Images extends Base
                 unset($post['type_tempview']);
                 unset($post['tempview']);
             }
-            
-            //处理自定义文件名,仅由字母数字下划线和短横杆组成,大写强制转换为小写
-            if (!empty($post['htmlfilename'])) {
-                $post['htmlfilename'] = preg_replace("/[^a-zA-Z0-9_-]+/", "", $post['htmlfilename']);
-                $post['htmlfilename'] = strtolower($post['htmlfilename']);
-                //判断是否存在相同的自定义文件名
-                $filenameCount = Db::name('archives')->where([
-                        'aid'   => ['NEQ', $post['aid']],
-                        'htmlfilename'  => $post['htmlfilename'],
-                    ])->count();
-                if (!empty($filenameCount)) {
-                    $this->error("自定义文件名已存在，请重新设置！");
-                }
-            }
 
             // 同步栏目切换模型之后的文档模型
             $channel = Db::name('arctype')->where(['id'=>$typeid])->getField('current_channel');
@@ -459,23 +376,17 @@ class Images extends Base
             );
             $data = array_merge($post, $newData);
 
-            $r = Db::name('archives')->where([
+            $r = M('archives')->where([
                     'aid'   => $data['aid'],
                     'lang'  => $this->admin_lang,
                 ])->update($data);
             
             if ($r) {
-                // ---------后置操作
-                model('Images')->afterSave($data['aid'], $data, 'edit');
-                // ---------end
+            	// ---------后置操作
+            	model('Images')->afterSave($data['aid'], $data, 'edit');
+            	// ---------end
                 adminLog('编辑图集：'.$data['title']);
-                
-                // 生成静态页面代码
-                $successData = [
-                    'aid'       => $data['aid'],
-                    'tid'       => $typeid,
-                ];
-                $this->success("操作成功!", null, $successData);
+                $this->success("操作成功!", $post['gourl']);
                 exit;
             }
 
@@ -500,7 +411,6 @@ class Images extends Base
         }
         /*--end*/
         $typeid = $info['typeid'];
-        $assign_data['typeid'] = $typeid;
 
         // 栏目信息
         $arctypeInfo = Db::name('arctype')->find($typeid);
@@ -565,9 +475,13 @@ class Images extends Base
         $this->assign('tempview', $tempview);
         /*--end*/
 
-        // URL模式
-        $tpcache = config('tpcache');
-        $assign_data['seo_pseudo'] = !empty($tpcache['seo_pseudo']) ? $tpcache['seo_pseudo'] : 1;
+        /*返回上一层*/
+        $gourl = input('param.gourl/s', '');
+        if (empty($gourl)) {
+            $gourl = url('Images/index', array('typeid'=>$typeid));
+        }
+        $assign_data['gourl'] = $gourl;
+        /*--end*/
 
         $this->assign($assign_data);
         return $this->fetch();

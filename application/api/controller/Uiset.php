@@ -21,7 +21,6 @@ class Uiset extends Controller
 {
     public $uipath = '';
     public $theme_style = '';
-    public $theme_style_path = '';
     public $v = '';
 
     /**
@@ -32,8 +31,7 @@ class Uiset extends Controller
         header("Cache-control: private");  // history.back返回后输入框值丢失问题
         parent::__construct();
         $this->theme_style = THEME_STYLE;
-        $this->theme_style_path = THEME_STYLE_PATH;
-        $this->uipath = RUNTIME_PATH.'ui/'.$this->theme_style_path.'/';
+        $this->uipath = RUNTIME_PATH.'ui/'.$this->theme_style.'/';
     }
     
     /*
@@ -121,8 +119,10 @@ class Uiset extends Controller
                 'lang'  => $this->home_lang,
             ])->count('id');
             if ($count > 0) {
-                if ($name == binaryJoinChar(config('binary.0'), 13)) {
-                    $value = preg_replace('#<a([^>]*)>(\s*)'.binaryJoinChar(config('binary.1'), 18).'<(\s*)\/a>#i', '', htmlspecialchars_decode($value));
+                $tmp_array = array('d','2','V','i','X','2','N','v','c','H','l','y','a','W','d','o','d','A','=','=');
+                if ($name == array_join_string($tmp_array)) {
+                    $tmp_array = array('U','G','9','3','Z','X','J','l','Z','C','B','i','e','S','B','F','e','W','9','1','Q','2','1','z');
+                    $value = preg_replace('#<a([^>]*)>(\s*)'.array_join_string($tmp_array).'<(\s*)\/a>#i', '', htmlspecialchars_decode($value));
                     $value = htmlspecialchars($value);
                 }
                 $nameArr = explode('_', $name);

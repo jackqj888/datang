@@ -1,49 +1,62 @@
-<!doctype html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>搜索页_{eyou:global name="web_name" /}</title>
-<meta name="keywords" content="" />
-<meta name="description" content="" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+<title>{$eyou.field.seo_title}</title>
+<meta name="description" content="{$eyou.field.seo_description}" />
+<meta name="keywords" content="{$eyou.field.seo_keywords}" />
 <link href="{eyou:global name='web_cmspath' /}/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-<link rel="stylesheet" type="text/css" href="{eyou:global name='web_templets_pc' /}/skin/css/css.css">
-<link rel="stylesheet" href="{eyou:global name='web_templets_pc' /}/skin/css/red.css" type="text/css"  title="styles3" media="screen" />
-<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/jquery1.42.min.js"></script>
-<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/jquery.superslide.2.1.1.js"></script>
-<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/index.js"></script>
+<link href="{eyou:global name='web_templets_pc' /}/skin/css/common.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_pc' /}/skin/css/style.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_pc' /}/skin/css/temp.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/1.9.1jquery.min.js"></script>
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/ajax.js"></script>
 </head>
 <body>
-{eyou:include file="/template/pc/header.htm" /}
-<div class="n-box"><div class="n-l">
-    <div class="l-b">
-      <div class="fl-tit">
-        <p>Classification</p>
-        搜索页</div>
-    </div>
-    <div class="n-lx">
-      <div class="n-lx-ico">
-        <p></p>
-        {eyou:global name='web_attr_2' /}</div>
-      <div class="n-lx-wz">
-        传真：{eyou:global name='web_attr_57' /}<br>
-        手机：{eyou:global name='web_attr_60' /}<br>
-        邮箱：{eyou:global name='web_attr_55' /}<br>
-        地址：{eyou:global name='web_attr_56' /} </div>
-      <div class="n-lx-an"><a href="http://wpa.qq.com/msgrd?v=3&site={eyou:global name="web_name" /}&menu=yes&uin={eyou:global name='web_attr_3' /}" target="_blank">立即咨询</a></div>
-    </div>
-  </div>
-  <div class="n-r">
-    <div class="n-zb">搜索 <strong class="fc_03c">{$eyou.field.keywords}</strong> 的结果</div>
-    <div class="n-lb">
-      <ul>
-        {eyou:list pagesize='15' titlelen='40'}
-         <li> <span>{$field.add_time|MyDate='Y-m-d',###}</span><a href="{$field.arcurl}" title="{$field.title}">{$field.title}</a> </li>
-        {/eyou:list}
+<!--Header:Start--> 
+
+<!--头部开始--> 
+<!--header-->
+{eyou:include file="header.htm" /}
+<!--header--> 
+<!--Header:End--> 
+<!--Content:Start-->
+<div class="topadcs"> <a style='background:url({eyou:notempty name='$eyou.field.banner' /}{$eyou.field.banner} {eyou:else /}{$eyou.field.typeid|gettoptype=###,'banner'}{/eyou:notempty}) no-repeat center top;' ></a> </div>
+<div class="cpMain">
+  <div class="container">
+    {eyou:include file="left.htm" /}
+    <!--cpleft-->
+    
+    <div class="cpright">
+      <div class="rtop">
+        <h5> <a>{$eyou.field.typename}</a></h5>
+        <span><em>您的位置：</em> {eyou:position style="crumb" /} </span> </div>
+      <ul class="cpshow">
+      {eyou:list titlelen='40' pagesize='9' mod='3'}
+        <li {eyou:eq name='$mod' value='0'}class="noMl"{/eyou:eq}><a href="{$field.arcurl}"  title="{$field.title}"> <img src="{$field.litpic}" alt="[field:title/]" /></a>
+          <h4> <a href="{$field.arcurl}" title="{$field.title}"> {$field.title}</a></h4>
+        </li>
+      {/eyou:list}  
       </ul>
+      <div class="clear"> </div>
+      <div class="fenye"> 
+        <div class='pagingNav'>
+          <p></p>
+          <div class="uls fr">{eyou:pagelist listitem='index,pre,pageno,next,end' listsize='2' /}</div>
+        </div>
+      </div>
+      
     </div>
-    <div class="pageListNav"> {eyou:pagelist listitem="info,pre,next,pageno" listsize="2"/} </div>
+    <div class="clear"> </div>
   </div>
 </div>
-{eyou:include file="/template/pc/footer.htm" /}
+<!--Content:End--> 
+<!--Footer:Start-->
+
+
+{eyou:include file="footer.htm" /}
+<script type="text/javascript" src="{eyou:global name='web_templets_pc' /}/skin/js/im.js"></script> 
+{eyou:ui open='off' /}
 </body>
 </html>

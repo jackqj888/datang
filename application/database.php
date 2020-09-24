@@ -1,20 +1,29 @@
 <?php
-use think\Env;
-return array(
+/**
+ * 易优CMS
+ * ============================================================================
+ * 版权所有 2016-2028 海南赞赞网络科技有限公司，并保留所有权利。
+ * 网站地址: http://www.eyoucms.com
+ * ----------------------------------------------------------------------------
+ * 如果商业用途务必到官方购买正版授权, 以免引起不必要的法律纠纷.
+ * ============================================================================
+ * Author: 小虎哥 <1105415366@qq.com>
+ * Date: 2018-4-3
+ */
 
+return array(
     // 数据库类型
-    'type'            => Env::get('database.type', 'mysql'),
+    'type'            => 'mysql',
     // 服务器地址
-    'hostname'        => Env::get('database.hostname', '127.0.0.1'),
+    'hostname'        => '127.0.0.1',
     // 数据库名
-    'database'        => Env::get('database.database', 'jixie'),
+    'database'        => 'eyoucms',
     // 用户名
-    'username'        => Env::get('database.username', 'jixie'),
+    'username'        => 'root',
     // 密码
-    'password'        => Env::get('database.password', '5hTLbj7SxpPSxGwK'),
+    'password'        => 'root',
     // 端口
-    'hostport'        => Env::get('database.hostport', '3306'),
-    // 端口
+    'hostport'        => '8889',
     // 连接dsn
     'dsn'             => '',
     // 数据库连接参数
@@ -22,7 +31,7 @@ return array(
     // 数据库编码默认采用utf8
     'charset'         => 'utf8',
     // 数据库表前缀
-    'prefix'          => 'jx_',
+    'prefix'          => 'ey_',
     // 数据库调试模式
     'debug'           => false,
     // 数据库部署方式:0 集中式(单一服务器),1 分布式(主从服务器)

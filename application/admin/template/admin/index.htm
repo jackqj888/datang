@@ -1,5 +1,5 @@
 {include file="public/layout" /}
-<body class="bodystyle" style="cursor: default; -moz-user-select: inherit;">
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;">
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
 <div class="page">
@@ -8,7 +8,7 @@
         <div class="mDiv">
             <div class="ftitle">
                 <h3>管理员列表</h3>
-                <h5>(共{$pager->totalRows}条数据)</h5>
+                <h5>(共{$pager->totalRows}条记录)</h5>
             </div>
             <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
             <form class="navbar-form form-inline" action="{:url('Admin/index')}" method="get" onsubmit="layer_loading('正在处理');">
@@ -105,7 +105,7 @@
                             </td>
                             <td>
                                 <div class="w120 tc">
-                                    {$vo.mobile|default='无'}
+                                    {$vo.mobile}
                                 </div>
                             </td>
                             <td class="">
@@ -170,7 +170,6 @@
         <!--分页位置-->
         {$page} </div>
 </div>
-<input type="hidden" name="head_pic" id="head_pic" value="{$Think.session.admin_info.head_pic|get_head_pic=###}">
 <script>
     $(document).ready(function(){
         // 表格行点击选中切换
@@ -182,9 +181,6 @@
         $('.fa-refresh').click(function(){
             location.href = location.href;
         });
-
-        // 上传头像及时显示
-        $('#admin_head_pic', window.parent.document).attr('src', $('#head_pic').val());
     });
 </script>
 

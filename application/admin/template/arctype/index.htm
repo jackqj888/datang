@@ -5,36 +5,24 @@
     background:#FFFFDF;
   }
 </style>
-<div class="page" style="box-shadow:none;">
+<div class="page">
   <form method="post">
     <div class="flexigrid">
       <div class="mDiv">
         <div class="ftitle">
           <h3>栏目列表</h3>
-          <h5>(共{$arctype_list|count}条数据)</h5>
+          <h5>(共{$arctype_list|count}条记录)</h5>
         </div>
         <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
-      {eq name='$main_lang' value='$admin_lang'}
-        {eq name="'Arctype@add'|is_check_access" value="1"}
-        <div class="cate-dropup">
-          <div class="cate-dropup-bt">增加栏目<i class="fa fa-angle-down" aria-hidden="true"></i></div>
-          <div class="cate-dropup-con" style="">
-          <a href="{:url('Arctype/add')}">增加顶级栏目</a>
-          <a href="{:url('Arctype/batch_add')}">批量增加栏目</a>
-          </div>
+        {eq name='$main_lang' value='$admin_lang'}
+        <div class="fbutton">
+              <a href="{if condition="in_array($Request.action, array('add','edit'))"}javascript:void(0);{else /}{:url("Arctype/add")}{/if}">
+                  <div class="add">
+                      <span><i class="fa fa-plus"></i>增加顶级栏目</span>
+                  </div>
+              </a>
         </div>
-        <script type="text/javascript">
-          $(".cate-dropup-bt").click(function(event){
-              $(".cate-dropup-con").slideToggle(200);
-              event.stopPropagation();
-          })
-          $(document).click(function(event){
-              $(".cate-dropup-con").slideUp(200);
-              event.stopPropagation();
-          })
-        </script>
         {/eq}
-      {/eq}
       </div>
       <div class="hDiv">
         <div class="hDivBox">
@@ -88,12 +76,8 @@
           {foreach name="arctype_list" item="vo" key="k" }
             <tr nctype="0" {if condition="$vo['parent_id'] gt 0"} style="display:none;"{/if} class="parent_id_{$vo['parent_id']}" data-level="{$vo['level']}" data-id="{$vo['id']}">
               <td class="name">
-                <div class="w60 tc">
-                  {eq name='$main_lang' value='$admin_lang'}
-                    {$vo.id}
-                  {else /}
-                    {$main_arctype_list[$vo['id']]['id']|default=$vo['id']}
-                  {/eq}
+                <div class="w60 tc">       
+                  {$vo.id}
                 </div>
               </td>
               <td class="typename" style="width: 100%">
@@ -113,22 +97,12 @@
                   {else /}
                   <img src="__SKIN__/images/tv-collapsable-last.gif" style="float: none;" fieldid="2" status="open" nc_type="flex">
                   {/gt}
-
-                  {if condition="!empty($vo['weapp_code'])"}
-                    <!-- 插件栏目 -->
-                    <a href="{:weapp_url($vo['weapp_code'].'/'.$vo['weapp_code'].'/index')}" {neq name='$main_lang' value='$admin_lang'}title="{$main_arctype_list[$vo['id']]['typename']|default=$vo['typename']}"{/neq}>{$vo.typename}</a>
-                    <!-- end -->
+                  
+                  {if condition="$vo['current_channel'] == 6" /}
+                  <a href="{:url('Arctype/single_edit',array('typeid'=>$vo['id']))}">{$vo.typename}</a>
                   {else /}
-                    {if condition="$vo['current_channel'] == 6"}
-                      <a href="{:url('Arctype/single_edit',array('typeid'=>$vo['id']))}" {neq name='$main_lang' value='$admin_lang'}title="{$main_arctype_list[$vo['id']]['typename']|default=$vo['typename']}"{/neq}>{$vo.typename}</a>
-                    {else /}
-                      {if condition="empty($channeltype_list[$vo['current_channel']]['ifsystem'])"}
-                        <a href="{:url('Custom/index',['channel'=>$vo['current_channel'],'typeid'=>$vo['id']])}" {neq name='$main_lang' value='$admin_lang'}title="{$main_arctype_list[$vo['id']]['typename']|default=$vo['typename']}"{/neq}>{$vo.typename}</a>
-                      {else /}
-                        <a href="{:url($channeltype_list[$vo['current_channel']]['ctl_name'].'/index',['typeid'=>$vo['id']])}" {neq name='$main_lang' value='$admin_lang'}title="{$main_arctype_list[$vo['id']]['typename']|default=$vo['typename']}"{/neq}>{$vo.typename}</a>
-                      {/if}
-                      <i class="arctotal">（文档：{$vo.id|get_total_arc=###}条）</i>
-                    {/if}
+                  <a href="{:url($channeltype_list[$vo['current_channel']]['ctl_name'].'/index',array('typeid'=>$vo['id'], 'tab'=>3))}">{$vo.typename}</a>
+                  <i class="arctotal">（文档：{$vo.id|get_total_arc=###}条）</i>
                   {/if}
                 </div>
               </td>
@@ -149,42 +123,28 @@
               </td>
               <td>
                   <div class="w300 tl pb0">
-                      {eq name="'Archives@index'|is_check_access" value="1"}
-                        {if condition="!empty($vo['weapp_code'])"}
-                          <!-- 插件栏目 -->
-                          <a href="{:weapp_url($vo['weapp_code'].'/'.$vo['weapp_code'].'/index')}" class="btn blue"><i class="fa fa-pencil-square-o"></i>内容</a>
-                          <!-- end -->
+                      {eq name="'Archives@index'|is_check_access" value="1"}  
+                        {if condition="$vo['current_channel'] == 6" /}
+                        <a href="{:url('Arctype/single_edit',array('typeid'=>$vo['id']))}" class="btn blue"><i class="fa fa-pencil-square-o"></i>内容</a>
                         {else /}
-                          {if condition="$vo['current_channel'] == 6" /}
-                          <a href="{:url('Arctype/single_edit',array('typeid'=>$vo['id']))}" class="btn blue"><i class="fa fa-pencil-square-o"></i>内容</a>
-                          {else /}
-                            {if condition="empty($channeltype_list[$vo['current_channel']]['ifsystem'])"}
-                              <a href="{:url('Custom/index',array('channel'=>$vo['current_channel'],'typeid'=>$vo['id'], 'tab'=>3))}" class="btn blue"><i class="fa fa-pencil-square-o"></i>内容</a>
-                            {else /}
-                              <a href="{:url($channeltype_list[$vo['current_channel']]['ctl_name'].'/index',array('typeid'=>$vo['id'], 'tab'=>3))}" class="btn blue"><i class="fa fa-pencil-square-o"></i>内容</a>
-                            {/if}
-                          {/if}
+                        <a href="{:url($channeltype_list[$vo['current_channel']]['ctl_name'].'/index',array('typeid'=>$vo['id'], 'tab'=>3))}" class="btn blue"><i class="fa fa-pencil-square-o"></i>内容</a>
                         {/if}
                       {/eq}
-
                       <a href="{:url('Arctype/edit',array('id'=>$vo['id']))}" class="btn blue"><i class="fa fa-pencil-square-o"></i>编辑</a>
-
                       {eq name="'Arctype@add'|is_check_access" value="1"}
-                        {if condition="$main_lang == $admin_lang && empty($vo['weapp_code'])"}
-                          {if condition="$vo['grade'] < ($arctype_max_level - 1)"}           
-                            <a href="{:url('Arctype/add',array('parent_id'=>$vo['id']))}" class="btn blue"><i class="fa fa-pencil-square-o"></i>增加子栏目</a>
-                          {else /}
-                            <a class="btn blue" title="不支持增加四级栏目"><i class="fa fa-pencil-square-o"></i>不支持增加</a>
-                          {/if}
+                      {eq name='$main_lang' value='$admin_lang'}
+                        {if condition="$vo['grade'] < ($arctype_max_level - 1)"}           
+                          <a href="{:url('Arctype/add',array('parent_id'=>$vo['id']))}" class="btn blue"><i class="fa fa-pencil-square-o"></i>增加子栏目</a>
+                        {else /}
+                          <a class="btn blue" title="不支持增加四级栏目"><i class="fa fa-pencil-square-o"></i>不支持增加</a>
                         {/if}
                       {/eq}
-
-                      {eq name="'Arctype@pseudo_del'|is_check_access" value="1"}
-                        {eq name='$main_lang' value='$admin_lang'}
-                        <a class="btn red"  href="javascript:void(0);" data-url="{:url('Arctype/pseudo_del')}" data-id="{$vo.id}" data-typename="{$vo.typename}" data-deltype="pseudo" onClick="delfun(this);"><i class="fa fa-trash-o"></i>删除</a>
-                        {/eq}
                       {/eq}
-
+                      {eq name="'Arctype@pseudo_del'|is_check_access" value="1"}
+                      {eq name='$main_lang' value='$admin_lang'}
+                      <a class="btn red"  href="javascript:void(0);" data-url="{:url('Arctype/pseudo_del')}" data-id="{$vo.id}" data-typename="{$vo.typename}" data-deltype="pseudo" onClick="delfun(this);"><i class="fa fa-trash-o"></i>删除</a>
+                      {/eq}
+                      {/eq}
                       <a href="{$vo|get_typeurl=###}" class="btn blue" target="_blank"><i class="fa fa-pencil-square-o"></i>浏览</a>
                   </div>
               </td>
@@ -304,7 +264,7 @@
             $.ajax({
                 type : 'post',
                 url : $(obj).attr('data-url'),
-                data : {del_id:$(obj).attr('data-id'),_ajax:1},
+                data : {del_id:$(obj).attr('data-id')},
                 dataType : 'json',
                 success : function(data){
                     layer.closeAll();
@@ -322,22 +282,6 @@
         });
         return false;
     }  
-
-    /* 生成静态页面代码 */
-    var typeid = "{$typeid}";
-    var is_del = "{$is_del}";
-    if(typeid > 0){
-      $.ajax({
-        url:__root_dir__+"/index.php?m=home&c=Buildhtml&a=upHtml&lang="+__lang__,
-          type:'POST',
-          dataType:'json',
-          data:{'typeid':typeid,'is_del':is_del,ctl_name:'Arctype',_ajax:1},
-          success:function(data){
-
-          }
-      });
-    } 
-    /* end */
   </script>
 </div>
 

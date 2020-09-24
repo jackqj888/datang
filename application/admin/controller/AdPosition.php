@@ -117,7 +117,6 @@ class AdPosition extends Base
                         $AdData['pid']         = $insertId;
                         $AdData['title']       = trim($post['img_title'][$key]);
                         $AdData['links']       = $post['img_links'][$key];
-                        $AdData['intro']       = $post['img_intro'][$key];
                         $AdData['target']      = $target;
                         // 其他参数
                         $AdData['media_type']  = 1;
@@ -200,7 +199,6 @@ class AdPosition extends Base
                                 $AdData['litpic']      = $value;
                                 $AdData['title']       = $post['img_title'][$key];
                                 $AdData['links']       = $post['img_links'][$key];
-                                $AdData['intro']       = $post['img_intro'][$key];
                                 $AdData['target']      = $target;
                                 // 其他参数
                                 $AdData['sort_order']  = $i++;
@@ -213,7 +211,6 @@ class AdPosition extends Base
                                 $AdData['pid']         = $post['id'];
                                 $AdData['title']       = $post['img_title'][$key];
                                 $AdData['links']       = $post['img_links'][$key];
-                                $AdData['intro']       = $post['img_intro'][$key];
                                 $AdData['target']      = $target;
                                 // 其他参数
                                 $AdData['media_type']  = 1;
@@ -232,7 +229,6 @@ class AdPosition extends Base
                             $AdData['pid']         = $post['id'];
                             $AdData['title']       = $post['img_title'][$key];
                             $AdData['links']       = $post['img_links'][$key];
-                            $AdData['intro']       = $post['img_intro'][$key];
                             $AdData['target']      = $target;
                             // 其他参数
                             $AdData['media_type']  = 1;
@@ -343,6 +339,11 @@ class AdPosition extends Base
                 }
             }
 
+            $ad_count = M('ad')->where('pid','IN',$id_arr)->count();
+            if ($ad_count > 0){
+                $this->error('该位置下有广告，不允许删除，请先删除该位置下的广告');
+            }  
+
             /*多语言*/
             $attr_name_arr = [];
             foreach ($id_arr as $key => $val) {
@@ -372,8 +373,6 @@ class AdPosition extends Base
                         ])->delete();
                 }
                 /*--end*/
-
-                M('ad')->where('pid','IN',$id_arr)->delete();
 
                 adminLog('删除广告-id：'.implode(',', $id_arr));
                 $this->success('删除成功');

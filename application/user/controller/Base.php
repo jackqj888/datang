@@ -29,7 +29,15 @@ class Base extends Common {
         if(session('?users_id'))
         {
             $users_id = session('users_id');
-            $users = GetUsersLatestData($users_id);
+            $users = M('users')->field('a.*,b.level_name')
+                ->alias('a')
+                ->join('__USERS_LEVEL__ b', 'a.level = b.level_id', 'LEFT')
+                ->where([
+                    'a.users_id'        => $users_id,
+                    'a.lang'            => $this->home_lang,
+                    'a.is_activation'   => 1,
+                ])->find();
+            session('users',$users);  //覆盖session 中的 users
             $this->users = $users;
             $this->users_id = $users['users_id'];
             
@@ -39,7 +47,7 @@ class Base extends Common {
             }
             $this->assign('nickname',$nickname);
             
-            $this->assign('users',$users); //存储会员信息
+            $this->assign('users',$users); //存储用户信息
             $this->assign('users_id',$this->users_id);
         } else {
             //过滤不需要登陆的行为
@@ -47,29 +55,24 @@ class Base extends Common {
             $ctl_all = CONTROLLER_NAME.'@*';
             $filter_login_action = config('filter_login_action');
             if (!in_array($ctl_act, $filter_login_action) && !in_array($ctl_all, $filter_login_action)) {
-                $resource = input('param.resource/s');
-                if ('Uploadify@*' == $ctl_all && 'reg' == $resource) {
-                    // 注册时上传图片不验证登录行为
+                if (IS_AJAX) {
+                    $this->error('请先登录！');
                 } else {
-                    if (IS_AJAX) {
-                        $this->error('请先登录！');
-                    } else {
-                        if (isWeixin()) {
-                            //微信端
-                            $this->redirect('user/Users/users_select_login');
-                            exit;
-                        } else {
-                            // 其他端
-                            $this->redirect('user/Users/login');
-                            exit;
-                        }
+                    if (isWeixin()) {
+                        //微信端
+                        $this->redirect('user/Users/users_select_login');
+                        exit;
+                    }else{
+                        // 其他端
+                        $this->redirect('user/Users/login');
+                        exit;
                     }
                 }
             }
         }
 
         // 订单超过 get_shop_order_validity 设定的时间，则修改订单为已取消状态，无需返回数据
-        // model('Shop')->UpdateShopOrderData($this->users_id);
+        model('Shop')->UpdateShopOrderData($this->users_id);
 
         // 会员功能是否开启
         $logut_redirect_url = '';
@@ -82,13 +85,6 @@ class Base extends Common {
             // 登录的会员被后台删除，立马退出会员中心
             $logut_redirect_url = url('user/Users/centre');
         }
-
-        // 是否开启会员注册功能
-        $Method = request()->action();
-        if (isset($this->usersConfig['users_open_reg']) && $this->usersConfig['users_open_reg'] == 1 && 'reg' == $Method) {
-            $logut_redirect_url = ROOT_DIR.'/';
-        }
-
         if (!empty($logut_redirect_url)) {
             // 清理session并回到首页
             session('users_id', null);
@@ -123,8 +119,5 @@ class Base extends Common {
             $is_wechat_applets = 1; // 在微信小程序中
         }
         $this->assign('is_wechat_applets',$is_wechat_applets);
-
-        // 子目录
-        $this->assign('RootDir', ROOT_DIR); 
     }
 }

@@ -1,71 +1,67 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0;" />
 <meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
 <meta content="telephone=no" name="format-detection" />
-<script type="text/javascript" language="javascript" src="{eyou:global name='web_templets_m' /}/skin/js/jq.js"></script>
-<script type="text/javascript" language="javascript" src="{eyou:global name='web_templets_m' /}/skin/js/js.js"></script>
-<script src="{eyou:global name='web_templets_m' /}/skin/js/slide.js"></script>
-<script src="{eyou:global name='web_templets_m' /}/skin/js/swiper.min.js"></script>
 <title>{$eyou.field.seo_title}</title>
 <meta name="description" content="{$eyou.field.seo_description}" />
 <meta name="keywords" content="{$eyou.field.seo_keywords}" />
-<link href="{eyou:global name='web_cmspath' /}/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-<link href="{eyou:global name='web_templets_m' /}/skin/css/reset.css" type="text/css" rel="stylesheet" />
-<link href="{eyou:global name='web_templets_m' /}/skin/css/css.css" type="text/css" rel="stylesheet" />
-<link href="{eyou:global name='web_templets_m' /}/skin/css/swiper.min.css" type="text/css" rel="stylesheet" />
-<link rel="stylesheet" href="{eyou:global name='web_templets_m' /}/skin/css/iconfont.css" />
+<meta name="generator" content="eyoucms 1.0.0" data-variable="{eyou:global name='web_eyoucms' /}" />
+<link href="{eyou:version file='/favicon.ico' /}" rel="shortcut icon" type="image/x-icon" />
+<link href="{eyou:global name='web_templets_m' /}/skin/css/fontsstyle.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_m' /}/skin/css/reset.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_m' /}/skin/css/common.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_m' /}/skin/css/prlist.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{eyou:global name='web_templets_m' /}/skin/js/jquery.js"></script>
 </head>
 <body>
-<div id="container"> {eyou:include file="/template/mobile/header.htm" /}
-  <div class="mainboxbg"></div>
-  <!--header-->
-  <div id="header" class="clearfix">
-    <div class="back abslt_l"><a class="iconfont" href="javascript:history.back(-1);">&#xe62a;</a></div>
-    <div class="contitle"><a href="{eyou:global name='web_cmsurl' /}/" title="{eyou:global name='web_title' /}"> <img src="{eyou:global name='web_attr_59' /}" alt="{eyou:global name='web_title' /}"/> </a></div>
-    <div class="flbox abslt_r sechan"><span class="sdmenut iconfont">&#xe687;</span></div>
-  </div>
-  <!--mainbox-->
-  <div class="mainbox clearfix" style="margin-top:0;"> 
-    <!--loginbox-->
-    <div class="menutt">
-      <div class="ttl"> {$eyou.field.typename}
-        <div class="spanfl"> 分类<em class="iconfont">&#xe63e;</em> </div>
-      </div>
-      <div class="flboxsub"> 分类：
-        <ul class="flboxlist">
-          {eyou:channel type='first' id='field' currentstyle='on'}
-          <li> <a href="{$field.typeurl}"><span class="iconfont">&#xe63e;</span>{$field.typename}</a></li>
-          {/eyou:channel}
-        </ul>
-        <div class="flcolose">关闭</div>
-      </div>
-      <ul class="cpzslist imgautolist clearfix">
-        {eyou:list pagesize ='6' titlelen="40" }
-        <li> <a href="{$field.arcurl}" title='{$field.title}'>
-          <div class="imgbox">
-            <div class="imgpic"> <span><img src="{$field.litpic}" alt="{$field.title}"></span> </div>
-            <div class="ttbg">{$field.title}</div>
-          </div>
-          </a> </li>
-        {/eyou:list}
+
+<!--header-->
+{eyou:include file="header.htm" /}
+{eyou:include file="nav.htm" /}
+<div class="CategoryList_Title"> <a href="javascript:history.go(-1);"><i class="icon-left fl"></i></a>{$eyou.field.typename}
+  <ul 
+    {eyou:notempty name='$eyou.field.has_children' /}
+    class="CategoryLista"
+    {eyou:else /}
+    style="display:none"
+    {/eyou:notempty}
+     id="fenl">
+    <li ><a href="#"><i class="icon-details"></i></a>
+      <ul class="list1">
+        {eyou:channel type='first' }
+        <li><a href="{$field.typeurl}">>{$field.typename}</a></li>
+       {/eyou:channel}
       </ul>
-      <div class="page clearfix">
-        <div class="aspNetHidden">{eyou:pagelist listitem='index,end,pre,next' listsize='2' /}</div>
-      </div>
-    </div>
-  </div>
-  <!--footer--> 
-  {eyou:include file="/template/mobile/footer.htm" /} </div>
-<script>
-    $(window).resize(function () {
-        autoimg_list();
-        autoh();
-    })
-    autoimg_list();
-    autoh();
-</script>
+    </li>
+  </ul>
+</div>
+<div class="productLayout">
+{eyou:list pagesize ='8' titlelen='20' mod='2' notypeid='19'}
+  <dl>
+    <dt><a href="{$field.arcurl}" title="{$field.title}"> <img src="{$field.litpic}" alt="{$field.title}"  width="100%"/></a></dt>
+    <dd>
+      <h5>{$field.title}</h5>
+    </dd>
+  </dl>
+   {eyou:eq name='$mod' value='0'}<div class="clear"></div>{/eyou:eq}
+{/eyou:list}
+  <!-- cb_分页 --> 
+</div>
+  <div class='pagingNav'>
+  <p></p>
+  <div class="uls fr">{eyou:pagelist listitem='index,pre,next,end' listsize='1' /}</div>
+</div>
+
+<!--info--> 
+{eyou:include file="footer.htm" /}
+<script type="text/javascript" src="{eyou:global name='web_templets_m' /}/skin/js/prefixfree.min.js"></script> 
+<script type="text/javascript" src="{eyou:global name='web_templets_m' /}/skin/js/sdw_mobile.js"></script> 
+<script type="text/javascript" src="{eyou:global name='web_templets_m' /}/skin/js/jquery1.js"></script> 
+<script src="{eyou:global name='web_templets_m' /}/skin/js/tools.js"></script>
 </body>
 </html>

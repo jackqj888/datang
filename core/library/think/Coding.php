@@ -27,31 +27,31 @@ class Coding
 
     static public function checksd()
     {
-//        $object = new Driver();
-//        $object::check_service_domain();
+        $object = new Driver();
+        $object::check_service_domain();
     }
 
     static public function resetcr()
     {
-//        $object = new Driver();
-//        $object::reset_copy_right();
+        $object = new Driver();
+        $object::reset_copy_right();
     }
 
     static public function setcr($name, $globalTpCache = array())
     {
-//        $object = new Driver();
-//        return $object::set_copy_right($name, $globalTpCache);
+        $object = new Driver();
+        return $object::set_copy_right($name, $globalTpCache);
     }
 
     static public function checkcr()
     {
-//        $object = new Driver();
-//        $object::check_copy_right();
+        $object = new Driver();
+        $object::check_copy_right();
     }
 
     static public function checkauthor()
     {
-//        $object = new Driver();
-//        return $object::check_author_ization();
+        $object = new Driver();
+        return $object::check_author_ization();
     }
 }

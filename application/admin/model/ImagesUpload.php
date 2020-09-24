@@ -13,7 +13,6 @@
 
 namespace app\admin\model;
 
-use think\Db;
 use think\Model;
 
 /**
@@ -34,7 +33,7 @@ class ImagesUpload extends Model
      */
     public function getImgUpload($aid, $field = '*')
     {
-        $result = Db::name('ImagesUpload')->field($field)
+        $result = db('ImagesUpload')->field($field)
             ->where('aid', $aid)
             ->order('sort_order asc')
             ->select();
@@ -51,7 +50,7 @@ class ImagesUpload extends Model
         if (!is_array($aid)) {
             $aid = array($aid);
         }
-        $result = Db::name('ImagesUpload')->where(array('aid'=>array('IN', $aid)))->delete();
+        $result = db('ImagesUpload')->where(array('aid'=>array('IN', $aid)))->delete();
 
         return $result;
     }
@@ -65,7 +64,6 @@ class ImagesUpload extends Model
     public function saveimg($aid, $post = array())
     {
         $imgupload = isset($post['imgupload']) ? $post['imgupload'] : array();
-        $imgintro = isset($post['imgintro']) ? $post['imgintro'] : array();
         if (!empty($imgupload) && count($imgupload) > 1) {
             array_pop($imgupload); // 弹出最后一个
 
@@ -82,7 +80,7 @@ class ImagesUpload extends Model
                 $filesize = 0;
                 $img_info = array();
                 if (is_http_url($val)) {
-                    $imgurl = handle_subdir_pic($val);
+                    $imgurl = $val;
                 } else {
                     $imgurl = ROOT_PATH.ltrim($val, '/');
                     $filesize = @filesize('.'.$val);
@@ -94,13 +92,11 @@ class ImagesUpload extends Model
                 $attr = isset($img_info[3]) ? $img_info[3] : '';
                 $mime = isset($img_info['mime']) ? $img_info['mime'] : '';
                 $title = !empty($post['title']) ? $post['title'] : '';
-                $intro = !empty($imgintro[$key]) ? $imgintro[$key] : '';
                 ++$sort_order;
                 $data[] = array(
                     'aid' => $aid,
                     'title' => $title,
                     'image_url'   => $val,
-                    'intro'   => $intro,
                     'width' => $width,
                     'height' => $height,
                     'filesize'  => $filesize,

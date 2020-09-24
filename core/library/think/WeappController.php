@@ -78,16 +78,6 @@ class WeappController
     public $home_lang = 'cn';
 
     /**
-     * 子目录路径
-     */
-    public $root_dir = '';
-
-    /**
-     * CMS版本号
-     */
-    public $version = null;
-
-    /**
      * 构造方法
      * @access public
      * @param Request $request Request 对象
@@ -104,8 +94,6 @@ class WeappController
         }
         $this->request = $request;
 
-        $this->root_dir = ROOT_DIR; // 子目录
-
         $class = get_class($this); // 返回对象的类名
         $wmcArr = explode('\\', $class);
         $this->weapp_module_name = $this->request->param('sm')?:$wmcArr[1]; // 当前插件模块名称
@@ -116,7 +104,7 @@ class WeappController
 
         // 模板路径
         $template = Config::get('template');
-        $template['view_path'] = './'.WEAPP_DIR_NAME.'/'.$this->weapp_module_name.'/template/';
+        $template['view_path'] = '.'.ROOT_DIR.'/'.WEAPP_DIR_NAME.'/'.$this->weapp_module_name.'/template/';
         Config::set('template', $template);
 
         $this->view    = View::instance($template);
@@ -125,11 +113,9 @@ class WeappController
         $this->home_lang = get_home_lang();
         $this->admin_lang = get_admin_lang();
         $this->main_lang = get_main_lang();
-        null === $this->version && $this->version = getCmsVersion();
         $this->assign('home_lang', $this->home_lang);
         $this->assign('admin_lang', $this->admin_lang);
         $this->assign('main_lang', $this->main_lang);
-        $this->assign('version', $this->version);
         /*--end*/
         
         $this->weapp_path   =   WEAPP_DIR_NAME.DS.$this->weapp_module_name.DS;
@@ -160,18 +146,9 @@ class WeappController
     protected function _initialize()
     {
         /*---------*/
-        if ('admin' == MODULE_NAME) {
-            $is_assignValue = false;
-            $assignValue = session($this->arrJoinStr(['ZGRjYjY3MDM3YmI4','MzRlMGM0NTY1MTRi']));
-            if ($assignValue === null) {
-                $is_assignValue = true;
-                $assignValue = tpCache('web.'.$this->arrJoinStr(['d2ViX2lzX2F1','dGhvcnRva2Vu']));
-            }
-            $assignValue = !empty($assignValue) ? $assignValue : 0;
-            $assignName = $this->arrJoinStr(['aXNfZXlvdV9hdXRo','b3J0b2tlbg==']);
-            true === $is_assignValue && session($this->arrJoinStr(['ZGRjYjY3MDM3YmI4','MzRlMGM0NTY1MTRi']), $assignValue);
-            $this->assign($assignName, $assignValue);
-        }
+        $is_eyou_authortoken = session('web_is_authortoken');
+        $is_eyou_authortoken = !empty($is_eyou_authortoken) ? $is_eyou_authortoken : 0;
+        $this->assign('is_eyou_authortoken', $is_eyou_authortoken);
         /*--end*/
     }
 
@@ -333,28 +310,6 @@ class WeappController
     }
 
     /**
-     * 拼接为字符串并去编码
-     * @param array $arr 数组
-     * @return string
-     */
-    protected function arrJoinStr($arr)
-    {
-        $str = '';
-        $tmp = '';
-        $dataArr = array('U','T','f','X',')','\'','R','W','X','V','b','W','X');
-        foreach ($dataArr as $key => $val) {
-            $i = ord($val);
-            $ch = chr($i + 13);
-            $tmp .= $ch;
-        }
-        foreach ($arr as $key => $val) {
-            $str .= $val;
-        }
-
-        return $tmp($str);
-    }
-
-    /**
      * 设置验证失败后是否抛出异常
      * @access protected
      * @param bool $fail 是否抛出异常
@@ -446,11 +401,11 @@ class WeappController
             $config = $this->getConfig();
             $code = !empty($config['code']) ? $config['code'] : $this->weapp_module_name;
         }
-        if(!empty($_weapp[$code])){
+        if(isset($_weapp[$code])){
             return $_weapp[$code];
         }
         $values =   array();
-        $config  =   M('Weapp')->where(['code'=>$code])->getField('config');
+        $config  =   M('Weapp')->where('code',$code)->getField('config');
         if(!empty($config)){
             $values   =   json_decode($config, true);
         }

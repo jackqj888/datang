@@ -37,12 +37,12 @@ class TagArcview extends Base
      * 获取栏目基本信息
      * @author wengxianhu by 2018-4-20
      */
-    public function getArcview($aid = '', $addfields = '', $joinaid = '')
+    public function getArcview($aid = '', $addfields = '')
     {
         $aid = !empty($aid) ? $aid : $this->aid;
-        $joinaid !== '' && $aid = $joinaid;
 
         if (empty($aid)) {
+            echo '标签arcview报错：缺少属性 aid 值，或文档ID不存在。';
             return false;
         }
 
@@ -81,39 +81,19 @@ class TagArcview extends Base
         /*--end*/
 
         /*附加表*/
-        $addtableName = $channeltype_table.'_content';
         if (!empty($addfields)) {
             $addfields = str_replace('，', ',', $addfields); // 替换中文逗号
             $addfields = trim($addfields, ',');
-            /*过滤不相关的字段*/
-            $addfields_arr = explode(',', $addfields);
-            $extFields = M($addtableName)->getTableFields();
-            $addfields_arr = array_intersect($addfields_arr, $extFields);
-            if (!empty($addfields_arr) && is_array($addfields_arr)) {
-                $addfields = implode(',', $addfields_arr);
-            } else {
-                $addfields = '*';
-            }
-            /*end*/
         } else {
             $addfields = '*';
         }
-        $row = M($addtableName)->field($addfields)->where('aid',$aid)->find();
-        if (is_array($row)) {
-            $result = array_merge($result, $row);
-            isset($result['total_duration']) && $result['total_duration'] = gmSecondFormat($result['total_duration'], ':');
-        } else {
-            $saveData = [
-                'aid'           => $aid,
-                'add_time'      => getTime(),
-                'update_time'   => getTime(),
-            ];
-            M($addtableName)->save($saveData);
-        }
+        $tableContent = $channeltype_table.'_content';
+        $row = M($tableContent)->field($addfields)->where('aid',$aid)->find();
+        $result = array_merge($result, $row);
         $result = $this->fieldLogic->getChannelFieldList($result, $result['channel']); // 自定义字段的数据格式处理
         /*--end*/
 
-        $result = view_logic($aid, $result['channel'], $result, true);
+        $result = view_logic($aid, $result['channel'], $result);
 
         return $result;
     }

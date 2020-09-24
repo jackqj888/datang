@@ -1,0 +1,385 @@
+﻿ @charset "utf-8";
+/* eyoucms.com 易优CMS -- 好用,免费,安全 */
+/*reset*/
+/* CSS reset for c_b */
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td {
+	margin: 0;
+	padding: 0;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+table th, table td {
+	padding: 5px;
+}
+fieldset, img {
+	border: 0;
+}
+address, caption, cite, code, dfn, em, th, var {
+	font-style: normal;
+	font-weight: normal;
+}
+ol, ul {
+	list-style: none;
+}
+ception, th {
+	text-align: left;
+}
+q:before, q:after {
+	content: '';
+}
+abbr, acronym {
+	border: 0;
+}
+a {
+	color: #666;
+	text-decoration: none;
+}  /*for ie f6n.net*/
+a:focus {
+	outline: none;
+} /*for ff f6n.net*/
+a:hover {
+	text-decoration: underline;
+}
+/*定位*/
+.tl {
+	text-align: left;
+}
+.tc {
+	text-align: center;
+}
+.tr {
+	text-align: right;
+}
+.bc {
+	margin-left: auto;
+	margin-right: auto;
+}
+.fl {
+	float: left;
+	display: inline;
+}
+.fr {
+	float: right;
+	display: inline;
+}
+.zoom {
+	zoom: 1
+}
+.hidden {
+	visibility: hidden;
+}
+.vam {
+	vertical-align: middle;
+}
+.clear {
+	clear: both;
+	height: 0;
+	line-height: 0;
+	font-size: 0;
+}
+p {
+	word-spacing: -1.5px;
+}
+ -moz-box-sizing:content-box;
+-webkit-box-sizing:content-box;
+box-sizing:content-box;
+/*其他*/
+.curp {
+	cursor: pointer
+}
+;
+/*原reset*/
+sup {
+	vertical-align: baseline;
+}
+sub {
+	vertical-align: baseline;
+}
+input, button, textarea, select, optgroup, option {
+	font-family: inherit;
+	font-size: inherit;
+	font-style: inherit;
+	font-weight: inherit;
+}
+input, button, textarea, select {
+*font-size:100%;
+}
+input, select {
+	vertical-align: middle;
+}
+body {
+	font: 12px/1.231 arial, helvetica, clean, sans-serif;
+}
+select, input, button, textarea, button {
+	font: 99% arial, helvetica, clean, sans-serif;
+}
+table {
+	font-size: inherit;
+	font: 100%;
+	border-collapse: collapse;
+}
+pre, code, kbd, samp, tt {
+	font-family: monospace;
+*font-size:108%;
+	line-height: 100%;
+}
+/*title*/
+h1 {
+	font-size: 32px;
+}
+h2 {
+	font-size: 26px;
+}
+h3 {
+	font-size: 20px;
+}
+h4 {
+	font-size: 14px;
+}
+h5 {
+	font-size: 12px;
+}
+h6 {
+	font-size: 10px;
+}
+/*end reset*/
+
+
+
+/* CSS Document */
+body {
+	background-color: #fff;
+	overflow-x: hidden;
+	color: #666;
+	font-size: 12px;
+	font-family: microsoft yahei, "微软雅黑";
+	position: relative;
+}/*网站字体颜色*/
+.header, .content, .footer, .container {
+	margin-left: auto;
+	margin-right: auto;
+	width: 1000px;
+	font-family: microsoft yahei;
+}
+/*页眉*/
+.headerTop h1 img {
+	width: 300px !important;
+	height: 64px !important;
+}
+.header {
+	width: 100%;
+	overflow: hidden;
+	background-color: #fff;
+}
+.headerTop {
+	overflow: hidden;
+	height: 160px;
+}
+.headerTop h1 {
+	float: left;
+	margin-top: 60px;
+	margin-left: 10px;
+}
+.headerTop .wen {
+	overflow: hidden;
+	float: left;
+	margin-top: 65px;
+	margin-left: 30px;
+}
+.headerTop .wen h2 {
+	font-weight: normal;
+	font-size: 26px;
+	color: #000;
+}
+.headerTop .wen p {
+	font-size: 24px;
+	color: #009944;
+}
+.headerTop .headRight {
+	overflow: hidden;
+	float: right;
+	height: 100%;
+}
+.headerTop .headRight ul {
+	height: 15px;
+	padding-top: 20px;
+	margin-bottom: 30px;
+}
+.headerTop .headRight li {
+	float: left;
+	font-size: 12px;
+	line-height: 15px;
+	padding: 0 10px;
+	border-right: 1px dotted #666;
+	position: relative;
+}
+.headerTop .headRight li:last-child {
+	border: none;
+}
+.headerTop .headRight li a {
+	color: #666
+}
+.headerTop .headRight li img {
+	display: none;
+	position: absolute;
+	left: 0;
+	top: 20px;
+}
+.headerTop .headRight li.last {
+	border: none;
+	padding-right: 0;
+}
+.headerTop .headRight li:hover img {
+	display: block;
+}
+.headerTop .phone {
+	overflow: hidden;
+	background: url(../img/tel.png) no-repeat center left;
+	padding: 13px 0;
+	padding-left: 35px;
+	float: right
+}
+.headerTop .phone p {
+	font-size: 12px;
+	color: #666;
+margin-top:
+}
+.headerTop .phone h3 {
+	font-size: 24px;
+	color: #19938F;
+	font-weight: normal;
+}
+.headerNav {
+	overflow: hidden;
+	width: 100%;
+	height: 55px;
+	background: url(../img/navbg.png) repeat-x left top;
+}
+.headerNav li {
+	float: left;
+	font-size: 16px;
+	line-height: 55px;
+	white-space: nowrap
+}
+.headerNav li a {
+	color: #fff;
+	display: block;
+	text-decoration: none;
+	padding: 0 26px;
+}
+.headerNav li.last {
+	background: none
+}
+.headerNav li:hover a, .headerNav li.cur a {
+	color: #FF9900;
+	font-weight: bold;
+}
+/*footer*/
+.footer dt a img {
+	width: 200px !important;
+	height: 43px !important;
+}
+.footer {
+	overflow: hidden;
+	width: 100%;
+	background-color: #1da4a0;
+	padding: 45px 0
+}
+.footer .f_nav {
+	overflow: hidden;
+	margin-bottom: 40px;
+}
+.footer .f_nav li {
+	float: left;
+	font-size: 13px;
+	padding: 0 26px;
+	border-right: 1px dashed #fff;
+	white-space: nowrap
+}
+.footer .f_nav li:last-child {
+	border: none;
+}
+.footer .f_nav li a {
+	color: #fff;
+}
+.footer .f_nav li.last {
+	border: none
+}
+.footer .f_btm {
+	overflow: hidden;
+}
+.footer dl {
+	overflow: hidden;
+	width: 570px;
+	float: left;
+}
+.footer dt {
+	overflow: hidden;
+	float: left;
+	margin-right: 25px;
+	margin-bottom: 20px;
+}
+.footer dd {
+	overflow: hidden;
+	width: 455px;
+	float: left;
+	margin-top: 5px;
+}
+.footer dd p {
+	font-size: 12px;
+	color: #fff;
+	line-height: 25px;
+}
+.footer dd p a {
+	color: #fff;
+}
+.footer dd em {
+	margin: 0 5px;
+}
+.footer .ewm {
+	overflow: hidden;
+	float: right;
+	width: 120px;
+}
+.footer .ewm p {
+	font-size: 12px;
+	color: #fff;
+	text-align: center;
+	margin-top: 10px;
+}
+.retop ul {
+	overflow: hidden;
+}
+.retop li {
+	float: left;
+	margin-left: 10px;
+}
+.retop li img {
+	display: block;
+}
+.rtTop {
+	width: 43px;
+	height: 43px;
+	overflow: hidden;
+	position: fixed;
+	top: 35%;
+	right: 50%;
+	margin-right: -543px;
+	cursor: pointer;
+	display: none;
+	z-index: 99;
+}
+.rtTop h4 {
+	width: 43px;
+	height: 43px;
+	overflow: hidden;
+	position: relative;
+}
+.rtTop img {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+}

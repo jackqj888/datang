@@ -1,5 +1,5 @@
 {include file="public/layout" /}
-<body class="rolecss bodystyle">
+<body class="rolecss">
 <div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none; visibility: visible; left: 95px; top: 573px;"></div>
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
@@ -9,33 +9,31 @@
         <div class="ncap-form-default">
             <dl class="row">
                 <dt class="tit">
-                    <label for="user_name"><em>*</em>用&nbsp;&nbsp;户&nbsp;&nbsp;名</label>
+                    <label for="user_name"><em>*</em>用户名</label>
                 </dt>
                 <dd class="opt">
-                    <input type="text" name="user_name" value="" id="user_name" onkeyup="check_user_name(this);" class="input-txt">
-                    <p class="red" id="tips_user_name"></p>
+                    <input type="text" name="user_name" value="" id="user_name" class="input-txt">
+                    <p class="notic"></p>
                 </dd>
             </dl>
             <dl class="row">
                 <dt class="tit">
-                    <label for="password"><em>*</em>用户密码</label>
+                    <label for="password"><em>*</em>登录密码</label>
                 </dt>
                 <dd class="opt">
-                    <input type="text" name="password" value="" id="password" autocomplete="off" class="input-txt">
-                    <p class="notic">推荐密码至少是以0-9a-zA-Z.@_-!等符号组合！</p>
-                    <p id="password_tips"></p>
+                    <input type="password" name="password" value="" id="password" class="input-txt">
+                    <p class="notic"></p>
                 </dd>
             </dl>
-            <!-- <dl class="row">
+            <dl class="row">
                 <dt class="tit">
                     <label for="password"><em>*</em>确认密码</label>
                 </dt>
                 <dd class="opt">
-                    <input type="password" name="password2" value="" id="password2" autocomplete="off" class="input-txt">
+                    <input type="password" name="password2" value="" id="password2" class="input-txt">
                     <p class="notic"></p>
-                    <p id="password2_tips"></p>
                 </dd>
-            </dl> -->
+            </dl>
             <dl class="row">
                 <dt class="tit">
                     <label for="pen_name">笔名</label>
@@ -60,15 +58,6 @@
                 </dt>
                 <dd class="opt">
                     <input type="text" name="mobile" value="" id="mobile" class="input-txt">
-                    <p class="notic"></p>
-                </dd>
-            </dl>
-            <dl class="row">
-                <dt class="tit">
-                    <label for="email">Email邮箱</label>
-                </dt>
-                <dd class="opt">
-                    <input type="text" name="email" value="" id="email" class="input-txt">
                     <p class="notic"></p>
                 </dd>
             </dl>
@@ -221,7 +210,7 @@
                     {/if}
                 </dd>
             </dl>
-            <div class="bot" style="position: relative;"><a href="JavaScript:void(0);" onclick="adsubmit();" class="ncap-btn-big ncap-btn-green" id="submitBtn">确认提交</a></div>
+            <div class="bot"><a href="JavaScript:void(0);" onclick="adsubmit();" class="ncap-btn-big ncap-btn-green" id="submitBtn">确认提交</a></div>
         </div>
     </form>
 </div>
@@ -436,79 +425,30 @@
         changeRole(new_role_id);
     }
 
-    function check_user_name(obj)
-    {
-        var user_name = $(obj).val();
-        $.ajax({
-            url: "{:url('Admin/ajax_add_user_name')}",
-            type: "POST",
-            dataType: "JSON",
-            async: false,
-            data: {user_name:user_name, _ajax:1},
-            success: function(res){
-                if (0 == res.code) {
-                    $('#tips_user_name').html(res.msg);
-                } else {
-                    $('#tips_user_name').html('');
-                }
-            }
-        });
-    }
-
-    $('#password').keyup(function(){
-        var password = $(this).val();
-        $.ajax({
-            url: "{:url('Admin/ajax_checkPasswordLevel')}",
-            type: "POST",
-            dataType: "JSON",
-            data: {password:password, _ajax:1},
-            success: function(res){
-                $('#password_tips').removeAttr('class');
-                if (1 == res.code) {
-                    $('#password_tips').addClass('rank r'+res.data.pwdLevel);
-                }
-            }
-        });
-    });
-/*
-    $('#password2').keyup(function(){
-        var password = $('#password').val();
-        var password2 = $('#password2').val();
-        $('#password2_tips').hide();
-        if (password != '' || password2 != '') {
-            if (password != password2) {
-                $('#password2_tips').html('<font color="red">两次密码输入不一致！</font>').show();
-            } else {
-                $('#password2_tips').html('<font color="green">校验通过！</font>').show();
-            }
-        }
-    });
-*/
     // 判断输入框是否为空
     function adsubmit(){
-        var user_name = $('input[name=user_name]').val();
-        if($.trim(user_name) == ''){
+        if($('input[name=user_name]').val() == ''){
             showErrorMsg('用户名不能为空！');
             $('input[name=user_name]').focus();
             return false;
         }
         var password = $('#password').val();
+        var password2 = $('#password2').val();
         if(password == ''){
             showErrorMsg('登录密码不能为空！');
             $('input[name=password]').focus();
             return false;
         }
-        // var password2 = $('#password2').val();
-        // if(password2 == ''){
-        //     showErrorMsg('确认密码不能为空！');
-        //     $('input[name=password2]').focus();
-        //     return false;
-        // }
-        // if (password != password2) {
-        //     showErrorMsg('两次密码输入不一致！');
-        //     $('input[name=password]').focus();
-        //     return false;
-        // }
+        if(password2 == ''){
+            showErrorMsg('确认密码不能为空！');
+            $('input[name=password2]').focus();
+            return false;
+        }
+        if (password != password2) {
+            showErrorMsg('两次密码输入不一致！');
+            $('input[name=password]').focus();
+            return false;
+        }
         var role_id = $('input[name=role_id]:checked').val();
         if(role_id == '' || undefined == role_id){
             showErrorMsg('请选择权限组！');

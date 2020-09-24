@@ -1,97 +1,50 @@
-<style>
-  .cur {
-    color: #fff;
-    background: #274f7d;
-  }
-  .subList .cur {
-    color: #274f7d!important;
-    background: initial;
-  }
-  .subList .cur p {
-    color: #274f7d!important;
-  }
-  .subList {
-    display: none;
-    padding: 10px 0;
-
-  }
-  .subList li {
-    width: 100%;
-    height: 30px;
-    overflow: hidden;
-    margin: 0 auto;
-    padding: 0;
-    background-color: initial;
-  }
-  .subList li a {
-    display: block;
-    width: 100%;
-    height: 30px;
-    overflow: hidden;
-    line-height: 30px;
-    color: #808ea4;
-    font-size: 12px;
-    margin: 0 auto;
-    padding: 0 20px;
-    box-sizing: border-box;
-  }
-  .subList li a p {
-    width: 100%;
-    color: #999;
-    background-color: #fff;
-    height: 30px;
-    line-height: 30px;
-    font-weight: normal;
-    padding: 0;
-  }
-  .subList li a:hover {
-    background: initial;
-  }
-  .subList li a p:hover {
-    color: #274f7d;
-  }
-  .active {
-    display: block;
-  }
-  .er-fl li {
-    text-align: initial;
-  }
-  .er-fl li a {
-    padding-left: 20px;
-  }
-</style>
-<div class="n-l">
-    <div class="l-b">
-      <div class="fl-tit">
-        <p>Classification</p>
-        {$eyou.field.typeid|gettoptype=###,'typename'}</div>
-      <div class="er-fl">
-        <ul>
-        {eyou:channel type='first' id='field' currentstyle='cur'}
-          <li style="position: relative">
-            <a href="{$field.typeurl}" class="{$field.currentstyle}" id="{$field.id}">{$field.typename}</a>
-            <span class="toggleIcon"></span>
-          </li>
-          <ul class="subList">
-            {eyou:channel name='$field.children' id='field1' currentstyle='cursub'}
-            <li>
-              <a href="{$field1.typeurl}" class="{$field1.currentstyle}"><p>-  {$field1.typename}</p></a>
-            </li>
-            {/eyou:channel}
-          </ul>
-        {/eyou:channel} 
-        </ul>
+<div class="left" e-page="left">
+<div class="leftMu">
+  <h4><a href="{$eyou.field.typeid|gettoptype=###,'typeurl'}">{$eyou.field.typeid|gettoptype=###,'typename'}</a></h4>
+  <ul>
+    {eyou:channel type='first' id='field' currentstyle='cur'}
+    <li class="{$field.currentstyle}"><a href="{$field.typeurl}">{$field.typename}</a></li>
+    {/eyou:channel}
+  </ul>
+</div>
+<h4 class="t05 eyou-edit" e-id="l1" e-type="text"> {eyou:uitext e-id='l1' e-page="left"}
+  {$field.value}
+  {eyou:else /}
+  相关资讯
+  {/eyou:uitext} </h4>
+<div class="t05_cons1 eyou-edit" e-id="l2" e-type="arclist"> {eyou:uiarclist e-id='l2' typeid='6' e-page="left"}
+  <ul>
+    {eyou:arclist titlelen='20' rderby='rand' row='10'}
+    <li><a href="{$field.arcurl}" title="{$field.title}"> {$field.title}</a></li>
+    {/eyou:arclist}
+  </ul>
+  <div class="clear"></div>
+  {/eyou:uiarclist} </div>
+<div class="contactn mt10 mb10 mb10">
+    <div class="t05 eyou-edit" e-id="l3" e-type="type" > {eyou:uitype typeid='7' e-id='l3' e-page='left'}
+      {eyou:type type='self' empty='缺省文字'}
+      <h5> <a href="{$field.typeurl}" class="yan2" target="_blank">{$field.typename}</a></h5>
+      {/eyou:type}
+      {/eyou:uitype} </div>
+    <div class="subnr">
+    <div class="eyou-edit" e-id="l4"  e-type="upload">
+{eyou:uiupload e-id='l4' e-page='left' id='field'}
+{$field.value}
+{eyou:else /}
+<img src="{eyou:global name='web_templets_pc' /}/skin/img/catactus.jpg" />
+{/eyou:uiupload} 
+</div>
+     <div class="eyou-edit" e-id="l5" e-type="text">
+    {eyou:uitext e-id='l5' e-page='left' id='field'}
+      {$field.value}
+      {eyou:else/}
+      <p> <span class="subspan">咨询热线：</span></p>
+      <p class="subtel">{eyou:global name='web_attr_1' /}</p>
+      <p><span>QQ客服：{eyou:global name='web_attr_2' /}</span></p>
+      <p><span>企业邮箱：</span>{eyou:global name='web_attr_8' /}</p>
+      <p> <span>地 址：</span>{eyou:global name='web_attr_5' /}</p>
+      {/eyou:uitext}
       </div>
-    </div>
-    <div class="n-lx">
-      <div class="n-lx-ico">
-        <p></p>
-        {eyou:global name='web_attr_2' /}</div>
-      <div class="n-lx-wz">
-        传真：{eyou:global name='web_attr_57' /}<br>
-        手机：{eyou:global name='web_attr_60' /}<br>
-        邮箱：{eyou:global name='web_attr_55' /}<br>
-        地址：{eyou:global name='web_attr_56' /} </div>
-      <div class="n-lx-an"><a href="http://wpa.qq.com/msgrd?v=3&site={eyou:global name="web_name" /}&menu=yes&uin={eyou:global name='web_attr_3' /}" target="_blank">立即咨询</a></div>
-    </div>
+       </div>
   </div>
+</div>

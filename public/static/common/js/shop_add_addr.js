@@ -7,7 +7,7 @@ function GetRegionData(t,type){
     var url = $('#GetRegionDataS').val();
     $.ajax({
         url: url,
-        data: {parent_id:parent_id,_ajax:1},
+        data: {parent_id:parent_id},
         type:'post',
         dataType:'json',
         success:function(res){
@@ -22,7 +22,7 @@ function GetRegionData(t,type){
         },
         error : function() {
             layer.closeAll();
-            layer.alert('未知错误，无法继续！', {icon: 5});
+            layer.alert('网络失败，请刷新页面后重试', {icon: 5});
         }
     });
 }
@@ -32,15 +32,7 @@ function AddAddress(){
     var parentObj = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
     var types = $('#types').val();
     var url   = $('#ShopAddAddress').val();
-    if (url.indexOf('?') > -1) {
-        url += '&';
-    } else {
-        url += '?';
-    }
-    url += '_ajax=1';
-
     var _parent = parent;
-    
     $.ajax({
         url: url,
         data: $('#theForm').serialize(),
@@ -48,12 +40,12 @@ function AddAddress(){
         dataType:'json',
         success:function(res){
             if(res.code == 1){
-                if (res.data.url) {
+                if (res.url) {
                     parent.layer.close(parentObj);
                     parent.layer.msg(res.msg, {time: 1000}, function(){
-                        _parent.ReturnUrl(res.data.url);
+                        _parent.ReturnUrl(res.url);
                     });
-                } else {
+                }else{
                     parent.layer.close(parentObj);
                     AddHtml(res.data,types);
                     parent.layer.msg(res.msg, {time: 1000});    
@@ -65,7 +57,7 @@ function AddAddress(){
         },
         error : function() {
             layer.closeAll();
-            layer.alert('未知错误，无法继续！', {icon: 5});
+            layer.alert('网络失败，请刷新页面后重试', {icon: 5});
         }
     });
 };

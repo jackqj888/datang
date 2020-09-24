@@ -322,7 +322,7 @@ class RecycleBin extends Base
                 $r = $this->arctype->where($where)->delete();
                 if($r){
                     // Tag标签删除
-                    Db::name('taglist')->where([
+                    Db::name('tagindex')->where([
                             'typeid'    => ['IN', $ids],
                         ])->delete();
                     // 内容数据删除

@@ -37,8 +37,8 @@ class TagDiyfield extends Base
                     {
                         $list = [];
                         foreach ($data as $key => $val) {
-                            $val['image_url'] = handle_subdir_pic($val['image_url']);
-                            $list[$key] = $val;
+                            $list[$key]['image_url'] = handle_subdir_pic($val);
+                            $list[$key]['title'] = '';
                         }
                         $data = $list;
                     }

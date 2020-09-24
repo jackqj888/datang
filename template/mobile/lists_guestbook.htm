@@ -1,80 +1,105 @@
-<!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
-<meta content="yes" name="apple-mobile-web-app-capable">
-<meta content="telephone=no" name="format-detection">
-<script type="text/javascript" language="javascript" src="{eyou:global name='web_templets_m' /}/skin/js/jq.js"></script>
-<script type="text/javascript" language="javascript" src="{eyou:global name='web_templets_m' /}/skin/js/js.js"></script>
-<script src="{eyou:global name='web_templets_m' /}/skin/js/slide.js"></script>
-<script src="{eyou:global name='web_templets_m' /}/skin/js/swiper.min.js"></script>
+<div class="">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0;" />
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
 <title>{$eyou.field.seo_title}</title>
 <meta name="description" content="{$eyou.field.seo_description}" />
 <meta name="keywords" content="{$eyou.field.seo_keywords}" />
-<link href="{eyou:global name='web_templets_m' /}/skin/css/reset.css" type="text/css" rel="stylesheet" />
-<link href="{eyou:global name='web_templets_m' /}/skin/css/css.css" type="text/css" rel="stylesheet" />
-<link href="{eyou:global name='web_templets_m' /}/skin/css/swiper.min.css" type="text/css" rel="stylesheet" />
-<link rel="stylesheet" href="{eyou:global name='web_templets_m' /}/skin/css/iconfont.css">
+<meta name="generator" content="eyoucms 1.0.0" data-variable="{eyou:global name='web_eyoucms' /}" />
+<link href="{eyou:version file='/favicon.ico' /}" rel="shortcut icon" type="image/x-icon" />
+<script type="text/javascript" src="{eyou:global name='web_templets_m' /}/skin/js/jquery.js"></script>
+<script type="text/javascript" src="{eyou:global name='web_templets_m' /}/skin/js/jquery.js"></script>
+<link href="{eyou:global name='web_templets_m' /}/skin/css/fontsstyle.css" rel="stylesheet" />
+<link href="{eyou:global name='web_templets_m' /}/skin/css/reset.css" rel="stylesheet" type="text/css" />
+<link href="{eyou:global name='web_templets_m' /}/skin/css/common.css" rel="stylesheet" />
+<link href="{eyou:global name='web_templets_m' /}/skin/css/prlist.css" rel="stylesheet" />
 </head>
 <body>
-<div id="container"> {eyou:include file="/template/mobile/header.htm" /}
-  <div class="mainboxbg"></div>
-  <!--header--> 
-  
-  <!--header-->
-  <div id="header" class="clearfix">
-    <div class="back abslt_l"><a class="iconfont" href="javascript:history.back(-1);">&#xe62a;</a></div>
-    <div class="contitle"><a href="{eyou:global name='web_cmsurl' /}/" title="{eyou:global name='web_title' /}"> <img src="{eyou:global name='web_attr_59' /}" alt="{eyou:global name='web_title' /}"/> </a></div>
-    <div class="flbox abslt_r sechan"><span class="sdmenut iconfont">&#xe687;</span></div>
-  </div>
-  <!--mainbox-->
-  <div class="mainbox clearfix" style="margin-top:0;"> 
-    <!--loginbox-->
-    <div class="menutt clearfix">
-      <div class="ttl"> {$eyou.field.typename}
-        <div class="spanfl"> 分类<em class="iconfont">&#xe63e;</em> </div>
-      </div>
-      <div class="flboxsub"> 分类：
-        <ul class="flboxlist">
-          {eyou:channel type='first' id='field' currentstyle='on'}
-          <li> <a href="{$field.typeurl}"><span class="iconfont">&#xe63e;</span>{$field.typename}</a></li>
-          {/eyou:channel}
-        </ul>
-        <div class="flcolose">关闭</div>
-      </div>
-      <div class="contentct">
-        <div class="loginbox"> {eyou:guestbookform type='default'}
-          <form method="POST" class="msgForm" enctype="multipart/form-data" action="{$field.action}" onsubmit="return checkForm();">
-            <input name="{$field.attr_14}" type="text" id="attr_14" class="inputtext" placeholder="{$field.itemname_14}" />
-            <input name="{$field.attr_15}" type="text" id="attr_15" class="inputtext" placeholder="{$field.itemname_15}" />
-            <input name="{$field.attr_16}" type="text" id="attr_16" class="inputtext" placeholder="{$field.itemname_16}" />
-            <textarea name="{$field.attr_17}" id="attr_17" class="text_qs2" placeholder="{$field.itemname_17}" ></textarea>
-            <input type="submit" name="submit" value="提交" id="submit" class="login" />
-            {$field.hidden}
-          </form>
-          <script type="text/javascript">
+<!--header-->
+{eyou:include file="header.htm" /}
+{eyou:include file="nav.htm" /}
+<div class="CategoryList_Title"> <a href="javascript:history.go(-1);"><i class="icon-left fl"></i></a>{$eyou.field.typename}
+  <ul 
+    {eyou:notempty name='$eyou.field.has_children' /}
+    class="CategoryLista"
+    {eyou:else /}
+    style="display:none"
+    {/eyou:notempty}
+     id="fenl">
+    <li ><a href="#"><i class="icon-details"></i></a>
+      <ul class="list1">
+        {eyou:channel type='first' }
+        <li><a href="{$field.typeurl}">>{$field.typename}</a></li>
+       {/eyou:channel}
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="ProductDetailed">
+ {eyou:guestbookform type='default'}
+  <form method="POST" enctype="multipart/form-data" action="{$field.action}" onsubmit="return checkForm();">
+    <table class="formSpan">
+      <tr>
+        <td class="td1"> {$field.itemname_1}: </td>
+        <td><input type="text" name="{$field.attr_1}" placeholder="请输入您的{$field.itemname_1}" id="attr_1" />
+          <br /></td>
+      </tr>
+      <tr>
+        <td> {$field.itemname_2}: </td>
+        <td><input type="phone" name="{$field.attr_2}" value="" placeholder="请输入您的{$field.itemname_2}" id="attr_2" /></td>
+      </tr>
+      <tr>
+        <td> {$field.itemname_4}: </td>
+        <td><textarea name="{$field.attr_4}" placeholder="请输入您的{$field.itemname_4}" id="attr_4"></textarea>
+          <p id="ErrorInfo" class="red pl10"> </p></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <button type="submit" class="sbutton">提交</button>
+         </td>
+      </tr>
+    </table>
+    {$field.hidden}
+  </form>
+  <script type="text/javascript">
             function checkForm()
             {
-              if(document.getElementById('attr_14').value.length == 0)
+              if(document.getElementById('attr_1').value.length == 0)
               {
-                alert('请输入{$field.itemname_14}');
+                alert('请填写{$field.itemname_1}');
                 return false;
               }
-              if(document.getElementById('attr_15').value.length == 0)
+              if(document.getElementById('attr_2').value.length == 0)
               {
-                alert('请输入{$field.itemname_15}');
+                alert('请填写{$field.itemname_2}');
                 return false;
               }
               
               return true;
             }
           </script> 
-          {/eyou:guestbookform} </div>
-      </div>
-    </div>
-  </div>
-  <!--footer--> 
-  {eyou:include file="/template/mobile/footer.htm" /} </div>
+  {/eyou:guestbookform}
+  
+  <div class="searchSpan">
+   <form method="get" action="{eyou:searchurl /}">
+    <input type="hidden" name="channel" value="" />
+    <input type="hidden" name="typeid" value="" />
+    <input class="txtSearch" type="text" name="keywords" placeholder="输入您要搜索的关键词" id="se_key" />
+    <button type="submit" style="background-color:transparent;border:0;display: block; margin-left: auto;"> <a><i class="icon-search btnSearch"></i></a></button>
+   </form>  </div>
+            
+</div>
+<!--info-->
+{eyou:include file="footer.htm" /}
 </body>
+<script type="text/javascript" src="{eyou:global name='web_templets_m' /}/skin/js/sdw_mobile.js"></script>
+<script type="text/javascript" src="{eyou:global name='web_templets_m' /}/skin/js/tools.js"></script>
 </html>
+</div>

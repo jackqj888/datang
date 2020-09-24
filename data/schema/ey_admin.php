@@ -63,15 +63,6 @@ return array (
     'primary' => false,
     'autoinc' => false,
   ),
-  'head_pic' => 
-  array (
-    'name' => 'head_pic',
-    'type' => 'varchar(255)',
-    'notnull' => false,
-    'default' => '',
-    'primary' => false,
-    'autoinc' => false,
-  ),
   'last_login' => 
   array (
     'name' => 'last_login',
@@ -141,15 +132,6 @@ return array (
     'type' => 'tinyint(1)',
     'notnull' => false,
     'default' => '1',
-    'primary' => false,
-    'autoinc' => false,
-  ),
-  'syn_users_id' => 
-  array (
-    'name' => 'syn_users_id',
-    'type' => 'int(10)',
-    'notnull' => false,
-    'default' => '0',
     'primary' => false,
     'autoinc' => false,
   ),

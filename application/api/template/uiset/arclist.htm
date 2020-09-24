@@ -13,25 +13,20 @@
         }
         .control-group {
             padding: 5px 0px;
-			
         }
-		.controls{
-			text-align: center;
-		}
         .input{
             width: 92px;
         }
         .select {
             height: 28px;
             font-size: 12px;
-			border: 1px solid #ddd;
-			border-radius:4px;
         }
         .btn{
-             background-color: #4fc0e8;
+            font: bold 14px/20px "microsoft yahei", arial;
+            background-color: #4fc0e8;
             color: #FFF;
-			border-radius: 4px;
-			padding: 6px 20px;
+            text-shadow: 0 -1px 0 rgba(0,0,0,0.10);
+            border-color: #3aa8cf;
         }
         .btn:hover {
             color: #FFF;
@@ -85,7 +80,7 @@
             }
 
             layer_loading('正在处理');
-            var url = "{:url('api/Uiset/submit', ['_ajax'=>1])}";
+            var url = "{:url('api/Uiset/submit')}";
             $.ajax({
                 url: url,
                 type: 'POST',

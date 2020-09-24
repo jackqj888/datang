@@ -103,19 +103,6 @@ abstract class Paginator implements ArrayAccess, Countable, IteratorAggregate, J
      */
     protected function url($page)
     {
-        // tag标签ID by 小虎哥
-        static $tagid = 0;
-        if (!empty($this->options['query']['tagid'])) {
-            $tagid = intval($this->options['query']['tagid']);
-        }
-
-        // 栏目ID by 小虎哥
-        static $typeid = 0;
-        if (!empty($this->options['query']['typeid_tmp'])) {
-            $typeid = intval($this->options['query']['typeid_tmp']);
-            unset($this->options['query']['typeid_tmp']);
-        }
-
         if ($page <= 0) {
             $page = 1;
         }
@@ -134,66 +121,19 @@ abstract class Paginator implements ArrayAccess, Countable, IteratorAggregate, J
 
         /*-----------------URL模式------------------*/
         // URL模式
-        static $seo_pseudo = null;
-        null === $seo_pseudo && $seo_pseudo = config('ey_config.seo_pseudo');
-        // 筛选标识
-        static $url_screen_var = null;
-        null === $url_screen_var && $url_screen_var = config('global.url_screen_var');
+        $seo_pseudo = config('ey_config.seo_pseudo');
         if (3 == $seo_pseudo) { // 伪静态模式 by 小虎哥
-            if (!isset($this->options['query'][$url_screen_var])) { // 不是筛选URL
-                // static $seo_rewrite_format = null;
-                // null === $seo_rewrite_format && $seo_rewrite_format = config('ey_config.seo_rewrite_format');
-                // if (1 == intval($seo_rewrite_format)) {
-                //     if (!stristr($url, '.html')) {
-                //         $url .= '/';
-                //     }
-                // }
-                
-                // tag标签分页
-                if (!empty($tagid)) {
-                    if (1 >= $this->currentPage) {
-                        1 < $page && $url = preg_replace('/\.html$/i', "_{$page}.html", $url);
-                    } else {
-                        $url = preg_replace('/\/'.$tagid.'_(\d+)\.html$/i', "/{$tagid}.html", $url);
-                        1 < $page && $url = preg_replace('/\.html$/i', "_{$page}.html", $url);
-                    }
-                    unset($parameters[$this->options['var_page']]);
-                    unset($this->options['query']['tagid']);
-                }
-                
-                // 栏目分页
-                if (!empty($typeid)) {
-                    if (stristr($url, '.html')) {
-                        if (1 >= $this->currentPage) {
-                            1 < $page && $url = preg_replace('/\.html$/i', "/list_{$typeid}_{$page}.html", $url);
-                        } else {
-                            $url = preg_replace('/\/list_'.$typeid.'_(\d+)\.html$/i', '.html', $url);
-                            1 < $page && $url = preg_replace('/\.html$/i', "/list_{$typeid}_{$page}.html", $url);
-                        }
-                    } else {
-                        $url .= '/';
-                        if (1 >= $this->currentPage) {
-                            1 < $page && $url .= "list_{$typeid}_{$page}/";
-                        } else {
-                            $url = preg_replace('/\/list_'.$typeid.'_(\d+)\/$/i', '/', $url);
-                            1 < $page && $url .= "list_{$typeid}_{$page}/";
-                        }
-                    }
-                    unset($parameters[$this->options['var_page']]);
+            $seo_rewrite_format = config('ey_config.seo_rewrite_format');
+            if (1 == intval($seo_rewrite_format)) {
+                if (!stristr($url, '.html')) {
+                    $url .= '/';
                 }
             }
             /*--end*/
-        }
+        } 
         /*------------------------end*/
 
-        if (2 != $seo_pseudo && 1 == $page) { // 排除静态页面模式
-            unset($parameters[$this->options['var_page']]);
-        }
-
         if (!empty($parameters)) {
-            if (!stristr($url, 'index.php') && !stristr($url, '.html')) {
-                $url = rtrim($url, '/').'/';
-            }
             $url .= '?' . http_build_query($parameters, null, '&');
         }
         return $url . $this->buildFragment();

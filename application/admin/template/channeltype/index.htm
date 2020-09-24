@@ -1,6 +1,6 @@
 {include file="public/layout" /}
 
-<body class="bodystyle" style="cursor: default; -moz-user-select: inherit;">
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;">
 <div id="append_parent"></div>
 <div id="ajaxwaitid"></div>
 <div class="page">
@@ -8,7 +8,7 @@
         <div class="mDiv">
             <div class="ftitle">
                 <h3>频道模型列表</h3>
-                <h5>(共{$pageObj->totalRows}条数据)</h5>
+                <h5>(共{$pageObj->totalRows}条记录)</h5>
             </div>
             <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
             <div class="sDiv">
@@ -94,12 +94,16 @@
                             <td class="">
                                 <div class="tl {empty name="$vo.ifsystem"}w230{else /}w160{/empty}">
                                     {eq name="'Channeltype@edit'|is_check_access" value="1"}
+                                        {eq name="$vo.nid" value="guestbook"}
+                                        &nbsp;&nbsp;&nbsp;———
+                                        {else /}
                                         <a href="{:url('Channeltype/edit',array('id'=>$vo['id']))}" class="btn blue"><i class="fa fa-pencil-square-o blocki"></i>编辑</a>
+                                        {/eq}
                                     {/eq}
 
                                     {eq name="'Channeltype@edit'|is_check_access" value="1"}
                                         {eq name="$vo.nid" value="guestbook"}
-                                        <a href="{:url('Field/attribute_index')}" class="btn blue"><i class="fa fa-code blocki"></i>内容字段</a>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;—————
                                         {else /}
                                         <a href="{:url('Field/channel_index',array('channel_id'=>$vo['id']))}" class="btn blue"><i class="fa fa-code blocki"></i>内容字段</a>
                                         {/eq}
@@ -170,7 +174,7 @@
             $.ajax({
                 type : 'post',
                 url : $(obj).attr('data-url'),
-                data : {del_id:$(obj).attr('data-id'), _ajax:1},
+                data : {del_id:$(obj).attr('data-id')},
                 dataType : 'json',
                 success : function(data){
                     layer.closeAll();
@@ -193,7 +197,7 @@
         $.ajax({
             type : 'post',
             url : "{:url('Channeltype/ajax_show')}",
-            data : {id:$(obj).attr('data-id'),status:$(obj).attr('data-status'), _ajax:1},
+            data : {id:$(obj).attr('data-id'),status:$(obj).attr('data-status')},
             dataType : 'json',
             success : function(res){
                 if (res.code == 1) {
@@ -212,7 +216,7 @@
                             $.ajax({
                                 type : 'post',
                                 url : "{:url('Channeltype/ajax_check_tpl')}",
-                                data : {id:$(obj).attr('data-id'),status:$(obj).attr('data-status'),tpltype:res.data.tpltype, _ajax:1},
+                                data : {id:$(obj).attr('data-id'),status:$(obj).attr('data-status'),tpltype:res.data.tpltype},
                                 dataType : 'json',
                                 success : function(res){
                                     layer.closeAll();
@@ -221,24 +225,18 @@
                                             window.location.reload();
                                         });
                                     }else{
-                                        layer.alert(res.msg, {icon: 5, title:false, closeBtn:false});
+                                        layer.alert(res.msg, {icon: 2, title:false});
                                     }
                                 }
                             })
                         });
                     }
                 } else {
-                    var icon = 5;
-                    try {
-                        if (res.data.icon) {
-                            icon = res.data.icon;
-                        }
-                    }catch(err){}
-                    layer.alert(res.msg, {icon: icon, title:false, closeBtn:false});
+                    layer.alert(res.msg, {icon: 2, title:false});
                 }
             },
             error:function(){
-                layer.alert(ey_unknown_error, {icon: 5, title:false, closeBtn:false});
+                layer.alert('网络失败，请刷新页面后重试', {icon: 2, title:false});
             }
         });
     }

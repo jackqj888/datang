@@ -1,0 +1,16 @@
+<div class="RandomNews mb10" e-page="boot">
+          <h4 class="diysr eyou-edit" e-id="h2"  e-type="text"> {eyou:uitext e-id='h2' e-page='boot' id='field'}
+{$field.value}
+{eyou:else /}产品推荐{/eyou:uitext}</h4>
+            <div class="news_random eyou-edit" e-id="h3" e-type="arclist">
+              {eyou:uiarclist e-id='h3' typeid='2' e-page="boot"}
+          {eyou:arclist titlelen='20' flag='c' row='4'}
+            <dl class="product_dl_commend">
+              <dt><a href="{$field.arcurl}" title="{$field.title}"> <img src="{$field.litpic}" alt="{$field.title}" /></a></dt>
+              <dd><a href="{$field.arcurl}" title="{$field.title}"> {$field.title}</a></dd>
+            </dl>
+           {/eyou:arclist}
+           {/eyou:uiarclist}
+            <div class="clear"> </div>
+          </div>
+        </div>

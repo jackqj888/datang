@@ -13,7 +13,6 @@
 
 namespace app\admin\model;
 
-use think\Db;
 use think\Model;
 
 /**
@@ -34,7 +33,7 @@ class ProductImg extends Model
      */
     public function getProImg($aid, $field = '*')
     {
-        $result = Db::name('ProductImg')->field($field)
+        $result = db('ProductImg')->field($field)
             ->where('aid', $aid)
             ->order('sort_order asc')
             ->select();
@@ -51,7 +50,7 @@ class ProductImg extends Model
         if (!is_array($aid)) {
             $aid = array($aid);
         }
-        $result = Db::name('ProductImg')->where(array('aid'=>array('IN', $aid)))->delete();
+        $result = db('ProductImg')->where(array('aid'=>array('IN', $aid)))->delete();
 
         return $result;
     }
@@ -65,7 +64,6 @@ class ProductImg extends Model
     public function saveimg($aid, $post = array())
     {
         $proimg = isset($post['proimg']) ? $post['proimg'] : array();
-        $imgintro = isset($post['imgintro']) ? $post['imgintro'] : array();
         if (!empty($proimg) && count($proimg) > 1) {
             array_pop($proimg); // 弹出最后一个
 
@@ -94,13 +92,11 @@ class ProductImg extends Model
                 $attr = isset($img_info[3]) ? $img_info[3] : '';
                 $mime = isset($img_info['mime']) ? $img_info['mime'] : '';
                 $title = !empty($post['title']) ? $post['title'] : '';
-                $intro = !empty($imgintro[$key]) ? $imgintro[$key] : '';
                 ++$sort_order;
                 $data[] = array(
                     'aid' => $aid,
                     'title' => $title,
                     'image_url'   => $val,
-                    'intro'   => $intro,
                     'width' => $width,
                     'height' => $height,
                     'filesize'  => $filesize,

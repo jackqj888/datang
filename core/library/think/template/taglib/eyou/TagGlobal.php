@@ -50,12 +50,9 @@ class TagGlobal extends Base
         }
         /*--end*/
 
-        $ctl = binaryJoinChar(config('binary.5'), 13);
-        $act = binaryJoinChar(config('binary.6'), 5);
-        $globalArr = $ctl::$act($name);
-        if (!empty($globalArr['data'])) {
-            $value = $globalArr['value'];
-            $globalData = $globalArr['data'];
+        $globalTpCache = tpCache('global');
+        if ($globalTpCache) {
+            $value = \think\Coding::setcr($name, $globalTpCache);
 
             switch ($name) {
                 // case 'web_basehost':
@@ -64,7 +61,7 @@ class TagGlobal extends Base
                         $request = Request::instance();
 
                         // if(empty($value)) {
-                        //     if (1 == $globalData['seo_pseudo']) {
+                        //     if (1 == $globalTpCache['seo_pseudo']) {
                         //         $value = '/';
                         //     }
                         // } && $value = url('home/Index/index');
@@ -90,12 +87,11 @@ class TagGlobal extends Base
                             $value .= http_build_query(['tmp'=>'']);
                         } else {
                             $value = $request->domain().$this->root_dir;
-                            $separate_mobile = config('ey_config.separate_mobile');
-                            if (1 == $globalData['seo_pseudo'] || 1 == $separate_mobile) {
+                            if (1 == $globalTpCache['seo_pseudo']) {
                                 if (!empty($urlParam)) {
                                     /*是否隐藏小尾巴 index.php*/
                                     $seo_inlet = config('ey_config.seo_inlet');
-                                    if (0 == intval($seo_inlet) || 2 == $globalData['seo_pseudo']) {
+                                    if (0 == intval($seo_inlet)) {
                                         $value .= '/index.php';
                                     } else {
                                         $value .= '/';
@@ -114,29 +110,17 @@ class TagGlobal extends Base
                                 }
                             }
                         }
-                        
-                        if (stristr($request->host(true), '.yiyocms.com')) {
-                            $value = preg_replace('/^(http:|https:)/i', '', $value);
-                        }
                     }
-                    break;
-
-                case 'web_root_dir':
-                    $value = $this->root_dir;
                     break;
                 
                 case 'web_recordnum':
                     if (!empty($value)) {
-                        $value = '<a href="http://beian.miit.gov.cn/" rel="nofollow" target="_blank">'.$value.'</a>';
+                        $value = '<a href="http://www.beian.miit.gov.cn/" rel="nofollow" target="_blank">'.$value.'</a>';
                     }
                     break;
 
                 case 'web_templets_pc':
                 case 'web_templets_m':
-                    $globalData = $globalArr['data'];
-                    if (empty($globalData['web_tpl_theme']) && file_exists('./template/default')) {
-                        $value = str_replace('/template/', '/template/default/', $value);
-                    }
                     $value = $this->root_dir.$value;
                     break;
 

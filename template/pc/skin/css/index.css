@@ -1,0 +1,1554 @@
+﻿@charset "utf-8";
+/* eyoucms.com 易优CMS -- 好用,免费,安全 */
+/* CSS Document */
+#flashs {
+	position: relative;
+	height: 600px;
+	overflow: hidden;
+	width: 100% !important;
+}
+#flashs .bd {
+	width: 100% !important;
+}
+#flashs .bgitem {
+	z-index: 1;
+	position: absolute;
+	top: 0;
+	width: 100% !important;
+}
+#flashs .btn {
+	position: absolute;
+	z-index: 7;
+	bottom: 18px;
+	left: 50%;
+	margin-left: -31px;
+}
+#flashs .btn span {
+	color: #fff;
+	background: #717174;
+	cursor: pointer;
+	display: inline-block;
+	margin: 0 2px;
+	width: 25px;
+	height: 25px;
+	font-size: 14px;
+	line-height: 25px;
+	text-align: center;
+}
+#flashs .btn span.cur {
+	background: #1da4a0;
+}
+#flashs .banerer {
+	width: 100% !important;
+}
+/*search*/
+.search {
+	overflow: hidden;
+	margin-top: 15px;
+	height: 30px;
+	margin-bottom: 30px;
+}
+.search p {
+	float: left;
+	line-height: 30px;
+	font-size: 12px;
+	color: #333;
+}
+.search p a {
+	margin: 0 5px;
+	color: #666;
+}
+.search .sBox {
+	overflow: hidden;
+	float: right;
+	height: 30px;
+	width: 300px;
+	background: url(../img/search_bg.png) no-repeat center top;
+}
+.search .sBox a {
+	display: block;
+	width: 80px;
+	height: 30px;
+	background: url(../img/search.png) no-repeat center top;
+	float: right;
+}
+.search .sBox input {
+	float: left;
+	line-height: 30px;
+	border: none;
+	outline: none;
+	background: none;
+	width: 200px;
+	padding: 0 10px;
+	color: #999;
+	height: 30px;
+}
+
+/*规模*/
+.guimo {
+	overflow: hidden;
+	width: 100%;
+}
+.guimo h3 {
+	text-align: center;
+	font-size: 40px;
+	color: #1da4a0;
+	width: 420px;
+	background-color: #fff;
+	margin: 0 auto;
+	position: relative;
+	z-index: 5
+}
+.guimo h3 b {
+	color: #1da4a0;
+}
+.guimo em {
+	display: block;
+	width: 100%;
+	height: 1px;
+	background-color: #e8e9ea;
+	margin-top: -23px;
+}
+.guimo>p {
+	text-align: center;
+	font-size: 18px;
+	color: #666;
+	margin-top: 30px;
+	position: relative;
+	left: 50px;
+}
+.guimo dl {
+	overflow: hidden;
+	margin-top: -30px;
+}
+.guimo dt {
+	overflow: hidden;
+	float: left;
+}
+.guimo dd {
+	overflow: hidden;
+	width: 520px;
+	float: left;
+	margin-top: 110px;
+}
+.guimo dd p {
+	font-size: 16px;
+	color: #666;
+	line-height: 18px;
+	margin-bottom: 24px;
+	background: url(../img/guimo_y.png) no-repeat left 5px;
+	padding-left: 20px;
+}
+.guimo dd b {
+	color: #1da4a0;
+}
+/*时代*/
+.shidai {
+	overflow: hidden;
+	width: 100%;
+	background-color: #1da4a0;
+	padding-top: 35px;
+}
+.shidai h4 {
+	text-align: center;
+	font-weight: normal;
+	font-size: 25px;
+	color: #fff;
+}
+.shidai h3 {
+	font-size: 40px;
+	color: #fff;
+	text-align: center;
+	padding-bottom: 12px;
+	background: url(../img/shidai01.png) no-repeat center bottom;
+}
+.shidai h3 b {
+	color: #ffff00;
+}
+.shidai>p {
+	font-size: 16px;
+	color: #fff;
+	text-align: center;
+	margin-bottom: 10px;
+}
+.shidai>p img {
+	position: relative;
+	top: 2px;
+	margin: 0 10px;
+}
+.shidai ul {
+	overflow: hidden;
+	width: 1000px;
+	margin: 0 auto;
+}
+.shidai li {
+	float: left;
+	width: 200px;
+	height: 400px;
+}
+.shidai li h5 {
+	font-size: 14px;
+	color: #fff;
+	width: 144px;
+	margin: 0 auto;
+	margin-bottom: 10px;
+}
+.shidai li p {
+	width: 144px;
+	margin: 0 auto;
+	font-size: 13px;
+	color: #fff;
+	line-height: 20px;
+}
+.shidai li.li05 h5 {
+	font-size: 24px;
+	color: #1da4a0;
+	text-align: center;
+	margin-top: 205px;
+}
+.shidai li.li05 p {
+	font-size: 13px;
+	line-height: 20px;
+	color: #1da4a0;
+}
+
+.shidai li.li01 h5 {
+	margin-top: 330px;
+}
+.shidai li.li02 h5 {
+	margin-top: 310px;
+}
+.shidai li.li03 h5 {
+	margin-top: 290px;
+}
+.shidai li.li04 h5 {
+	margin-top: 270px;
+}
+/*潜力*/
+.qianli {
+	overflow: hidden;
+	width: 100%;
+	height: 735px;
+	background: url(../img/qianlibg.jpg) no-repeat center top;
+}
+.qianli h4 {
+	font-weight: normal;
+	text-align: center;
+	margin-top: 45px;
+	font-size: 25px;
+	color: #000
+}
+.qianli h3 {
+	font-size: 40px;
+	color: #1da4a0;
+	text-align: center;
+	margin-bottom: 5px;
+}
+.qianli>p {
+	font-size: 18px;
+	color: #666;
+	text-align: center;
+	margin-bottom: 40px;
+}
+.qianli .qlWen {
+	height: 504px;
+	width: 1006px;
+	overflow: hidden;
+}
+.qianli .qlWen span {
+	display: block;
+	text-align: center;
+	font-size: 24px;
+	color: #fff;
+}
+.qianli .qlWen span b {
+	color: #ffff00;
+}
+.qianli .qlWen>p {
+	font-size: 18px;
+	color: #fff;
+	text-align: center;
+}
+.qianli .wen {
+	overflow: hidden;
+	float: right;
+	margin-top: 85px;
+	width: 555px;
+}
+.qianli .wen h5 {
+	font-size: 20px;
+	color: #333;
+	margin-bottom: 15px;
+}
+.qianli .wen h5 b {
+	color: #004871;
+}
+.qianli .wen p {
+	font-size: 13px;
+	color: #333;
+	line-height: 20px;
+	margin-bottom: 38px;
+	width: 490px;
+	overflow: hidden;
+}
+.qianli .wen p em {
+	color: #004871
+}
+/*优势*/
+.youshi {
+	overflow: hidden;
+	width: 100%;
+	height: 798px;
+	background: url(../img/youshibg.jpg) no-repeat center top;
+}
+.youshi h3 {
+	font-size: 36px;
+	color: #1da4a0;
+	font-weight: normal;
+	background: url(../img/ys_x.png) no-repeat center;
+	text-align: center;
+	margin-top: 25px;
+	margin-bottom: 45px;
+}
+.youshi h3 em {
+	position: relative;
+	left: -70px
+}
+.youshi h3 span {
+	position: relative;
+	left: 50px;
+}
+.youshi .ysContent {
+	overflow: hidden;
+	width: 1000px;
+	height: 577px;
+	margin: 0 auto;
+	background: url(../img/youshicontent.png) no-repeat center;
+}
+.youshi .ysf {
+	overflow: hidden;
+	width: 239px;
+	padding-left: 20px;
+	margin-top: 120px;
+}
+.youshi .ysf h4 {
+	font-size: 25px;
+	color: #fff;
+	font-weight: normal;
+}
+.youshi .ysf span {
+	display: block;
+	font-weight: bold;
+	color: #fff;
+	font-size: 25px;
+	margin-bottom: 10px;
+}
+.youshi .ysf p {
+	font-size: 15px;
+	margin-bottom: 45px;
+	color: #fff;
+	width: 234px;
+	overflow: hidden;
+}
+.youshi .ysf p b {
+	color: #ffff00;
+}
+.youshi .ysf img {
+	display: block;
+}
+.youshi .ysLeft {
+	float: left;
+}
+.youshi .ysRight {
+	float: right;
+}
+.youshi .ysBox {
+	overflow: hidden;
+	float: left;
+	width: 478px;
+}
+.youshi .ysBox h5 {
+	font-size: 25px;
+	color: #fff;
+	margin-left: 110px;
+	line-height: 74px;
+}
+.youshi .ysBox .ysList {
+	overflow: hidden;
+	width: 100%;
+	height: 355px;
+	position: relative
+}
+.youshi .ysBox .ysList ul {
+	overflow: hidden;
+	position: relative;
+}
+.youshi .ysBox .ysList li {
+	width: 478px;
+	height: 355px;
+	float: left;
+	overflow: hidden;
+}
+.youshi .ysBox .ysList img {
+	display: block;
+	margin: 0 auto;
+	margin-bottom: 14px;
+}
+.youshi .ysBox .ysList dl {
+	overflow: hidden;
+	width: 440px;
+	margin: 0 auto;
+}
+.youshi .ysBox .ysList dt {
+	background: url(../img/ys_y.png) no-repeat center;
+	overflow: hidden;
+	width: 55px;
+	height: 55px;
+	float: left;
+	text-align: center;
+	line-height: 55px;
+	font-size: 24px;
+	color: #f26b17;
+	font-weight: bold;
+}
+.youshi .ysBox .ysList dd {
+	overflow: hidden;
+	width: 380px;
+	float: right;
+}
+.youshi .ysBox .ysList h4 {
+	font-size: 21px;
+	color: #fff;
+	margin-bottom: 12px;
+}
+.youshi .ysBox .ysList p {
+	font-size: 16px;
+	color: #fff;
+}
+.youshi .ysBox .btn {
+	overflow: hidden;
+	width: 120px;
+	margin: 0 auto;
+	height: 18px;
+}
+.youshi .ysBox .btn span {
+	display: block;
+	float: left;
+	width: 18px;
+	height: 18px;
+	background: url(../img/youshi_btn.png) no-repeat center right;
+	margin: 0 6px;
+	cursor: pointer;
+}
+.youshi .ysBox .btn span.cur {
+	background-position: left
+}
+/*困扰*/
+.kunrao {
+	overflow: hidden;
+	position: relative;
+	margin-top: 30px;
+	
+	height: 570px;
+}
+.kunrao>p {
+	text-align: center;
+	font-size: 18px;
+	color: #333;
+	margin-bottom: 5px;
+	margin-top: 10px;
+}
+.kunrao h4 {
+	font-size: 18px;
+	color: #333;
+	text-align: center;
+	margin-bottom: 5px;
+}
+.kunrao h3 {
+	font-size: 40px;
+	color: #1da4a0;
+	text-align: center;
+	margin-bottom: 10px;
+}
+.kunrao h3 b {
+	color: #1da4a0;
+}
+.kunrao span {
+	font-size: 18px;
+	color: #333;
+	position: absolute;
+}
+.kunrao span b {
+	font-size: 25px;
+	color: #1da4a0;
+}
+.kunrao .s01 {
+	left: 74px;
+	top: 180px;
+}
+.kunrao .s02 {
+	left: 0;
+	top: 290px;
+}
+.kunrao .s03 {
+	left: 40px;
+	top: 405px;
+}
+.kunrao .s04 {
+	left: 717px;
+	top: 180px;
+}
+.kunrao .s05 {
+	left: 770px;
+	top: 290px;
+}
+.kunrao .btn {
+	overflow: hidden;
+	position: absolute;
+	left: 670px;
+	top: 410px;
+}
+.kunrao .btn a {
+	display: block;
+	width: 130px;
+	height: 40px;
+	background: url(../img/kunrao_zx.png) no-repeat center;
+	float: left;
+}
+.kunrao .btn p {
+	font-size: 12px;
+	color: #999;
+	float: left;
+	margin-left: 10px;
+}
+.kunrao .btn em {
+	font-size: 20px;
+	color: #1da4a0;
+	display: block;
+}
+/*pk*/
+.pk {
+	width: 100%;
+	height: 530px;
+	padding-top: 46px;
+	background: url(../img/pk_bg.png) repeat center;
+	position: relative;
+}
+.pk .bk {
+	display: block;
+	position: absolute;
+	left: 50%;
+	bottom: -120px;
+	margin-left: -790px;
+}
+.pk h3 {
+	font-size: 35px;
+	color: #1da4a0;
+	text-align: center;
+}
+.pk p {
+	font-size: 20px;
+	color: #333;
+	text-align: center;
+}
+.pk .pkBox {
+	overflow: hidden;
+	width: 998px;
+	height: 513px;
+	background: url(../img/pk_k.png) no-repeat center top;
+	margin: 0 auto;
+	margin-top: -50px;
+	position: relative;
+}
+.pk .pkContent {
+	overflow: hidden;
+	width: 972px;
+	margin: 0 auto;
+	height: 355px;
+	position: relative;
+	margin-top: 80px;
+}
+.pk .pkContent ul {
+	overflow: hidden;
+	position: relative;
+}
+.pk .pkContent li {
+	float: left;
+	width: 972px;
+	height: 355px;
+}
+.pk .pkContent li p {
+	font-size: 13px;
+	color: #666;
+	margin-left: 20px;
+	line-height: 20px;
+	height: 60px;
+	margin-top: 10px;
+	width: 450px;
+}
+.pk .pkContent li b {
+	color: #1da4a0;
+}
+.pk .pkContent li .pleft {
+	float: left;
+}
+.pk .pkContent li .pright {
+	float: right;
+}
+.pk .pkContent li img {
+	display: block;
+}
+.pk .menu {
+	overflow: hidden;
+	position: absolute;
+	width: 522px;
+	height: 59px;
+	left: 50%;
+	bottom: 3px;
+	margin-left: -260px;
+}
+.pk .menu li {
+	position: relative;
+	top: 10px;
+	float: left;
+	width: 120px;
+	height: 49px;
+	background: url(../img/pk_li.png) no-repeat center top;
+	line-height: 49px;
+	text-align: center;
+	font-size: 15px;
+	color: #fff;
+	margin: 0 5px;
+	cursor: pointer;
+}
+.pk .menu li.cur {
+	height: 59px;
+	background: url(../img/pk_licur.png) no-repeat center top;
+	line-height: 59px;
+	font-weight: bold;
+	top: 0;
+	font-size: 18px;
+}
+/*保障*/
+.baozhang {
+	overflow: hidden;
+	margin-top: 45px;
+	margin-bottom: 35px;
+}
+.baozhang h3 {
+	font-size: 40px;
+	color: #1da4a0;
+	text-align: center;
+	margin-bottom: 5px;
+}
+.baozhang h3 b {
+	color: #1da4a0;
+}
+.baozhang>p {
+	font-size: 16px;
+	color: #666;
+	text-align: center;
+	margin-bottom: 30px;
+}
+.baozhang dl {
+	overflow: hidden;
+	width: 100%;
+	height: 280px;
+	margin-bottom: 30px;
+}
+.baozhang dt {
+	overflow: hidden;
+	width: 447px;
+	height: 280px;
+	float: left;
+}
+.baozhang dd {
+	overflow: hidden;
+	float: right;
+	width: 540px;
+}
+.baozhang dd h4 {
+	font-size: 16px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+.baozhang dd h4 a {
+	color: #1da4a0;
+}
+.baozhang dd p {
+	font-size: 13px;
+	line-height: 22px;
+	color: #666;
+	height: 154px;
+	width: 100%;
+	overflow: hidden;
+	text-align: justify;
+	margin-bottom: 45px;
+}
+.baozhang dd>a {
+	display: block;
+	width: 120px;
+	height: 45px;
+	line-height: 45px;
+	text-align: center;
+	font-size: 16px;
+	color: #fff;
+	float: left;
+	margin-right: 8px;
+}
+.baozhang dd .btn01 {
+	background-color: #1da4a0;
+}
+.baozhang dd .btn02 {
+	background-color: #1da4a0;
+}
+.baozhang .bzBox {
+	overflow: hidden;
+	width: 100%;
+	height: 161px;
+	position: relative
+}
+.baozhang .bzBox ul {
+	overflow: hidden;
+	position: absolute;
+}
+.baozhang .bzBox li {
+	float: left;
+	width: 238px;
+	height: 161px;
+	position: relative;
+	margin-right: 12px;
+}
+.baozhang .bzBox li img {
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 1
+}
+.baozhang .bzBox li p {
+	font-size: 13px;
+	color: #fff;
+	background: url(../img/baozhang_bg.png) repeat center;
+	padding: 5px 10px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	z-index: 2;
+	width: 218px;
+}
+/*pro*/
+.pro {
+	overflow: hidden;
+	width: 100%;
+	padding: 50px 0;
+	background-color: #1da4a0;
+}
+.pro h3 {
+	text-align: center;
+	font-size: 35px;
+	color: #fff;
+}
+.pro>p {
+	text-align: center;
+	font-size: 16px;
+	color: #fff;
+	margin-bottom: 40px;
+}
+.pro .proLeft {
+	overflow: hidden;
+	float: left;
+	width: 230px;
+}
+.pro .proLeft h3 {
+	font-size: 24px;
+	padding-top: 30px;
+	padding-left: 20px;
+	padding-bottom: 25px;
+	background-color: #474646;
+}
+.pro .proLeft h3 a {
+	color: #fff;
+}
+.pro .proLeft h3 em {
+	font-size: 14px;
+	font-family: Arial;
+	color: #6e6c6c;
+	margin-left: 5px;
+}
+.pro .proLeft ul {
+	overflow: hidden;
+	width: 196px;
+	padding: 7px 17px;
+	background-color: #fff;
+}
+.pro .proLeft li {
+	float: left;
+	width: 100%;
+	border-bottom: 1px dashed #ddd;
+	font-size: 13px;
+	line-height: 55px;
+	background: url(../img/pro_s.png) no-repeat left center;
+}
+.pro .proLeft li a {
+	color: #333;
+	margin-left: 20px;
+}
+.pro .proLeft li a:hover {
+	color: #ff9900;
+}
+.pro .proLeft .phone {
+	overflow: hidden;
+	width: 100%;
+	height: 154px;
+	background: url(../img/pro_phone.png) no-repeat center top;
+}
+.pro .proLeft .phone p {
+	font-size: 14px;
+	color: #cdc9c9;
+	margin-top: 85px;
+	margin-left: 15px;
+}
+.pro .proLeft .phone em {
+	font-size: 15px;
+}
+.pro .proRight {
+	overflow: hidden;
+	width: 750px;
+	height: 644px;
+	background-color: #fff;
+	float: right
+}
+.pro .proRight .topmenu {
+	overflow: hidden;
+	width: 720px;
+	margin: 0 auto;
+	margin-top: 30px;
+	background: url(../img/pro_x.png) repeat-x left bottom;
+	margin-bottom: 20px;
+}
+.pro .proRight .topmenu span.more {
+	font-size: 12px;
+	color: #999;
+	float: right;
+}
+.pro .proRight .topmenu ul {
+	overflow: hidden;
+	float: left;
+}
+.pro .proRight .topmenu li {
+	float: left;
+	text-align: center;
+	font-size: 14px;
+	margin: 0 10px;
+	width: 100px;
+	padding-bottom: 32px;
+}
+.pro .proRight .topmenu li.first {
+	margin-left: 0
+}
+.pro .proRight .topmenu li a {
+	color: #333;
+	text-decoration: none;
+}
+.pro .proRight .topmenu li.cur a {
+	color: #1da4a0;
+	font-weight: bold;
+}
+.pro .proRight .topmenu li.cur {
+	border-bottom: 2px solid #1da4a0;
+}
+.pro .proRight .topmenu .more {
+	font-size: 12px;
+	color: #999;
+	float: right;
+}
+.pro .proRight .proBox {
+	overflow: hidden;
+	width: 100%;
+}
+.pro .proRight .proBox ul {
+	overflow: hidden
+}
+.pro .proRight .proBox li {
+	float: left;
+	width: 226px;
+	margin-left: 18px;
+	overflow: hidden;
+}
+.pro .proRight .proBox li a img {
+	display: block;
+	border: 1px solid #e5e5e5;
+	width: 224px;
+}
+.pro .proRight .proBox li a img:hover {
+	border-color: #ff9900;
+}
+.pro .proRight .proBox li p {
+	font-size: 12px;
+	color: #666;
+	text-align: center;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	margin-top: 10px;
+	margin-bottom: 15px;
+}
+/*加盟优势*/
+.jmys {
+	overflow: hidden;
+	padding: 12px 0 33px 0;
+	background: url(../img/jmysbg.png) repeat center;
+	border-bottom: 3px solid #fff;
+}
+.jmys .jmysBox {
+	overflow: hidden;
+	height: 1368px;
+}
+.jmys .jmysBox>div {
+	overflow: hidden;
+	width: 330px;
+}
+.jmys .jmysBox h4 {
+	font-size: 24px;
+	color: #333;
+	border-bottom: 1px solid #1da4a0;
+	padding-bottom: 13px;
+	margin-bottom: 14px;
+	font-weight: normal;
+}
+.jmys .jmysBox p {
+	font-size: 13px;
+	line-height: 22px;
+	color: #666;
+	text-align: justify;
+}
+.jmys .wen01 {
+	margin-top: 220px;
+	margin-left: 572px;
+}
+.jmys .wen02 {
+	margin-top: 102px;
+	margin-left: 107px;
+}
+.jmys .wen03 {
+	margin-top: 94px;
+	margin-left: 572px;
+}
+.jmys .wen04 {
+	margin-top: 102px;
+	margin-left: 107px;
+}
+.jmys .wen05 {
+	margin-top: 132px;
+	margin-left: 572px;
+}
+.jmys .jmysBox>div.phone {
+	overflow: hidden;
+	width: 290px;
+	margin: 0 auto;
+	margin-top: 120px;
+}
+.jmys .phone p {
+	font-size: 12px;
+	color: #999;
+	float: left;
+}
+.jmys .phone p em {
+	display: block;
+	font-size: 19px;
+	color: #1da4a0;
+}
+.jmys .phone a {
+	display: block;
+	width: 130px;
+	height: 40px;
+	background: url(../img/kunrao_zx.png) no-repeat center;
+	float: right;
+}
+/*空间*/
+.kongjian {
+	overflow: hidden;
+	width: 100%;
+	height: 682px;
+}
+/*口碑*/
+.koubei {
+	overflow: hidden;
+	margin-bottom: 40px;
+	height: 459px;
+	padding-top: 50px
+}
+.koubei h3 {
+	text-align: center;
+	font-size: 35px;
+}
+.koubei h3 a {
+	color: #1da4a0;
+}
+.koubei>p {
+	font-size: 16px;
+	color: #666;
+	text-align: center;
+	margin-bottom: 55px;
+}
+.koubei .kbBanner {
+	overflow: hidden;
+	width: 394px;
+	height: 342px;
+	background-color: #1da4a0;
+	float: left;
+	position: relative;
+}
+.koubei .kbBanner ul {
+	overflow: hidden;
+	position: absolute;
+	z-index: 2
+}
+.koubei .kbBanner li {
+	float: left;
+	width: 394px;
+	height: 342px;
+}
+.koubei .kbBanner li img {
+	display: block;
+}
+.koubei .kbBanner li .wen {
+	overflow: hidden;
+	width: 100%;
+	height: 80px;
+}
+.koubei .kbBanner li .wen h5 {
+	font-size: 18px;
+	color: #fff;
+	float: left;
+	margin-left: 12px;
+	margin-top: 20px;
+	cursor: pointer;
+}
+.koubei .kbBanner li .wen h5 em {
+	display: block;
+	font-size: 12px;
+	margin-top: 4px;
+}
+.koubei .kbBanner li span {
+	display: block;
+	width: 80px;
+	height: 80px;
+	background: url(../img/koubei02.jpg) no-repeat center;
+	float: right;
+}
+.koubei .kbBanner .btn {
+	overflow: hidden;
+	width: 45px;
+	position: absolute;
+	z-index: 3;
+	right: 7px;
+	bottom: 91px;
+}
+.koubei .kbBanner .btn span {
+	display: block;
+	width: 11px;
+	height: 11px;
+	background: url(../img/koubei_btn.png) no-repeat center left;
+	float: left;
+	margin-right: 4px;
+}
+.koubei .kbBanner .btn .cur {
+	background-position: right
+}
+.koubei .kbList {
+	overflow: hidden;
+	width: 575px;
+	float: right;
+	height: 342px;
+	position: relative;
+}
+.koubei .kbList dl {
+	overflow: hidden;
+	width: 100%;
+	margin-bottom: 18px;
+	height: 162px;
+}
+.koubei .kbList dt {
+	overflow: hidden;
+	width: 244px;
+	float: left;
+	height: 162px;
+}
+.koubei .kbList dd {
+	overflow: hidden;
+	float: right;
+	width: 310px;
+}
+.koubei .kbList h4 {
+	font-size: 16px;
+	margin-bottom: 20px;
+}
+.koubei .kbList h4 a {
+	color: #1da4a0;
+}
+.koubei .kbList p {
+	font-size: 13px;
+	color: #999;
+	line-height: 20px;
+	height: 80px;
+	overflow: hidden;
+}
+/*客户证书*/
+.khzs {
+	overflow: hidden;
+	width: 100%;
+	padding: 45px 0 65px 0;
+	background-color: #f9f9f9;
+}
+.khzs .kehu, .khzs .zhengshu {
+	overflow: hidden;
+	height: 345px;
+	border-top: 3px solid #1da4a0;
+	background-color: #fff;
+}
+.khzs .kehu {
+	width: 672px;
+	float: left
+}
+.khzs .zhengshu {
+	width: 290px;
+	float: right;
+}
+.khzs h3 {
+	font-size: 20px;
+	margin-left: 20px;
+	margin-top: 24px;
+	margin-bottom: 24px;
+}
+.khzs h3 a {
+	color: #1da4a0;
+}
+.khzs .kehu ul {
+	overflow: hidden;
+	border: 1px solid #e8e8e8;
+	border-bottom: none;
+	width: 627px;
+	margin: 0 auto;
+}
+.khzs .kehu li {
+	overflow: hidden;
+	width: 156px;
+	height: 116px;
+	border-right: 1px solid #e8e8e8;
+	border-bottom: 1px solid #e8e8e8;
+	float: left
+}
+.khzs .kehu li:nth-child(4n) {
+	border-right: none
+}
+.khzs .zsBox {
+	overflow: hidden;
+	width: 100%;
+	height: 265px;
+	position: relative;
+}
+.khzs .zsBox>span {
+	display: block;
+	width: 12px;
+	height: 27px;
+	position: absolute;
+	top: 104px;
+	cursor: pointer;
+}
+.khzs .zsBox .zsLeft {
+	background: url(../img/zsbtn.png) no-repeat center top;
+	left: 10px;
+}
+.khzs .zsBox .zsRight {
+	background: url(../img/zsbtn.png) no-repeat center bottom;
+	right: 10px;
+}
+.khzs .zsWin {
+	overflow: hidden;
+	width: 216px;
+	height: 265px;
+	margin: 0 auto;
+	position: relative;
+}
+.khzs .zsWin ul {
+	overflow: hidden;
+	position: absolute;
+}
+.khzs .zsWin li {
+	width: 216px;
+	height: 265xp;
+	float: left;
+	overflow: hidden
+}
+.khzs .zsWin li p {
+	font-size: 12px;
+	color: #999;
+	text-align: center;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	margin-top: 5px;
+}
+/*加盟支持*/
+.jmzc {
+	overflow: hidden;
+	width: 100%;
+	height: 718px;
+}
+.jmzc h5 {
+	font-size: 16px;
+	margin-bottom: 8px;
+	color: #333;
+}
+.jmzc h5 b {
+	color: #1da4a0;
+}
+.jmzc p {
+	font-size: 13px;
+	line-height: 20px;
+	color: #666;
+}
+.jmzc .jmzcBox {
+	overflow: hidden;
+	margin-top: 250px;
+}
+.jmzc .jmzcBox>div {
+	overflow: hidden;
+	width: 360px;
+	float: left;
+	margin-left: 135px;
+	margin-bottom: 55px;
+}
+/*news*/
+.n_box {
+	overflow: hidden;
+	margin-top: 35px;
+	margin-bottom: 40px;
+}
+.news {
+	overflow: hidden;
+	float: left;
+	width: 572px;
+	height: 362px;
+}
+.wenda {
+	overflow: hidden;
+	width: 400px;
+	float: right;
+}
+.n_box .title {
+	width: 100%;
+	margin-bottom: 20px;
+	overflow: hidden;
+	background: url(../img/news02.png) repeat-x left bottom
+}
+.n_box .title ul {
+	overflow: hidden;
+	float: left;
+}
+.n_box .title .more {
+	float: right;
+	font-size: 12px;
+	color: #dadada;
+	font-family: Arial;
+	margin-top: 10px;
+}
+.n_box .title li {
+	float: left;
+	width: 100px;
+	text-align: center;
+	font-weight: bold;
+	padding-bottom: 20px;
+	font-size: 18px;
+}
+.n_box .title li a {
+	color: #666;
+	text-decoration: none
+}
+.n_box .title li.cur {
+	border-bottom: 3px solid #1da4a0;
+}
+.n_box .title li.cur a {
+	color: #1da4a0
+}
+.n_box .title h3 {
+	font-size: 18px;
+	float: left;
+	padding-bottom: 23px;
+}
+.n_box .title h3 a {
+	color: #333;
+}
+.news .newsBox {
+	overflow: hidden;
+	width: 100%;
+}
+.news dl {
+	overflow: hidden;
+	width: 100%;
+	margin-bottom: 20px;
+}
+.news dt {
+	overflow: hidden;
+	width: 126px;
+	height: 84px;
+	float: left;
+}
+.news dd {
+	overflow: hidden;
+	float: right;
+	width: 430px;
+}
+.news dd h5 {
+	font-size: 14px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	margin-bottom: 10px;
+	margin-top: 5px;
+	font-weight: normal;
+}
+.news dd h5 a {
+	color: #333;
+}
+.news dd p {
+	font-size: 12px;
+	color: #999;
+	line-height: 20px;
+	height: 40px;
+	overflow: hidden;
+}
+.wenda .wdBox {
+	overflow: hidden;
+	width: 100%;
+	height: 285px;
+	position: relative;
+}
+.wenda .wdList {
+	overflow: hidden;
+	width: 100%;
+	margin-bottom: 35px;
+}
+.wenda .wdList h5 {
+	font-size: 14px;
+	font-weight: normal;
+	padding-left: 30px;
+	background: url(../img/wenda.png) no-repeat left center;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	padding-bottom: 8px;
+	margin-bottom: 3px;
+}
+.wenda .wdList h5 a {
+	color: #333
+}
+.wenda .wdList p {
+	font-size: 12px;
+	color: #999;
+	line-height: 20px;
+	height: 40px;
+}
+/*加盟留言*/
+.jmly {
+	overflow: hidden;
+	width: 940px;
+	height: 365px;
+	background: url(../img/jmly03.png) no-repeat 486px center;
+	background-color: #fff;
+	margin: 0 auto;
+	padding: 25px 20px;
+	border: 8px solid #1da4a0;
+	position: relative;
+	z-index: 5
+}
+.jmly .jmlyLeft {
+	overflow: hidden;
+	width: 441px;
+	float: left;
+}
+.jmly .jmlyLeft h5 {
+	font-size: 30px;
+	color: #1da4a0;
+	margin-bottom: 15px;
+}
+.jmly .jmlyLeft h5 em {
+	font-size: 14px;
+	color: #333;
+	margin-left: 10px;
+}
+.jmly .jmlyLeft img {
+	display: block;
+	margin-bottom: 15px;
+}
+.jmly .jmlyLeft h4 {
+	font-size: 14px;
+	color: #333;
+	margin-bottom: 12px;
+}
+.jmly .jmlyLeft ul {
+	overflow: hidden;
+	margin-bottom: 30px;
+}
+.jmly .jmlyLeft li {
+	float: left;
+	width: 156px;
+	font-size: 12px;
+	color: #333;
+	line-height: 25px;
+	background: url(../img/jmly_g.png) no-repeat left center;
+	padding-left: 20px;
+}
+.jmly .jmlyLeft h3 {
+	font-size: 22px;
+	color: #1da4a0;
+	margin-bottom: 5px;
+}
+.jmly .jmlyLeft p {
+	font-size: 18px;
+	color: #1da4a0;
+}
+.jmly .jmlyRight {
+	overflow: hidden;
+	float: right;
+	width: 410px;
+}
+.jmly .jmlyRight p {
+	font-size: 14px;
+	color: #004871;
+	text-align: right;
+	margin-bottom: 25px;
+}
+.jmly .jmlyRight p b {
+	font-size: 22px;
+}
+.jmly .jmlyRight ul {
+	overflow: hidden;
+	width: 100%;
+}
+.jmly .jmlyRight li {
+	overflow: hidden;
+	margin-bottom: 3px;
+}
+.jmly .jmlyRight input {
+	width: 363px;
+	padding: 0 10px;
+	height: 41px;
+	background: url(../img/jmly02.jpg) repeat-x left top;
+	border: 1px solid #cdcdcd;
+	font-size: 13px;
+	color: #004871;
+	line-height: 41px;
+	margin-right: 5px;
+	outline: none
+}
+.jmly .jmlyRight em {
+	color: #004871
+}
+.jmly .jmlyRight textarea {
+	width: 363px;
+	padding: 10px;
+	background: url(../img/jmly02.jpg) repeat-x left top;
+	border: 1px solid #cdcdcd;
+	font-size: 13px;
+	color: #004871;
+	outline: none;
+	resize: none;
+	height: 91px;
+}
+.jmly .jmlyRight .btnTjly {
+	display: block;
+	width: 104px;
+	height: 43px;
+	text-align: center;
+	line-height: 43px;
+	color: #fff;
+	font-size: 18px;
+	background: cadetblue;
+}
+/*link*/
+.link {
+	overflow: hidden;
+	width: 100%;
+	position: relative;
+	z-index: 4;
+	padding-bottom: 38px;
+	padding-top: 315px;
+	margin-top: -290px;
+	background-color: #f4f4f4;
+}
+.link h3 {
+	font-size: 16px;
+	margin-bottom: 5px;
+}
+.link h3 a {
+	color: #1da4a0;
+}
+.link h3 span {
+	font-size: 12px;
+	color: #ccc;
+	margin-left: 5px;
+	font-weight: normal;
+}
+.link ul {
+	overflow: hidden;
+	width: 100%;
+}
+.link li {
+	float: left;
+	font-size: 12px;
+	margin: 0 10px;
+	white-space: nowrap;
+}
+.link li a {
+	color: #999;
+}
+/* -- 弹出窗口 -- */
+#mesbook1_c, #mesbook1 {
+	display: none;
+	z-index: 1001;
+	width: 398px;
+	border: 1px solid #ccc;
+	background: #fff;
+	padding-bottom: 20px;
+}
+#mesbook1_c div, #mesbook1 div {
+	border: 1px solid #E4E3E3;
+	background: #EBECEB;
+	height: 18px;
+	padding: 4px .5em 0;
+	margin-bottom: 10px;
+}
+#mesbook1_c dl.b1, #mesbook1 dl.b1 {
+	width: 370px;
+	margin: 0 auto;
+}
+#mesbook1_c dl.b1 dt, #mesbook1 dl.b1 dt {
+	float: left;
+	width: 105px;
+	overflow: hidden;
+}
+#mesbook1_c dl.b1 dd, #mesbook1 dl.b1 dd {
+	width: 265px;
+	float: right;
+}
+#mesbook1_c #mesbook1_cBtns, #mesbook1 #mesbook1Btns {
+	padding-bottom: 10px;
+}
+#mesbook1_c #mesbook1_cBtns input, #mesbook1 #mesbook1Btns input {
+	margin-right: 20px;
+}
+/*处理中动画占全屏*/
+#oran_div_processing {
+	width: 300px;
+	padding: 20px;
+	z-index: 9999;
+	text-align: center;
+	background: #fffeef;
+	border: solid 1px #b8ab04;
+}

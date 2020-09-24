@@ -1,43 +1,44 @@
-<div class="foot-box">
-<!--  <div class="link-box">-->
-<!--    <div class="link-con">-->
-<!--      <h3>友情链接：</h3>-->
-<!--       {eyou:flink titlelen='45' type='1'}<a href="{$field.url}" {$field.target}>{$field.title}</a>{/eyou:flink}-->
-<!--    </div>-->
-<!--  </div>-->
-  <div class="foot-con">
-    <div class="foot-cc">
-      <div class="foot-l">
-<!--        <div class="foot-menu">-->
-<!--          <div class="foot-menu-con">-->
-<!--            <ul>-->
-<!--              <li><a href="{eyou:global name='web_cmsurl' /}/">网站首页</a></li>-->
-<!--              {eyou:channel type="top" row="8" id="field" }-->
-<!--              <li><a href="{$field.typeurl}">{$field.typename}</a></li>-->
-<!--              {/eyou:channel} -->
-<!--            </ul>-->
-<!--          </div>-->
-<!--        </div>-->
-        <div class="foot-wz">{eyou:global name='web_copyright' /}<br>
-          电 话：{eyou:global name='web_attr_2' /} &nbsp;&nbsp;  手 机：{eyou:global name='web_attr_60' /}&nbsp;&nbsp;   传 真：{eyou:global name='web_attr_57' /} &nbsp;&nbsp;  E-mail：{eyou:global name='web_attr_55' /}<br>
-          地 址：{eyou:global name='web_attr_56' /}<br>
-          {eyou:global name='web_recordnum' /}</div>
-      </div>
-<!--      <div class="foot-r">-->
-<!--        <p>扫一扫关注微信公众帐号</p>-->
-<!--        <img src="{eyou:global name='web_attr_4' /}" width="97" height="97" alt=""/>-->
-<!--      </div>-->
+<div class="footer"  e-page="footer">
+  <ul class="container f_nav">
+    <li class="cur"><a href="{eyou:global name='web_cmsurl' /}/">首页</a></li>
+    {eyou:channel type='top'}
+    <li><a href="{$field.typeurl}">{$field.typename}</a></li>
+    {/eyou:channel}
+  </ul>
+  <div class="f_btm container">
+    <dl>
+      <dt class="eyou-edit" e-id="f1" e-type="upload"> <a href="{eyou:global name='web_cmsurl' /}/"> {eyou:uiupload e-id='f1' e-page="footer"}
+        {$field.value}
+        {eyou:else /} <a href="{eyou:global name='web_cmsurl' /}/"><img src="{eyou:global name='web_attr_4' /}" width="85" height="99" /></a> {/eyou:uiupload}</dt>
+      <dd>
+        <p class="phone eyou-edit" e-id="f2" e-type="text"> {eyou:uitext e-id='f2' e-page="footer"}
+          {$field.value}
+          {eyou:else /}{eyou:global name='web_name' /}<em></em> 公司地址：{eyou:global name='web_attr_5' /} {/eyou:uitext}</p>
+        <p class="phone eyou-edit" e-id="f3" e-type="text"> {eyou:uitext e-id='f3' e-page="footer"}
+          {$field.value}
+          {eyou:else /}电话：{eyou:global name='web_attr_1' /} / {eyou:global name='web_attr_6' /}<em></em>传真：{eyou:global name='web_attr_7' /}{/eyou:uitext}</p>
+        <p class="phone eyou-edit" e-id="f4" e-type="text">  {eyou:uitext e-id='f4' e-page="footer"}
+          {$field.value}
+          {eyou:else /}企业邮箱：{eyou:global name='web_attr_8' /}{/eyou:uitext}</p>
+        <p></p>
+        <p>{eyou:global name='web_copyright' /}</p>
+        <p>{eyou:global name='web_recordnum' /}</p>
+      </dd>
+    </dl>
+    <div class="ewm eyou-edit" e-id="181" e-type="upload"> 
+    {eyou:uiupload e-id='f5' e-page="footer"}
+      {$field.value}
+      {eyou:else /} 
+      <img src="{eyou:global name='web_attr_9' /}" width="120" height="120">
+    {/eyou:uiupload}
+      <p>扫描关注</p>
     </div>
   </div>
 </div>
-    {eyou:global name='web_thirdcode_pc' /} 
-    <!-- 应用插件标签 start --> 
-    {eyou:weapp type='default' /} 
-    <!-- 应用插件标签 end -->
-<div class="fixed-right-nav"> 
-<a href="javascript:window.scroll(0,0)" class="backtop"><i></i></a> 
-<a href="http://wpa.qq.com/msgrd?v=3&site={eyou:global name="web_name" /}&menu=yes&uin={eyou:global name='web_attr_3' /}" target="_blank" class="msg"><i></i>免费咨询</a> 
-<a href="{eyou:type typeid='53'}{$field.typeurl}{/eyou:type}" target="_blank" class="decora"><i></i>投诉建议</a> 
-<a class="qrcode"><i></i>
-  <div class="qrcodePic"><img width="150" height="150" src="{eyou:global name='web_attr_4' /}"></div>
-  </a> </div>
+<div class="rtTop">
+  <h4><img src="{eyou:global name='web_templets_pc' /}/skin/img/backbg.png" width="43" height="86" alt="回顶部" title="回顶部" /></h4>
+</div>
+{eyou:global name='web_thirdcode_pc' /} 
+<!-- 应用插件标签 start --> 
+{eyou:weapp type='default' /} 
+<!-- 应用插件标签 end -->

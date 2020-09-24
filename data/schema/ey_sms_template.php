@@ -3,20 +3,11 @@ return array (
   'tpl_id' => 
   array (
     'name' => 'tpl_id',
-    'type' => 'mediumint(8) unsigned',
+    'type' => 'mediumint(8)',
     'notnull' => false,
     'default' => NULL,
     'primary' => true,
     'autoinc' => true,
-  ),
-  'tpl_title' => 
-  array (
-    'name' => 'tpl_title',
-    'type' => 'varchar(128)',
-    'notnull' => false,
-    'default' => '',
-    'primary' => false,
-    'autoinc' => false,
   ),
   'sms_sign' => 
   array (
@@ -39,7 +30,7 @@ return array (
   'tpl_content' => 
   array (
     'name' => 'tpl_content',
-    'type' => 'varchar(1000)',
+    'type' => 'varchar(512)',
     'notnull' => false,
     'default' => '',
     'primary' => false,
@@ -51,24 +42,6 @@ return array (
     'type' => 'varchar(100)',
     'notnull' => false,
     'default' => '',
-    'primary' => false,
-    'autoinc' => false,
-  ),
-  'is_open' => 
-  array (
-    'name' => 'is_open',
-    'type' => 'tinyint(1) unsigned',
-    'notnull' => false,
-    'default' => '1',
-    'primary' => false,
-    'autoinc' => false,
-  ),
-  'lang' => 
-  array (
-    'name' => 'lang',
-    'type' => 'varchar(50)',
-    'notnull' => false,
-    'default' => 'cn',
     'primary' => false,
     'autoinc' => false,
   ),

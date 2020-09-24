@@ -9,15 +9,6 @@ return array (
     'primary' => true,
     'autoinc' => true,
   ),
-  'source' => 
-  array (
-    'name' => 'source',
-    'type' => 'tinyint(1) unsigned',
-    'notnull' => false,
-    'default' => '0',
-    'primary' => false,
-    'autoinc' => false,
-  ),
   'mobile' => 
   array (
     'name' => 'mobile',
@@ -27,10 +18,19 @@ return array (
     'primary' => false,
     'autoinc' => false,
   ),
+  'session_id' => 
+  array (
+    'name' => 'session_id',
+    'type' => 'varchar(128)',
+    'notnull' => false,
+    'default' => '',
+    'primary' => false,
+    'autoinc' => false,
+  ),
   'add_time' => 
   array (
     'name' => 'add_time',
-    'type' => 'int(11) unsigned',
+    'type' => 'int(11)',
     'notnull' => false,
     'default' => '0',
     'primary' => false,
@@ -48,16 +48,7 @@ return array (
   'status' => 
   array (
     'name' => 'status',
-    'type' => 'int(1) unsigned',
-    'notnull' => false,
-    'default' => '0',
-    'primary' => false,
-    'autoinc' => false,
-  ),
-  'is_use' => 
-  array (
-    'name' => 'is_use',
-    'type' => 'int(1) unsigned',
+    'type' => 'int(1)',
     'notnull' => false,
     'default' => '0',
     'primary' => false,
@@ -68,16 +59,16 @@ return array (
     'name' => 'msg',
     'type' => 'varchar(255)',
     'notnull' => false,
-    'default' => '',
+    'default' => NULL,
     'primary' => false,
     'autoinc' => false,
   ),
-  'lang' => 
+  'scene' => 
   array (
-    'name' => 'lang',
-    'type' => 'varchar(50)',
+    'name' => 'scene',
+    'type' => 'int(1)',
     'notnull' => false,
-    'default' => 'cn',
+    'default' => '0',
     'primary' => false,
     'autoinc' => false,
   ),
@@ -87,15 +78,6 @@ return array (
     'type' => 'text',
     'notnull' => false,
     'default' => NULL,
-    'primary' => false,
-    'autoinc' => false,
-  ),
-  'update_time' => 
-  array (
-    'name' => 'update_time',
-    'type' => 'int(11)',
-    'notnull' => false,
-    'default' => '0',
     'primary' => false,
     'autoinc' => false,
   ),

@@ -1,0 +1,621 @@
+﻿@charset "utf-8";
+/* eyoucms.com 易优CMS -- 好用,免费,安全 */
+/* CSS Document */
+.mian {
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+	min-width: 320px;
+	max-width: 640px;
+	overflow: hidden;
+	background-color: #fff;
+	font-family: Microsoft YaHei;
+}
+a {
+	text-decoration: none;
+	color: #666;
+}
+/*banner*/
+.banner {
+	overflow: hidden;
+	width: 100%;
+}
+.banner img {
+	display: block;
+	width: 100%;
+}
+.focus {
+	width: 100%;
+	margin: 0 auto;
+	position: relative;
+	overflow: hidden;
+}
+.focus .hd {
+	width: 100%;
+	height: 4px;
+	position: absolute;
+	z-index: 1;
+	bottom: 0;
+	text-align: center;
+}
+.focus .hd ul {
+	overflow: hidden;
+	display: -moz-box;
+	display: -webkit-box;
+	display: box;
+	height: 4px;
+	background-color: rgba(51,51,51,0.5);
+}
+.focus .hd ul li {
+	-moz-box-flex: 1;
+	-webkit-box-flex: 1;
+	box-flex: 1;
+	font-size: 0
+}
+.focus .hd ul .on {
+	background: #1DA4A0;
+}
+.focus .bd {
+	position: relative;
+	z-index: 0;
+}
+.focus .bd li img {
+	width: 100%;
+}
+.focus .bd li a {
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0); /* 取消链接高亮 */
+}
+/*banner*/
+.banner {
+	overflow: hidden;
+	width: 100%;
+}
+.banner img {
+	display: block;
+	width: 100%;
+}
+/*centernar*/
+.centernar {
+	overflow: hidden;
+	width: 97%;
+	margin: 0 auto;
+	background-color: #fff;
+}
+/*pro*/
+.pro {
+	overflow: hidden;
+	width: 100%;
+	margin-bottom: 1.6em;
+}
+.pro .title {
+	width: 100%;
+	padding: 1.5em 0;
+	background-color: #1DA4A0;
+	position: relative;
+	margin-bottom: 2em;
+}
+.pro .title h3 {
+	font-family: '宋体';
+	font-size: 1.25em;
+	color: #ffff00;
+	text-align: center;
+}
+.pro .title p {
+	font-size: 1em;
+	color: #fff;
+	font-family: '宋体';
+	text-align: center;
+}
+.pro .title img {
+	display: block;
+	width: 8%;
+	position: absolute;
+	left: 46%;
+	bottom: -15%;
+}
+.pro .menu {
+	overflow: hidden;
+	width: 90%;
+	margin: 0 auto;
+	margin-bottom: 1.25em;
+}
+.pro .menu li {
+	float: left;
+	width: 21%;
+	font-size: 1em;
+	color: #666;
+	text-align: center;
+	padding: 0.5em 0;
+	background-color: #d5d2d2;
+	border-radius: 5em;
+	margin: 0 2%;
+}
+.pro .menu li.on {
+	background-color: #1DA4A0;
+	color: #fff;
+}
+.pro .list {
+	overflow: hidden;
+	width: 97%;
+	margin: 0 auto;
+	margin-bottom: 1.25em;
+}
+.pro .list li {
+	float: left;
+	width: 50%;
+}
+.pro .list li img {
+	display: block;
+	width: 90%;
+	margin: 0 auto
+}
+.pro .list li p {
+	font-size: 1em;
+	color: #333;
+	text-align: center;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	margin-top: 0.8em;
+}
+.pro .more {
+	display: block;
+	font-size: 1em;
+	color: #fff;
+	width: 28%;
+	padding: 0.5em 0;
+	padding-left: 7%;
+	background: url(../img/pro_more.png) no-repeat 10% center;
+	background-size: 8%;
+	background-color: #ffa200;
+	border-radius: 3px;
+	margin: 0 auto;
+}
+/*pk*/
+.pk {
+	overflow: hidden;
+	width: 100%;
+	margin-bottom: 1.8em;
+}
+.pk .title {
+	overflow: hidden;
+	width: 100%;
+	display: block;
+	margin-bottom: 1.6em;
+}
+.pk .menu {
+	overflow: hidden;
+	width: 97%;
+	margin: 0 auto;
+	padding-bottom: 2%;
+	margin-bottom: 1.25em;
+}
+.pk .menu li {
+	float: left;
+	position: relative;
+	width: 24%;
+	margin: 0 0.45%;
+	text-align: center;
+	padding: 0.5em 0;
+	font-size: 1em;
+	color: #333;
+	background-color: #d5d2d2;
+}
+.pk .menu li img {
+	display: none;
+	width: 8%;
+	position: absolute;
+	left: 47.5%;
+	bottom: -5%;
+}
+.pk .menu li.on {
+	background-color: #1DA4A0;
+	color: #fff;
+}
+.pk .menu li.on img {
+	display: block
+}
+.pk dl {
+	overflow: hidden;
+	width: 100%;
+}
+.pk dt {
+	overflow: hidden;
+	width: 100%;
+}
+.pk dt img {
+	display: block;
+	width: 100%;
+	margin-bottom: 0.9em;
+}
+.pk dd {
+	overflow: hidden;
+	width: 97%;
+	margin: 0 auto;
+}
+.pk dd h4 {
+	font-size: 1em;
+	text-align: center;
+	margin-bottom: 0.8em;
+}
+.pk dd p {
+	font-size: 1em;
+	color: #666;
+	line-height: 1.5em;
+	text-align: justify;
+}
+.pk .pkleft {
+	float: left;
+	width: 48%;
+}
+.pk .pkleft h4 {
+	color: #1DA4A0;
+}
+.pk .pkright {
+	float: right;
+	width: 48%;
+}
+.pk .pkright h4 {
+	color: #333;
+}
+/*加盟优势*/
+.ys {
+	overflow: hidden;
+	width: 100%;
+	margin-bottom: 1em;
+}
+.ys .title {
+	width: 100%;
+	padding: 1.5em 0;
+	background-color: #1DA4A0;
+	position: relative;
+	margin-bottom: 2em;
+}
+.ys .title h3 {
+	font-family: '宋体';
+	font-size: 1.5em;
+	color: #ffff00;
+	text-align: center;
+}
+.ys .title p {
+	font-size: 0.8em;
+	color: #fff;
+	font-family: '宋体';
+	text-align: center;
+}
+.ys .title img {
+	display: block;
+	width: 8%;
+	position: absolute;
+	left: 46%;
+	bottom: -15%;
+}
+.ys ul {
+	overflow: hidden;
+}
+.ys li {
+	float: left;
+	width: 33.3%;
+	box-sizing: border-box;
+}
+.ys li img {
+	display: block;
+	width: 80%;
+	margin: 0 auto;
+	border-radius: 5em;
+	border: 2px solid #fff;
+	box-shadow: 5px 5px 10px #ddd
+}
+.ys li h5 {
+	font-size: 1.25em;
+	text-align: center;
+	color: #1DA4A0;
+	margin-top: 1.1em;
+}
+.ys li p {
+	font-size: 1em;
+	color: #666;
+	text-align: center;
+	margin-bottom: 1.7em;
+}
+/*口碑*/
+.koubei {
+	overflow: hidden;
+	width: 100%;
+	background: url(../img/kb_bg.jpg) repeat-x top left;
+	background-color: #1DA4A0;
+}
+.koubei h3 {
+	font-family: '宋体';
+	font-size: 1.5em;
+	color: #ffff00;
+	text-align: center;
+	margin-top: 1.5em;
+}
+.koubei p {
+	font-size: 0.8em;
+	color: #fff;
+	font-family: '宋体';
+	text-align: center;
+	margin-bottom: 1.5em;
+}
+.koubei .boxkb {
+	overflow: hidden;
+	width: 97%;
+	margin: 0 auto;
+	margin-bottom: 3%;
+	background-color: #fff;
+}
+.koubei .menu {
+	overflow: hidden;
+	width: 100%;
+	margin-bottom: 1.25em;
+}
+.koubei .menu li {
+	overflow: hidden;
+	float: left;
+	width: 50%;
+	border-top: 3px solid #e7e3e3;
+	background-color: #e7e3e3;
+	font-size: 1.1em;
+	color: #666;
+	text-align: center;
+	padding: 1em 0;
+}
+.koubei .menu li.on {
+	color: #1DA4A0;
+	font-weight: bold;
+	background-color: #fff;
+	border-top: 3px solid #ffff00;
+}
+.koubei .list {
+	overflow: hidden;
+	width: 97%;
+	margin: 0 auto;
+}
+.koubei .list li {
+	float: left;
+	width: 50%;
+}
+.koubei .list img {
+	display: block;
+	width: 90%;
+	margin: 0 auto;
+	margin-bottom: 0.8em;
+}
+.koubei .list p {
+	text-align: center;
+	font-size: 1em;
+	color: #333;
+	margin-bottom: 1.5em;
+}
+/*ad01*/
+.ad01 {
+	overflow: hidden;
+	display: block;
+	width: 97%;
+	margin: 0 auto;
+	margin-top: 1.25em;
+	margin-bottom: 2.5em;
+}
+.ad01 img {
+	display: block;
+	width: 100%;
+}
+/*about*/
+.about {
+	overflow: hidden;
+	width: 97%;
+	margin: 0 auto;
+	margin-bottom: 1.5em;
+}
+.about h4 {
+	font-size: 1.25em;
+	font-weight: normal;
+	text-align: center;
+	margin-bottom: 1em;
+}
+.about h4 a {
+	color: #333;
+}
+.about p {
+	font-size: 1em;
+	color: #666;
+	line-height: 1.5em;
+	margin-bottom: 1.6em;
+	text-align: justify;
+}
+.about a {
+	display: block;
+	width: 100%;
+}
+.about img {
+	display: block;
+	width: 100%;
+}
+/*news*/
+.news {
+	overflow: hidden;
+	width: 97%;
+	margin: 0 auto;
+	margin-bottom: 1.5em;
+}
+.news .menu {
+	overflow: hidden;
+	width: 100%;
+	margin-bottom: 1em;
+}
+.news .menu li {
+	float: left;
+	width: 50%;
+	font-size: 1.25em;
+	background-color: #d5d2d2;
+	color: #333333;
+	text-align: center;
+	padding: 1em 0;
+}
+.news .menu li.on {
+	background-color: #1DA4A0;
+	color: #fff;
+}
+.news .newsBox {
+	overflow: hidden;
+	width: 99%;
+}
+.news .newsList {
+	overflow: hidden;
+	width: 99%;
+}
+.news .newsList dl {
+	overflow: hidden;
+	width: 99%;
+	margin-bottom: 1.25em;
+}
+.news .newsList dt {
+	float: left;
+	width: 35%
+}
+.news .newsList dt img {
+	display: block;
+	width: 100%;
+}
+.news .newsList dd {
+	overflow: hidden;
+	width: 60%;
+	float: right;
+}
+.news .newsList dd h4 {
+	font-size: 1em;
+	color: #666;
+	font-weight: normal;
+	line-height: 1.25em;
+	height: 1.25em;
+	overflow: hidden;
+	margin-bottom: 0.3em;
+}
+.news .newsList dd p {
+	font-size: 1em;
+	line-height: 1.4em;
+	height: 5.5em;
+	color: #999;
+	overflow: hidden;
+}
+.news .newsList ul {
+	overflow: hidden;
+	width: 100%;
+}
+.news .newsList li {
+	width: 97%;
+	padding-left: 3%;
+	background: url(../img/news_li.png) no-repeat left center;
+	font-size: 1em;
+	line-height: 1.6em;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+.news .newsList li a {
+	color: #666;
+}
+/*留言*/
+.liuyan {
+	overflow: hidden;
+	width: 100%;
+	background-color: #1DA4A0;
+	padding-top: 1.5em;
+	padding-bottom: 1%;
+	margin-bottom: 1.5em;
+}
+.liuyan p {
+	font-size: 1em;
+	color: #fff;
+	margin-left: 7%;
+}
+.liuyan p a {
+	font-weight: bold;
+	color: #ffff00;
+}
+.liuyan .lyBox {
+	overflow: hidden;
+	width: 98%;
+	margin: 0 auto;
+	background: url(../img/ly.jpg) repeat-x left top;
+	padding-top: 3.5em;
+	background-color: #fff;
+	padding-bottom: 0.5em;
+}
+.liuyan .lyBox li {
+	width: 100%;
+	overflow: hidden;
+	margin-bottom: 0.8em;
+}
+.liuyan .lyBox span {
+	display: block;
+	width: 25%;
+	text-align: right;
+	padding-right: 1%;
+	font-size: 1em;
+	color: #666;
+	line-height: 2em;
+	float: left;
+}
+.liuyan .lyBox input {
+	width: 61%;
+	float: left;
+	height: 2em;
+	border: 1px solid #ccc;
+	line-height: 2em;
+	color: #666;
+	font-size: 1em;
+	padding: 0 4%
+}
+.liuyan .lyBox textarea {
+	width: 61%;
+	float: left;
+	height: 2em;
+	border: 1px solid #ccc;
+	resize: none;
+	height: 5em;
+	padding: 0.5em 4%;
+	font-size: 1em;
+	color: #666
+}
+.liuyan input.btn {
+	display: block;
+	width: 25%;
+	text-align: center;
+	font-size: 1em;
+	color: #fff;
+	background-color: #ffa200;
+	margin-left: 26%;
+}
+ @media screen and (min-width:320px) {
+body {
+	font-size: 75%;
+}
+}
+@media screen and (min-width:375px) {
+body {
+	font-size: 87.5%;
+}
+}
+@media screen and (min-width:480px) {
+body {
+	font-size: 87.5%;
+}
+}
+@media screen and (min-width:540px) {
+body {
+	font-size: 112.5%;
+}
+}
+@media screen and (min-width:550px) {
+body {
+	font-size: 125%;
+}
+}
+@media screen and (min-width:640px) {
+body {
+	font-size: 150%;
+}
+}

@@ -33,9 +33,6 @@ class ViewFilterBehavior {
 
     private function _initialize(&$params) {
         $this->thirdcode($params); // 自动加上第三方统计代码
-
-        // 自动追加阅读权限JS事件
-        $this->AppEndJsCode($params);
     }
 
     /**
@@ -51,51 +48,6 @@ class ViewFilterBehavior {
             if (!empty($web_thirdcode)) {
                 $params = str_ireplace('</body>', htmlspecialchars_decode($web_thirdcode)."\n</body>", $params);
             }
-        }
-    }
-
-    /**
-     * 自动追加阅读权限JS事件
-     * @access public
-     */
-    private function AppEndJsCode(&$params)
-    {
-        $aid = request()->param('aid/d');
-        $admin_id = request()->param('admin_id/d');
-        $ca = self::$controllerName.'@'.self::$actionName;
-        $is_appendJs = false;
-        $data['ClosePage'] = 0;
-        if (!empty($aid) && ('View@index' == $ca || 'view' == self::$actionName)) {
-            if (!empty($admin_id)) {
-                $data['ClosePage'] = 1;
-            }
-            $is_appendJs = true;
-        } else if ('Buildhtml@uphtml' == $ca && 'view' == request()->param('type')) {
-            $is_appendJs = true;
-        } else if ('Buildhtml@buildarticle' == $ca) {
-            $is_appendJs = true;
-        }
-
-        if (true === $is_appendJs) {
-            // 加载JS需要的参数
-            $channel = \think\Db::name('archives')->where(['aid'=>$aid])->getField('channel');
-            $data['get_url'] = ROOT_DIR . "/index.php?m=api&c=Ajax&a=get_arcrank&aid={$aid}";
-            $data['buy_url'] = ROOT_DIR . "/index.php?m=user&c=Media&a=media_order_buy&_ajax=1";
-            $data['VideoLogicUrl'] = ROOT_DIR . "/index.php?m=api&c=Ajax&a=video_logic&_ajax=1";
-            $data['LevelCentreUrl'] = ROOT_DIR . "/index.php?m=user&c=Level&a=level_centre";
-            $data['aid'] = $aid;
-            $data_json = json_encode($data);
-            $version   = getCmsVersion();
-            $root_dir = ROOT_DIR;
-            $JsHtml = <<<EOF
-<script type="text/javascript">var ey_1564127251 = {$data_json};</script>
-<script type="text/javascript" src="{$root_dir}/public/static/common/js/view_arcrank.js?v={$version}"></script>
-EOF;
-            if (5 == $channel) { // 只针对视频模型
-                $JsHtml .= '<script type="text/javascript">ey_1592981821();</script>';
-            }
-            // 追加替换JS
-            $params = str_ireplace('</head>', htmlspecialchars_decode($JsHtml)."\n</head>", $params);
         }
     }
 }

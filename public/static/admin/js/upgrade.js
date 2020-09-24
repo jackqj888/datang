@@ -57,7 +57,7 @@ function btn_upgrade(obj, type)
             ,btn: btn //按钮
             ,btn3: function(index){
                 var url = $(obj).data('tips_url');
-                $.getJSON(url, {show_popup_upgrade:-1,_ajax:1}, function(){});
+                $.getJSON(url, {show_popup_upgrade:-1}, function(){});
                 parent.layer.msg('【核心设置】里可以开启该提醒', {
                     btnAlign: 'c',
                     time: 20000, //20s后自动关闭
@@ -87,12 +87,12 @@ function btn_upgrade(obj, type)
  * 检测升级文件的目录权限
  */
 function checkdir(obj) {
-    layer_loading2('检测系统');
+    layer_loading('检测系统');
     $.ajax({
         type : "POST",
         url  : $(obj).data('check_authority'),
         timeout : 360000, //超时时间设置，单位毫秒 设置了 1小时
-        data : {filelist:0,_ajax:1},
+        data : {filelist:0},
         error: function(request) {
             parent.layer.closeAll();
             parent.layer.alert("检测不通过，可能被服务器防火墙拦截，请添加白名单，或者联系技术协助！", {icon: 2, title:false}, function(){
@@ -105,10 +105,8 @@ function checkdir(obj) {
                 upgrade($(obj));
             } else {
                 //提示框
-                if (2 == res.data.code) { 
-                    var alert = parent.layer.alert(res.msg, {icon: 2, title:false, btn: ['立即查看']}, function(){
-                        window.parent.open('http://www.eyoucms.com/plus/view.php?aid=9105');
-                    });
+                if (2 == res.data.code) {
+                    var alert = parent.layer.alert(res.msg, {icon: 2, title:false});
                 } else {
                     var confirm = parent.layer.confirm(res.msg, {
                             title: '检测系统结果'
@@ -130,7 +128,7 @@ function checkdir(obj) {
  * 升级系统
  */
 function upgrade(obj){
-    layer_loading2('升级<font id="upgrade_speed">中</font>');
+    layer_loading('升级<font id="upgrade_speed">中</font>');
     var version = $(obj).data('version');
     var max_version = $(obj).data('max_version');
     var timer = '';
@@ -139,7 +137,7 @@ function upgrade(obj){
         type : "GET",
         url  :  $(obj).data('upgrade_url'),
         timeout : 360000, //超时时间设置，单位毫秒 设置了 1小时
-        data : {_ajax:1},
+        data : {},
         beforeSend:function(){
             timer = setInterval(function(){
                 random = Math.floor(Math.random()*89+10);
@@ -155,7 +153,7 @@ function upgrade(obj){
         },
         error: function(request) {
             parent.layer.closeAll();
-            parent.layer.alert("空间超时请稍后再试，或手工升级！", {icon: 2, title:false}, function(){
+            parent.layer.alert("升级失败，请第一时间联系技术协助！", {icon: 2, title:false}, function(){
                 top.location.reload();
             });
         },
@@ -208,12 +206,6 @@ function upgrade(obj){
                     },500);
                 // },40000); // 睡眠1分钟，让复制文件执行完
             }
-            else if (-2 == res.data.code) {
-                parent.layer.closeAll();
-                parent.layer.alert(res.msg, {icon: 2, title:false, btn: ['立即查看']}, function(){
-                    window.parent.open('http://www.eyoucms.com/plus/view.php?aid=9105');
-                });
-            }
             else{
                 parent.layer.closeAll();
                 parent.layer.alert(res.msg, {icon: 2, title:false}, function(){
@@ -224,7 +216,7 @@ function upgrade(obj){
     });                 
 }
 
-function layer_loading2(msg){
+function layer_loading(msg){
     var loading = parent.layer.msg(
     msg+'...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请勿刷新页面', 
     {
@@ -248,7 +240,7 @@ function export_data(){
         shade: [0.2] //0.1透明度的白色背景
     });
     setTimeout(function(){
-        var url = eyou_basefile + "?m="+module_name+"&c=Tools&a=export&_ajax=1";
+        var url = eyou_basefile + "?m="+module_name+"&c=Tools&a=export";
         $.ajax({
             url: url,
             data: {tables:'all'},
@@ -287,7 +279,7 @@ function export_data(){
 }
 
 function backup_data(tab){
-    var url = eyou_basefile + "?m="+module_name+"&c=Tools&a=export&_ajax=1";
+    var url = eyou_basefile + "?m="+module_name+"&c=Tools&a=export";
     $.ajax({
         url: url,
         data: tab,
@@ -306,20 +298,6 @@ function backup_data(tab){
                         time: 2000, //1小时后后自动关闭
                         shade: [0.2] //0.1透明度的白色背景
                     });
-                    setTimeout(function(){
-                        parent.layer.closeAll();
-                        var full = parent.layer.alert('已升级最新版本！', {
-                                title: false,
-                                icon: 1,
-                                closeBtn: 0,
-                                btn: ['关闭'] //按钮
-                            }, function(){
-                                parent.layer.close(full);
-                                top.location.href = eyou_basefile;
-                            }
-                        );
-                    }, 1000);
-                    return;
                 }
                 backup_data(res.tab);
             } else {
