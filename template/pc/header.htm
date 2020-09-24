@@ -1,24 +1,35 @@
+<style>
+  .logo-box-c {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 30px;
+    height: 130px;
+  }
+  .lang-c {
+    position: relative;
+    top: 35px;
+  }
+  .lang-c img {
+    margin-top: 4px;
+    margin-right: 2px;
+  }
+  .eyou-edit2 {
+    margin-top: 30px!important;
+  }
+</style>
 <div class="header" e-page="header">
-  <div class="headerTop container">
-    <h1 class="eyou-edit" e-id="h1" e-type="upload"> <a href="{eyou:global name='web_cmsurl' /}/"> {eyou:uiupload e-id='h1' e-page="header"}
+  <div class="headerTop container logo-box-c">
+    <h1 class="eyou-edit eyou-edit2" e-id="h1" e-type="upload"> <a href="{eyou:global name='web_cmsurl' /}/"> {eyou:uiupload e-id='h1' e-page="header"}
       {$field.value}
-      {eyou:else /} <img src="{eyou:global name="web_logo" /}"  alt="{eyou:global name="web_name" /}" >{/eyou:uiupload}</a></h1>
-    <div class="wen"> </div>
-    <div class="headRight">
-      <ul>
-        <li><a href="javascript:addBookmark();">收藏本站</a></li>
-        <li class="eyou-edit" e-id="h2" e-type="type">{eyou:uitype typeid='23' e-id='h2' e-page='header'}{eyou:type type='self' empty='缺省文字'}<a href="{$field.typeurl}">{$field.typename}</a>{/eyou:type}{/eyou:uitype}</li>
-        <li class="last eyou-edit" e-id="h3" e-type="type" >{eyou:uitype typeid='24' e-id='h3' e-page='header'}{eyou:type type='self' empty='缺省文字'}<a href="{$field.typeurl}">{$field.typename}</a>{/eyou:type}{/eyou:uitype} </li>
-      </ul>
-      <div class="clear"></div>
-      <div class="phone eyou-edit" e-id="h4" e-type="text">
-      {eyou:uitext e-id='h4' e-page="header"}
-      {$field.value}
-      {eyou:else /}
-      <p>全国加盟咨询热线：</p>
-      <h3>{eyou:global name='web_attr_1' /}</h3>
-      {/eyou:uitext} </div>
+      {eyou:else /} <img src="{eyou:global name='web_logo' /}"  alt="{eyou:global name="web_name" /}" >{/eyou:uiupload}</a></h1>
+    <div class="lang-c">
+      {eyou:language }
+      <a href="{$field.url}"><img src="{$field.logo}" alt="{$field.title}"><span>{$field.title}</span></a>
+      {/eyou:language}
+    </div>
   </div>
+
 </div>
 <div class="headerNav">
   <ul class="container nav">

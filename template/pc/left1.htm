@@ -1,0 +1,151 @@
+<div class="left" e-page="left">
+  <style>
+    .cur {
+    }
+    .subList .cur {
+      color: #274f7d !important;
+      background: initial;
+    }
+    .subList .cur p {
+      color: #274f7d!important;
+    }
+    .subList {
+      display: none;
+      padding: 10px 0;
+      border-top: initial!important;
+      border-bottom: initial!important;
+      padding-left: 40px;
+
+    }
+    .subList li {
+      width: 100%;
+      height: 30px;
+      overflow: hidden;
+      margin: 0 auto;
+      padding: 0;
+      background-color: initial;
+    }
+    .subList li a {
+      display: block;
+      width: 100%;
+      height: 30px;
+      overflow: hidden;
+      line-height: 30px;
+      color: #808ea4;
+      font-size: 12px;
+      margin: 0 auto;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+    .subList li a p {
+      width: 100%;
+      color: #999;
+      background-color: #fff;
+      height: 30px;
+      line-height: 30px;
+      font-weight: normal;
+      padding: 0;
+    }
+    .subList li a:hover {
+      background: initial;
+    }
+    .subList li a p:hover {
+      color: #274f7d;
+    }
+    .active {
+      display: block;
+    }
+    .er-fl li {
+      text-align: initial;
+    }
+    .er-fl li a {
+      padding-left: 20px;
+    }
+    .toggleIcon {
+      display: block;
+      width: 30%;
+      height: 40px;
+      float: right;
+      background: url(./img/menu_tb1.png) 80% center no-repeat;
+      -webkit-transition: all .25s;
+      -moz-transition: all .25s;
+      -ms-transition: all .25s;
+      -o-transition: all .25s;
+      transition: all .25s;
+      position: absolute;
+      top: 8px;
+      right: 0;
+      height: 20px;
+      cursor: pointer;
+    }
+  </style>
+<div class="leftMu">
+  <h4><a href="{$eyou.field.typeid|gettoptype=###,'typeurl'}">{$eyou.field.typeid|gettoptype=###,'typename'}</a></h4>
+  <ul style="background-color: #ffffff">
+    {eyou:channel type='first' id='field' currentstyle='cur'}
+    <li style="position: relative" class="{$field.currentstyle}">
+      <a href="{$field.typeurl}" id="{$field.id}">{$field.typename}</a>
+      <span class="toggleIcon"></span>
+    </li>
+    <ul class="subList">
+      {eyou:channel name='$field.children' id='field1' currentstyle='cursub'}
+      <li>
+        <a href="{$field1.typeurl}" class="{$field1.currentstyle}"><p>-  {$field1.typename}</p></a>
+      </li>
+      {/eyou:channel}
+    </ul>
+    {/eyou:channel}
+  </ul>
+</div>
+<h4 class="t05 eyou-edit" e-id="l1" e-type="text"> {eyou:uitext e-id='l1' e-page="left"}
+  {$field.value}
+  {eyou:else /}
+  相关资讯
+  {/eyou:uitext} </h4>
+<div class="t05_cons1 eyou-edit" e-id="l2" e-type="arclist"> {eyou:uiarclist e-id='l2' typeid='6' e-page="left"}
+  <ul>
+    {eyou:arclist titlelen='20' rderby='rand' row='10'}
+    <li><a href="{$field.arcurl}" title="{$field.title}"> {$field.title}</a></li>
+    {/eyou:arclist}
+  </ul>
+  <div class="clear"></div>
+  {/eyou:uiarclist} </div>
+<div class="contactn mt10 mb10 mb10">
+    <div class="t05 eyou-edit" e-id="l3" e-type="type" > {eyou:uitype typeid='7' e-id='l3' e-page='left'}
+      {eyou:type type='self' empty='缺省文字'}
+      <h5> <a href="{$field.typeurl}" class="yan2" target="_blank">{$field.typename}</a></h5>
+      {/eyou:type}
+      {/eyou:uitype} </div>
+    <div class="subnr">
+    <div class="eyou-edit" e-id="l4"  e-type="upload">
+{eyou:uiupload e-id='l4' e-page='left' id='field'}
+{$field.value}
+{eyou:else /}
+<img src="{eyou:global name='web_templets_pc' /}/skin/img/catactus.jpg" />
+{/eyou:uiupload} 
+</div>
+     <div class="eyou-edit" e-id="l5" e-type="text">
+    {eyou:uitext e-id='l5' e-page='left' id='field'}
+      {$field.value}
+      {eyou:else/}
+      <p> <span class="subspan">咨询热线：</span></p>
+      <p class="subtel">{eyou:global name='web_attr_1' /}</p>
+      <p><span>QQ客服：{eyou:global name='web_attr_2' /}</span></p>
+      <p><span>企业邮箱：</span>{eyou:global name='web_attr_8' /}</p>
+      <p> <span>地 址：</span>{eyou:global name='web_attr_5' /}</p>
+      {/eyou:uitext}
+      </div>
+       </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function(){
+
+    $('.cur').parent('li').parent('ul').addClass('active')
+
+    $(".toggleIcon").click(function(){
+      $('.subList').slideUp(300)
+      $(this).parents('li').next('ul').stop(true).slideToggle(300);
+    });
+  });
+</script>
