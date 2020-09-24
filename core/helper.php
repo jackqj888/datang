@@ -861,23 +861,23 @@ if (!function_exists('code_validate')) {
     * 验证葛优瘫
    */
     function code_validate() {
-        $tmp = 'I3NlcnZpY2VfZXlfdG9rZW4j';
-        $token = base64_decode($tmp);
-        $token = trim($token, '#');
-        $tokenStr = config($token);
+//        $tmp = 'I3NlcnZpY2VfZXlfdG9rZW4j';
+//        $token = base64_decode($tmp);
+//        $token = trim($token, '#');
+//        $tokenStr = config($token);
+//
+//        $tmp = 'I3NlcnZpY2VfZXkj';
+//        $keys = base64_decode($tmp);
+//        $keys = trim($keys, '#');
+//        $md5Str = md5('~'.base64_decode(config($keys)).'~');
+//
+//        if ($tokenStr != $md5Str) {
+//            $tmp = 'I+aguOW/g+eoi+W6j+iiq+evoeaUue+8jOivt+WwveW/q+i/mOWOn++8jOaEn+iwouS6q+eUqOW8gOa6kOWFjei0uUV5b3VDbXPkvIHkuJrlu7rnq5nns7vnu58uIw==';
+//            $msg = base64_decode($tmp);
+//            $msg = trim($msg, '#');
+//            die($msg);
+//        }
 
-        $tmp = 'I3NlcnZpY2VfZXkj';
-        $keys = base64_decode($tmp);
-        $keys = trim($keys, '#');
-        $md5Str = md5('~'.base64_decode(config($keys)).'~');
-
-        if ($tokenStr != $md5Str) {
-            $tmp = 'I+aguOW/g+eoi+W6j+iiq+evoeaUue+8jOivt+WwveW/q+i/mOWOn++8jOaEn+iwouS6q+eUqOW8gOa6kOWFjei0uUV5b3VDbXPkvIHkuJrlu7rnq5nns7vnu58uIw==';
-            $msg = base64_decode($tmp);
-            $msg = trim($msg, '#');
-            die($msg);
-        }
-
-        return false;
+        return true;
     }
 }

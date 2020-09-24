@@ -1,16 +1,5 @@
 <div class="header" e-page="header">
   <div class="headerTop container">
-    <div class="logo-box">
-      <a href="{eyou:global name='web_cmsurl' /}/" title="{eyou:global name="web_name" /}">
-      <img src="{eyou:global name="web_logo" /}"
-      alt="{eyou:global name="web_name" /}" />
-      </a>
-    </div>
-    <div>
-      {eyou:language }
-      <a href="{$field.url}"><img src="{$field.logo}" alt="{$field.title}">{$field.title}</a>
-      {/eyou:language}
-    </div>
     <h1 class="eyou-edit" e-id="h1" e-type="upload"> <a href="{eyou:global name='web_cmsurl' /}/"> {eyou:uiupload e-id='h1' e-page="header"}
       {$field.value}
       {eyou:else /} <img src="{eyou:global name="web_logo" /}"  alt="{eyou:global name="web_name" /}" >{/eyou:uiupload}</a></h1>
