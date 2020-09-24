@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:23:"./template/pc/index.htm";i:1600937221;s:71:"/Users/haoming/work/dl/客户/大唐机械/jixie/template/pc/header.htm";i:1600937221;s:71:"/Users/haoming/work/dl/客户/大唐机械/jixie/template/pc/footer.htm";i:1600937209;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:23:"./template/pc/index.htm";i:1600940688;s:71:"/Users/haoming/work/dl/客户/大唐机械/jixie/template/pc/header.htm";i:1600939570;s:71:"/Users/haoming/work/dl/客户/大唐机械/jixie/template/pc/footer.htm";i:1600939570;}*/ ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
@@ -706,13 +706,13 @@
 <!--link-->
 <div class="link">
   <div class="container">
-    <h3><a>友情链接</a><span>LINKS</span></h3>
-    <ul>
-      <?php  $tagFlink = new \think\template\taglib\eyou\TagFlink; $_result = $tagFlink->getFlink("1", ""); if(is_array($_result) || $_result instanceof \think\Collection || $_result instanceof \think\Paginator): $i = 0; $e = 1; $__LIST__ = $_result;if( count($__LIST__)==0 ) : echo htmlspecialchars_decode("");else: foreach($__LIST__ as $key=>$field): $field["title"] = text_msubstr($field["title"], 0, 45, false); $__LIST__[$key] = $_result[$key] = $field;$mod = ($e % 2 );$i= intval($key) + 1;?>
-      <li><a href="<?php echo $field['url']; ?>" <?php echo $field['target']; ?>><?php echo $field['title']; ?> </a>
-      
-      <li><?php ++$e; endforeach; endif; else: echo htmlspecialchars_decode("");endif; $field = []; ?>
-    </ul>
+<!--    <h3><a>友情链接</a><span>LINKS</span></h3>-->
+<!--    <ul>-->
+<!--      <?php  $tagFlink = new \think\template\taglib\eyou\TagFlink; $_result = $tagFlink->getFlink("1", ""); if(is_array($_result) || $_result instanceof \think\Collection || $_result instanceof \think\Paginator): $i = 0; $e = 1; $__LIST__ = $_result;if( count($__LIST__)==0 ) : echo htmlspecialchars_decode("");else: foreach($__LIST__ as $key=>$field): $field["title"] = text_msubstr($field["title"], 0, 45, false); $__LIST__[$key] = $_result[$key] = $field;$mod = ($e % 2 );$i= intval($key) + 1;?>-->
+<!--      <li><a href="<?php echo $field['url']; ?>" <?php echo $field['target']; ?>><?php echo $field['title']; ?> </a>-->
+
+<!--      <li><?php ++$e; endforeach; endif; else: echo htmlspecialchars_decode("");endif; $field = []; ?>-->
+<!--    </ul>-->
   </div>
 </div>
 <!--footer-->

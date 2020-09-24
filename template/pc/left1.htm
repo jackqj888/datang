@@ -62,21 +62,10 @@
       padding-left: 20px;
     }
     .toggleIcon {
-      display: block;
-      width: 30%;
-      height: 40px;
-      float: right;
-      background: url(./img/menu_tb1.png) 80% center no-repeat;
-      -webkit-transition: all .25s;
-      -moz-transition: all .25s;
-      -ms-transition: all .25s;
-      -o-transition: all .25s;
-      transition: all .25s;
+      width: 15px;
       position: absolute;
-      top: 8px;
-      right: 0;
-      height: 20px;
-      cursor: pointer;
+      top: 15px;
+      right: 25px;
     }
   </style>
 <div class="leftMu">
@@ -85,7 +74,7 @@
     {eyou:channel type='first' id='field' currentstyle='cur'}
     <li style="position: relative" class="{$field.currentstyle}">
       <a href="{$field.typeurl}" id="{$field.id}">{$field.typename}</a>
-      <span class="toggleIcon"></span>
+      <img src="./template/pc/skin/img/ta.png" class="toggleIcon" alt="">
     </li>
     <ul class="subList">
       {eyou:channel name='$field.children' id='field1' currentstyle='cursub'}
