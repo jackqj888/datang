@@ -39,13 +39,13 @@
 /* proviewbox */
 .proviewbox {
 	float: left;
-	width: 305px;
+	width: 400px;
 	position: relative;
 	z-index: 5;
 }
 .probigshow {
 	position: relative;
-	width: 300px;
+	width: 400px;
 	padding: 1px;
 	border: 1px solid #ddd;
 	overflow: hidden
@@ -144,7 +144,7 @@
 .ul_prothumb img {
 	padding: 1px;
 	border: 1px solid #ddd;
-	width: 50px;
+	width: 80px;
 	height: 50px;
 }
 .ul_prothumb li.now img {
@@ -189,7 +189,7 @@ span.span_share .a_share {
 /* prodbaseinfo_a */
 .prodbaseinfo_a {
 	float: left;
-	width: 379px;
+	width: 280px;
 	margin-left: 16px;
 	z-index: 1;
 }
@@ -206,7 +206,7 @@ span.span_share .a_share {
 	zoom: 1;
 }
 .ul_prodinfos {
-	margin-top: 20px;
+	margin-top: 130px;
 	padding: 6px 15px;
 	overflow: hidden;
 	zoom: 1;

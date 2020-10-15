@@ -31,7 +31,8 @@
     <div class="cpright">
       <div class="rtop">
         <h5> <a>{$eyou.field.typename}</a></h5>
-        <span><em>您的位置：</em> {eyou:position style="crumb" /} </span> </div>
+        <span><em>您的位置：</em> {eyou:position style="crumb" /} </span> 
+      </div>
       <ul class="cpshow">
       {eyou:list titlelen='40' pagesize='9' mod='3'}
         <li {eyou:eq name='$mod' value='0'}class="noMl"{/eyou:eq}><a href="{$field.arcurl}"  title="{$field.title}"> <img src="{$field.litpic}" alt="[field:title/]" /></a>

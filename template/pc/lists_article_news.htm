@@ -36,7 +36,7 @@
   <div class="newone">
     <div class="newwleft eyou-edit" e-id="n2" e-type="arclist">
     {eyou:uiarclist e-id='n2' typeid='20' e-page="article_news"}
-     {eyou:arclist titlelen='20' limit='0,1' infolen='90'}
+     {eyou:arclist titlelen='30' limit='0,1' infolen='90'}
       <div class="onon">
         <div class="krst">
           <div class="syname"> <a href="{$field.arcurl}" title="{$field.title}">{$field.title}</a></div>
@@ -45,11 +45,13 @@
         <span class="tpleft"><a href="{$field.arcurl}" title="{$field.title}"> <img src="{$field.litpic}" alt="{$field.title}"> </a></span> </div>
        {/eyou:arclist}       
       <div class="clear"> </div>
+      <div class="nav1">
       <ul>
-      {eyou:arclist titlelen='20' limit='1,7'}
+      {eyou:arclist titlelen='30' }
         <li><span class="date">{$field.add_time|MyDate='Y-m-d',###}</span> <a href="{$field.arcurl}" title="{$field.title}">{$field.title}</a> </li>
       {/eyou:arclist}        
-      </ul>   
+      </ul> 
+    </div>  
      {/eyou:uiarclist}
     </div>
     
@@ -99,7 +101,7 @@
       <ul class="hover">
       {eyou:arclist titlelen='20' limit='1,4' infolen='50'}
         <li>
-          <div class="da"> <img src="{eyou:global name='web_templets_pc' /}/skin/img/t{$i}.gif" width="60" height="46" />{$field.add_time|MyDate='Y-m-d',###}</div>
+          <div class="da"> <img src="{eyou:global name='web_templets_pc' /}/skin/img/t{$i-1}.gif" width="60" height="46" />{$field.add_time|MyDate='Y-m-d',###}</div>
           <div class="baike">
             <div class="baname"> <a href="{$field.arcurl}" title="{$field.title}"> {$field.title} </a> </div>{$field.seo_description}...</div>
         </li>

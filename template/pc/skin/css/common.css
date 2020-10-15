@@ -19,9 +19,14 @@ fieldset, img {
 address, caption, cite, code, dfn, em, th, var {
 	font-style: normal;
 	font-weight: normal;
-}
+} 
 ol, ul {
 	list-style: none;
+	
+}
+
+.nav1 ul{
+	height:300px;  margin:auto; overflow-x:auto
 }
 ception, th {
 	text-align: left;
@@ -153,14 +158,14 @@ body {
 	background-color: #fff;
 	overflow-x: hidden;
 	color: #666;
-	font-size: 12px;
+	font-size: 15px;
 	font-family: microsoft yahei, "微软雅黑";
 	position: relative;
 }/*网站字体颜色*/
 .header, .content, .footer, .container {
 	margin-left: auto;
 	margin-right: auto;
-	width: 1000px;
+	width: 1200px;
 	font-family: microsoft yahei;
 }
 /*页眉*/
@@ -170,7 +175,8 @@ body {
 }
 .header {
 	width: 100%;
-	overflow: hidden;
+	/*overflow: hidden;*/
+	margin-top: -30px;
 	background-color: #fff;
 }
 .headerTop {
@@ -181,6 +187,7 @@ body {
 	float: left;
 	margin-top: 60px;
 	margin-left: 10px;
+	madding: 8px;
 }
 .headerTop .wen {
 	overflow: hidden;
@@ -255,7 +262,8 @@ margin-top:
 	overflow: hidden;
 	width: 100%;
 	height: 55px;
-	background: url(../img/navbg.png) repeat-x left top;
+	/*background: url(../img/navbg.png) repeat-x left top;*/
+	background-color: rgba(216, 20, 24, 1);
 }
 .headerNav li {
 	float: left;
@@ -263,18 +271,27 @@ margin-top:
 	line-height: 55px;
 	white-space: nowrap
 }
+
+.headerNav li:first-child{
+	border-left: 1px solid #ff787b;	
+}
+
 .headerNav li a {
 	color: #fff;
 	display: block;
 	text-decoration: none;
-	padding: 0 26px;
+	padding: 0 40px;
+	border-right: 1px solid #ff787b;
 }
 .headerNav li.last {
 	background: none
 }
 .headerNav li:hover a, .headerNav li.cur a {
-	color: #FF9900;
+	/* color: #FF9900; */
 	font-weight: bold;
+}
+.headerNav li:hover a {
+	background-color: #BC0004;
 }
 /*footer*/
 .footer dt a img {

@@ -7,19 +7,7 @@
     {/eyou:channel}
   </ul>
 </div>
-<h4 class="t05 eyou-edit" e-id="l1" e-type="text"> {eyou:uitext e-id='l1' e-page="left"}
-  {$field.value}
-  {eyou:else /}
-  相关资讯
-  {/eyou:uitext} </h4>
-<div class="t05_cons1 eyou-edit" e-id="l2" e-type="arclist"> {eyou:uiarclist e-id='l2' typeid='6' e-page="left"}
-  <ul>
-    {eyou:arclist titlelen='20' rderby='rand' row='10'}
-    <li><a href="{$field.arcurl}" title="{$field.title}"> {$field.title}</a></li>
-    {/eyou:arclist}
-  </ul>
-  <div class="clear"></div>
-  {/eyou:uiarclist} </div>
+
 <div class="contactn mt10 mb10 mb10">
     <div class="t05 eyou-edit" e-id="l3" e-type="type" > {eyou:uitype typeid='7' e-id='l3' e-page='left'}
       {eyou:type type='self' empty='缺省文字'}
@@ -27,6 +15,7 @@
       {/eyou:type}
       {/eyou:uitype} </div>
     <div class="subnr">
+      
     <div class="eyou-edit" e-id="l4"  e-type="upload">
 {eyou:uiupload e-id='l4' e-page='left' id='field'}
 {$field.value}
@@ -46,5 +35,19 @@
       {/eyou:uitext}
       </div>
        </div>
+
+       <h4 class="t05 eyou-edit" e-id="l1" e-type="text"> {eyou:uitext e-id='l1' e-page="left"}
+        {$field.value}
+        {eyou:else /}
+        相关资讯
+        {/eyou:uitext} </h4>
+      <div class="t05_cons1 eyou-edit" e-id="l2" e-type="arclist"> {eyou:uiarclist e-id='l2' typeid='6' e-page="left"}
+        <ul>
+          {eyou:arclist titlelen='20' rderby='rand' row='10'}
+          <li><a href="{$field.arcurl}" title="{$field.title}"> {$field.title}</a></li>
+          {/eyou:arclist}
+        </ul>
+        <div class="clear"></div>
+        {/eyou:uiarclist} </div>
   </div>
 </div>

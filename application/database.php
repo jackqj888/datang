@@ -10,11 +10,11 @@ return array(
     // 数据库名
     'database'        => Env::get('database.database', 'eyoucms'),
     // 用户名
-    'username'        => Env::get('database.username', 'root'),
+    'username'        => Env::get('database.username', 'root1'),
     // 密码
-    'password'        => Env::get('database.password', 'root'),
+    'password'        => Env::get('database.password', '123456'),
     // 端口
-    'hostport'        => Env::get('database.hostport', '8889'),
+    'hostport'        => Env::get('database.hostport', '3306'),
 
     // 连接dsn
     'dsn'             => '',

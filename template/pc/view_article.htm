@@ -38,22 +38,7 @@
           <div class="gduo"> <span>{eyou:prenext get='next' empty='<a>下一篇：暂无</a>'} <a href="{$field.arcurl}" title="{$field.title}"> 下一篇：{$field.title} </a> {/eyou:prenext}</span>{eyou:prenext get='pre' empty='<a>上一篇：暂无</a>'} <a href="{$field.arcurl}" title="{$field.title}"> 上一篇：{$field.title} </a> {/eyou:prenext}</div>
         </div>
       </div>
-      <div class="left2bot"> </div>
-      <div class="n_info_con2" e-page="view_article">
-        <h4 class="t04 eyou-edit" e-id="u1"  e-type="text"> {eyou:uitext e-id='u1' e-page='view_article' id='field'}
-          {$field.value}
-          {eyou:else /}推荐产品{/eyou:uitext}</h4>
-        <div class="info_b eyou-edit" e-id="u2" e-type="arclist"> {eyou:uiarclist e-id='u2' typeid='2' e-page="view_article"}
-          {eyou:arclist titlelen='20' row='4' flag='c'}
-          <dl class=sear_dl>
-            <dt class='dt2'><a href="{$field.arcurl}"><img src="{$field.litpic}" alt="{$field.title}" /></a></dt>
-            <dd class='d2'><a href="{$field.arcurl}">{$field.title}</a></dd>
-          </dl>
-          {/eyou:arclist}  
-          {/eyou:uiarclist}
-          <div class="clear"></div>
-        </div>
-      </div>
+    
     </div>
     <div class="right2">
       <div class="right2top"> </div>
@@ -65,7 +50,7 @@
           <li><a href="{$field.arcurl}" title="{$field.title}">{$field.title}</a></li>
           {/eyou:arclist}
         </ul>
-        <h4 class="t03"> <a>最新资讯文章</a></h4>
+        <h4 class="t03"> <a>行业动态文章</a></h4>
         <ul class="n_rt_ul" id="cntrLastArticle">
           {eyou:arclist titlelen='20' row='20' orderby='now'}
           <li><a href="{$field.arcurl}" title="{$field.title}">{$field.title}</a></li>

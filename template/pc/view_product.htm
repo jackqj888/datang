@@ -74,12 +74,7 @@ var ARR_IMG_PATH = [
                       <li class="li_normalprice">{$field.attr_name}: {$field.attr_value}</li>
                       {/eyou:volist}
                     </ul>
-                    <ul class="ul_prodinfos">
-                      <li>咨询热线：<span class="hottel" style="font-size: 24px;">{eyou:global name='web_attr_1' /}</span></li>
-                      <li class="li_weight">
-                        <div class="propar"> <a href="#caigou"> <img style="border: 0" src="{eyou:global name='web_templets_pc' /}/skin/img/buynowsmalls.jpg" /></a> </div>
-                      </li>
-                    </ul>
+                   
                   </div>
                   <div class="clear"> </div>
                 </div>
@@ -90,6 +85,22 @@ var ARR_IMG_PATH = [
                             $(".jqzoom").jqzoom({ title: false, zoomWidth: 340, zoomHeight: 340, xOffset: 4 });
                         </script> 
           </div>
+          
+          </div>
+          <div class="mod_goods_info">
+            <ul class="hds">
+              <li class="status_on" id="detail0" onclick="switchExtendAttrTab('detail0',2)">
+                <h3> 产品详情</h3>
+              </li>
+           </ul>
+          </div>
+          <div class="proinfo " id="detailvalue0">
+            <div id='contentvalue100' class="shouzi2" style='display:;'>
+             {$eyou.field.content}
+            </div>
+          </div>
+          
+          <div id="helpContent"> </div>
           <div class="clear"> </div>
           <div class="cp eyou-edit" e-id="p1" e-type="arclist" e-page="view_product">
 {eyou:uiarclist e-id='p1' typeid='2' e-page="view_product"}
@@ -108,66 +119,6 @@ var ARR_IMG_PATH = [
             </div>
             <div class="clear"> </div>
             {/eyou:uiarclist}
-          </div>
-          <div class="mod_goods_info">
-            <ul class="hds">
-              <li class="status_on" id="detail0" onclick="switchExtendAttrTab('detail0',2)">
-                <h3> 产品详情</h3>
-              </li>
-           </ul>
-          </div>
-          <div class="proinfo " id="detailvalue0">
-            <div id='contentvalue100' class="shouzi2" style='display:;'>
-             {$eyou.field.content}
-            </div>
-          </div>
-          
-          <div id="helpContent"> </div>
-          <div class="dgxxBox" id="caigou">
-            <p> 咨询：{$eyou.field.title}</p>
-            {eyou:guestbookform type='default' typeid='24'}
-            <form method="POST" enctype="multipart/form-data" action="{$field.action}" onsubmit="return checkForm();">
-            <ul class="m_form clearfix" id="tbForm1">
-              <li class="areLi">
-                <textarea class="txtAre" placeholder="请填写{$field.itemname_4}" id="attr_4" name="{$field.attr_4}"></textarea>
-              </li>
-              <li class="clearfix">
-                <label> {$field.itemname_1}</label>
-                <input class="iptTxt" type="text" id="attr_1" name="{$field.attr_1}" placeholder="请填写{$field.itemname_1}" />
-              </li>
-              <li class="clearfix">
-                <label> {$field.itemname_2}</label>
-                <input class="iptTxt" id="attr_2" name="{$field.attr_2}" type="text" placeholder="请填写{$field.itemname_2}" />
-              </li>
-              <li class="clearfix">
-                <label> {$field.itemname_3}</label>
-                <input class="iptTxt" id="attr_3" name="{$field.attr_3}" type="text" placeholder="请填写{$field.itemname_3}"/>
-              </li>
-              <li class="btnLi">
-                <input class="btnTjly" type="submit" name="submit" value="提交您的咨询信息" />
-              </li>
-            </ul>
-            {$field.hidden}
-          </form>
-          <script type="text/javascript">
-            function checkForm()
-            {
-              if(document.getElementById('attr_1').value.length == 0)
-              {
-                alert('请填写{$field.itemname_1}');
-                return false;
-              }
-              if(document.getElementById('attr_2').value.length == 0)
-              {
-                alert('请填写{$field.itemname_2}');
-                return false;
-              }
-              
-              return true;
-            }
-          </script>
-        {/eyou:guestbookform}
-          </div>
         </div>
       </div>
     </div>
